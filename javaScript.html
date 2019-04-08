@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>javascript정리</title>
+</head>
+<body>
+  <ol>
+    <li><a href="HTML_study.html">HTML study</a></li>
+    <li><a href="Web_Server.html">Web Server Study</a></li>
+    <li><a href="CSS_study.html">CSS study</a></li>
+    <li><a href="Javascript_study.html">CSS study</a></li>
+    <li><a href="Study_related_URL.html">Study related URL</a></li>
+    <li><a href="GL_related_URL.html">GL related URL</a></li>
+    <li><a href="ect_URL.html">ect URL</a></li>
+  </ol>
+<h1>Javascript</h1>
+<p>
+<strong>[기본적인 내용]</strong><br>
+사용자와 상호 작용하기 위해 만들어진 언어. javascript는 동적이다.(html은 정적이다.)
+ex) html에서 1+1을 쓰면 그래도 출력되지만 javascript에서는 1+1이 계산되어 2로 출력된다.<br>
+웹브라우저 >> 마우스 오른쪽 버튼 >> 검사 로 개발자 도구를 켤 수 있고 ESC를 누르면 나오는
+ console html, javascript등을 지금 페이지에 바로 적용 가능하다.<br>
+HTML의 주석문은 < !-- 내용 -- >이고 JS는 //이다.
+</p>
+<h2>1) html문서에서 javascript사용하기</h2>
+<p>
+CSS와 마찬가지로 어디서부터 javascript언어인지 웹브라이저에게 알려줘야한다.
+JS를 이용하여 제어하고자 하는 tag를 selector(선택자, CSS참고)를 이용하여 선택하고
+디자인에 관련한 속성은 CSS를 통하여 작용할 때 마다 CSS코드를 JS가 삽입해준다.<br>
+- <strong> script, /script </strong> : 이 태그 안에 작성된 코드들은 javascript로 분석해
+달라고 요천하는 태그이다. body태그 안에 들어간다.<br>
+- 태그의 Event atrribute(이벤트 속성)에서 ""안에 javascript내용을 넣는다.<br>
+- 검색어 : Javascript select tag by CSS selector (JS를 이용하여 제어하고자 하는 tag 찾을 때)<br>
+- 검색어 : Javascript element style (CSS코드를 어떻게 JS로 넣는가?)<br>
+</p>
+<h2>2) 기본 문법</h2>
+<p>
+  <h3>(1) Event attribute(이벤트 속성)</h3>
+  사용자가 Web Page와 자신가 맞는 작용을 하면 JS코드를 기억하고 있다가 실행해 준다.<br>
+  - 여기에는 <strong>onclic, onchage, onkeydown</strong> 등이 있다.<br>
+  - 검색어 : Javascript (작용 내용) event attribute<br>
+  - <strong>input</strong> : 이 tag를 사용하면 버튼(button), 입력창(text)을  등을 만들 수 있다.
+   input의 type속성에 생성하고 싶은 객체를 넣으면 된다.<br>
+  ex)<br>
+  <strong>< input type = "button" value = "hi" onclick = "aler('hi')" ></strong><br>
+  //value속성에 값을 넣으면 버튼의 이름을 넣을 수 있다.<br>
+  <strong>< input type = "text" onchange = "alert('changed')" ></strong><br>
+  //onchage : 문자 입력 후 엔터 작용, aler() : 브라우저의 경고창을 띄워준다. 괄호 안에
+  경고 내용을 넣을 수 있다.<br>
+  <strong>< input type = "text" onkeydown = "alert('key down!')" ></strong><br>
+  //onkeydown : 키 입력 작용<br>
+</p>
+<p>
+<h3>(2) Data type</h3>
+javascript는 변수를 사용할 수 있고 입력하는 값들에 데이터 타입이있다.
+또한 여러 연산자들을 사용할 수 있다. <br>
+단,변수에는 Data type이 없어서 아무 데이터나 입력해도된다.<br>
+- 검색어 : Javascript Data type<br>
+- 상수 -> 산술연산이 가능하다. ex) 10<br>
+- 문자열 -> 문자 데이터이다. Javascript string이라고 검색해보아라 여러 처리를 도와주는 함수 와
+Properties를 찾아볼 수 있다. 문자열에서 +연산자는 두 문자열을 결합해준다.<br>
+ex) "문자 데이터"<br>
+'문자 데이터'<br>
+"문자 데이터".length //문자 개수를 알려주는 property<br>
+"1" + "1" -> "11"<br>
+<strong>** document.write() : web page에 글씨를 출력할 때 쓰인다.</strong><br>
+ex)
+document.write("문자" + '< br >');  //이렇게 태그를 적용할 수도 잇다.
+document.write('< div style="color:red" >'+ "문자열" + '< /div >'); //CSS코드도 동일
+</p>
+<p>
+<h3>(3) 조건문</h3>
+C/C++ 코드 처럼 사용 가능하다.<br>
+//=============================================================================<br>
+< input type="button" value="nignt" onclick="<br>
+//이 태그의 value값을 알기위해 하는 방법 검색어 : javascript elemant get value<br>
+//이 태그 안에서 자신을 가지리키고 싶다면 this를 사용한다.<br>
+<strong>if(this.value === 'night')<strong><br>
+{<br>
+  //document.querySelector('body') : CSS의  선택자나 태그를 선택 할 수 있다.<br>
+  //style.backgroundColor = 'black'; : 변화를 주는 CSS코드를 JS로 넣는 코드<br>
+  document.querySelector('body').style.backgroundColor = 'black';<br>
+  this.value = 'day';<br>
+}<br>
+<strong>else<strong><br>
+{<br>
+  document.querySelector('body').style.backgroundColor = 'white';<br>
+  this.value = 'night';<br>
+}<br>
+  "><br>
+//=============================================================================<br>
+</p>
+<p>
+<h3>(4) 반복문 </h3>
+C/C++코드 처럼 사용 가능하며 while문과 for문이 있다.<br>
+//=============================================================================<br>
+<h4>< while문 ></h4>
+//document.querySelector('a')는 첫번째 태그만 가져온다. (그런 특성을 가지고 있음)<br>
+//여러 태그를 선택하려고 할때 => 검색어 : javascript get element by css selector multiple<br>
+//document.querySelectorALL('a') 모든 a태그를 배열처럼 가져온다.(하지만 실제 배열은 아니다.)<br>
+var alist = document.querySelectorAll('a');<br>
+//조건문에 쓰일 변수를 선언한다.<br>
+var i = 0;<br>
+//반복문의 시작, 괄호안에 조건문을 넣어준다.<br>
+<strong>while(i < alist.length)</strong><br>
+{<br>
+  //개발자 도구의 console에서 실행창에 값이 출력 된다.(web page에 보이지 않음)<br>
+  console.log(alist[i]);<br>
+  //배열처럼 사용 가능<br>
+  alist[i].style.color = 'powderblue';<br>
+  //count에 쓰이는 변수의 값을 증가 시킨다.<br>
+  i=i+1;<br>
+}<br>
+//=============================================================================<br>
+<h4>< for문 ></h4>
+//객체 + 반복문<br>
+//key변수에 coworkers객체의 키 값들이 들어간다.<br>
+for(var key in coworkers)<br>
+{<br>
+  //반복해서 실행할 코드<br>
+}<br>
+//=============================================================================<br>
+</p>
+<p>
+<h3>(5) 함수 </h3>
+//function이라 선언하여 정의한다.<br>
+<strong>function sum2(left, right){</strong><br>
+  //반환하는 것이다.<br>
+  <strong>return left+right;</strong><br>
+}<br>
+//사용은 이렇게<br>
+document.write(sum2(2,3) + '< br >');<br>
+</p>
+<p>
+<h3>(6) 객체 </h3>
+순서 없이 데이터를 저장해준다. 키 값으로 데이터를 꺼내올 수 있다.(이름으로 정리정돈된 상자)<br>
+객체에는 문자열, 숫자, 배열 등의 테이터와 함수(Method)를 담을 수 있다.<br>
+<h4>- 객체 생성</h4>
+//coworkers라는 객체에 이름을 붙여서 데이터 저장<br>
+//배열같이 정보를 넣을 때는 대괄호, 객체같이 정보를 넣을 때는 중괄호<br>
+var coworkers = {<br>
+  //키값/변수 : 데이터 또는 property : 데이터<br>
+  "programmer" : "egoing",<br>
+  "designer" : "leezche"<br>
+};<br>
+<h4>- 객체에 접근</h4>
+// . : 객체에 접근하는 기호<br>
+//객체에서 데이터 가져오기<br>
+document.write("programmer : " + coworkers.programmer + "< br >");<br>
+document.write("designer : " + coworkers.designer + "< br >");<br>
+<h4>- 객체에 정보 추가</h4>
+coworkers.bookeeper = "buru";<br>
+//띄어 쓰기가 키 값에 있을 때<br>
+coworkers["data scientist"] = "taeho";<br>
+document.write("bookeeper : " + coworkers["data scientist"] + "<br>");<br>
+<h4>- Iterate</h4>
+객체 + 반복문에 관한 내용이다.<br>
+검색어 : javascript object iterate<br>
+//Key에는 키 값이 들어간다.<br>
+for(var key in coworkers)<br>
+{<br>
+  document.write(key + ' : ' + coworkers[key] + '<br>');<br>
+}<br>
+<h4>- Property & Method</h4>
+//C++의 클래스와 같이 이렇게 함수를 객체에 담을 수 있다.<br>
+//또한 이런 함수 내에서 자신이 소속된 객체를 나타내는 대명사는 this이다.<br>
+//Method : 객체에 소속된 함수<br>
+//Property : 객체의 키 값들<br>
+coworkers.showAll = function(){<br>
+  //단 showAll도 여기에 소속된 데이터이기 때문에 출력 된다.<br>
+  for(var key in this)<br>
+  {<br>
+    document.write(key + ' : ' + this[key] + '< br >');<br>
+  }<br>
+}<br>
+//객체의 함수 호출<br>
+coworkers.showAll();<br>
+< input id="night_day2" type="button" value="night" onclick=" showAll();"><br>
+</p>
+<h2>3) 문서 분리 방법</h2>
+.js파일을 만들어 그곳에 JS코드를 넣고 이 코드가 쓰일 html문서에 선언해준다.<br>
+  <strong>< script src="colors.js" >< /script ></strong>
+<p>
+</p>
+<h2>4) 그 외</h2>
+- js에서 html tag관련 내용을 찾고 싶다면 <strong>document</strong>을 검색한다.<br>
+그래도 찾지 못하였다면 <strong>DOM(Document Object Model)</strong>를 검색<br>
+- 웹브라우저 자체를 제어하고 싶다면 <storng>window객체</strong>을 검색<br>
+- 웹페이지를 Reload하지 않고 정보 변경 하고 싶다면 <storng>ajaw테크닉</strong>을 검색<br>
+- Reload후에도 현재 상태를 유지하는 방법을 찾는 다면 <strong>coolie</strong>를  검색<br>
+- 인터넷이 끈켜도 동작하는 web page를 원한다면 <strong>offline web application</strong>을 검색<br>
+- <strong>webRTC</strong> : 화상통신<br>
+- <strong>speech</strong> : 음성 제어<br>
+- <strong>webGL</storng> : 3D Grapic 게임<br>
+- <strong>webVR</storng> : 가상현실<br>
+<p>
+</p>
