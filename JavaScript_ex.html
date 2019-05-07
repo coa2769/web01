@@ -4,51 +4,7 @@
         <title>WEB1-JavaScript</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="./CSS_Style.css">
-        <script>
-        function SetLinkColor(color)
-        {
-            var aList = document.querySelectorAll('a');
-
-            for(var key in aList)
-            {
-                if(aList[key].className !== 'saw')
-                {
-                    aList[key].style.color = color;
-                }
-            }
-        }
-
-        function SetBodyColor(color)
-        {
-            var target = document.querySelector('body');
-            target.style.color = color;  
-        }
-
-        function SetBackgroundColor(color)
-        {
-            var target = document.querySelector('body');
-            target.style.backgroundColor = color;
-        }
-
-        function ControlNinghtDay(self)
-        {
-            var target = document.querySelector('body');
-
-            if(self.value === 'night')
-            {
-                SetBackgroundColor('black');
-                SetBodyColor('white');
-                 self.value = 'day';
-                 SetLinkColor('powderblue');
-            }
-            else
-            {
-                SetBackgroundColor('white');
-                SetBodyColor('black');
-                self.value = 'night';
-                SetLinkColor('black');
-            }
-        }
+        <script src="./JavaScript_code.js"> 
 
         </script>
     </head>
@@ -70,7 +26,6 @@
                 <input type="button" value="night" onclick="
                ControlNinghtDay(this);
                 ">
-
             </div>
             <div>
                 <h2>JavaScript</h2>

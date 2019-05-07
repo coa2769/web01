@@ -59,7 +59,7 @@ ex)
 >> ```
 >> ex) 10
 >> ```
-> - **문자열** : 문자 데이터이다. 여러 처리를 도와주는 함수와 Properties(속성)이 있다. `Javascript string`로 검색 가능하다. 
+> - **문자열** : 문자 데이터이다. 여러 처리를 도와주는 함수와 Properties이 있다. `Javascript string`로 검색 가능하다. 
 >> ```
 >> ex) 
 >> // 두가지 모두 문자열을 나타낸다.
@@ -244,18 +244,30 @@ code의 중복과 가독성을 위해 사용되는 문법이다.
 >> {
 >>   document.write(key + ' : ' + coworkers[key] + '<br>');
 >> }
+>>
+>> var aList = document.querySelectorAll('a');
+>> var i = 0;
+>>
+>> //이렇게 객체를 순환하면 Method도 같이 순환하게 된다.
+>> for(var key in aList)
+>> {
+>>     document.write(key + "<br>");
+>> }
 >> ```
 > **[추천 검색어]**
 >> ```
 >> javascript object iteration
 >> ```
 
-> - **Property & Method**
+> - **Property & Method** <br>
+> 객체에는 Method도 저장할 수 있다. **`Method`**는 객체에 소속된 함수이고 **`Property`**는 객체의 키 값들이다.(여기서 키 값들은 class로 따지면 변수의 이름이다.)
 >> ```
->> //C++의 클래스와 같이 이렇게 함수를 객체에 담을 수 있다.
->> //또한 이런 함수 내에서 자신이 소속된 객체를 나타내는 대명사는 this이다.
->> //Method : 객체에 소속된 함수
->> //Property : 객체의 키 값들
+>> var coworkers = {
+>> "programmer" : "egoing",
+>> "designer" : "leezche" 
+>> };
+>>
+>> //Method 내에서 자신이 소속된 객체를 나타내는 대명사는 this이다.
 >> coworkers.showAll = function(){
 >>   //단 showAll도 여기에 소속된 데이터이기 때문에 출력 된다.
 >>   for(var key in this)
@@ -266,7 +278,6 @@ code의 중복과 가독성을 위해 사용되는 문법이다.
 >>
 >> //객체의 함수 호출
 >> coworkers.showAll();
->> <input id="night_day2" type="button" value="night" onclick=" showAll();">
 >> ```
 
 - - -
@@ -279,7 +290,13 @@ code의 중복과 가독성을 위해 사용되는 문법이다.
 
 - - -
 
-## 7) 그 외의
+## 7) library 와 framework
+- franework는 기본 틀 위에서 구현하게하는 도구.
+- library는 구현을 하기위해 필요한 부품들을 사용하여 구현하게하는 도구.
+
+- - -
+
+## 8) 그 외의
 - js에서 html tag관련 내용을 찾고 싶다면 **`document`** 을 검색한다. 그래도 찾지 못하였다면 **`DOM(Document Object Model)`** 를 검색한다.
 - 웹브라우저 자체를 제어하고 싶다면 **`window객체`** 을 검색한다.
 - 웹페이지를 Reload하지 않고 정보 변경 하고 싶다면 **`ajaw테크닉`** 을 검색한다.
