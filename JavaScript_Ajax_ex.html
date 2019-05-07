@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WEB-Ajax</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <input type="button" value="fetch" onclick="
+           fetch('HTML_ex.html').then(function(response){
+               response.text().then(function(text){
+                   alert(text);
+               })
+            })
+           ">
+    </body>
+</html>

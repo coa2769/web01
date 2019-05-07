@@ -1,17 +1,19 @@
 var Links = {
     SetColor:function (color){
-        var aList = document.querySelectorAll('a');
         
-        var i = 0;
+        //jQuery를 이용한 작업
+        $('a').css('color', color);
+        //var aList = document.querySelectorAll('a');
 
-        while(i <aList.length)
-        {
-            if(aList[i].className !== 'saw')
-            {
-                aList[i].style.color = color;
-            }
-            i = i+1;
-        }
+        // var i = 0;
+        // while(i <aList.length)
+        // {
+        //     if(aList[i].className !== 'saw')
+        //     {
+        //         aList[i].style.color = color;
+        //     }
+        //     i = i+1;
+        // }
     }
 
 }

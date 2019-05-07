@@ -293,6 +293,7 @@ code의 중복과 가독성을 위해 사용되는 문법이다.
 ## 7) library 와 framework
 - franework는 기본 틀 위에서 구현하게하는 도구.
 - library는 구현을 하기위해 필요한 부품들을 사용하여 구현하게하는 도구.
+- jQuery CDN은 라이브러리를 다운 받을 필요 없이 `<script src="">`으로 웹브라우저가 다운로드 하도록 할 수 있다.
 
 - - -
 
@@ -300,7 +301,7 @@ code의 중복과 가독성을 위해 사용되는 문법이다.
 - js에서 html tag관련 내용을 찾고 싶다면 **`document`** 을 검색한다. 그래도 찾지 못하였다면 **`DOM(Document Object Model)`** 를 검색한다.
 - 웹브라우저 자체를 제어하고 싶다면 **`window객체`** 을 검색한다.
 - 웹페이지를 Reload하지 않고 정보 변경 하고 싶다면 **`ajaw테크닉`** 을 검색한다.
-- Reload후에도 현재 상태를 유지하는 방법을 찾는 다면 **`coolie`** 를  검색한다.
+- Reload후에도 현재 상태를 유지하는 방법을 찾는 다면 **`cookie`** 를  검색한다.
 - 인터넷이 끊켜도 동작하는 web page를 원한다면 **`offline web application`** 을 검색한다.
 - **`webRTC`** : 화상통신
 - **`speech`** : 음성 제어
