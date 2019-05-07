@@ -1,0 +1,31 @@
+@media(min-width:500px){
+    #grid{
+      display:grid;
+      grid-template-columns:150px 1fr;
+    }
+  }
+  #block{
+  border: 5px red solid;
+
+}
+
+#active{
+  color:red;
+  }
+  
+a{
+  color:black;
+  text-decoration:none;
+}
+
+.saw{
+  color:gray;
+}
+
+h1 {
+  font-size:50px;
+  text-align:center;
+  padding:20px;
+  margin:0;
+  width:500px;
+}

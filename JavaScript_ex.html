@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WEB1-JavaScript</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./CSS_Style.css">
+        <script>
+        function SetLinkColor(color)
+        {
+            var aList = document.querySelectorAll('a');
+
+            for(var key in aList)
+            {
+                if(aList[key].className !== 'saw')
+                {
+                    aList[key].style.color = color;
+                }
+            }
+        }
+
+        function SetBodyColor(color)
+        {
+            var target = document.querySelector('body');
+            target.style.color = color;  
+        }
+
+        function SetBackgroundColor(color)
+        {
+            var target = document.querySelector('body');
+            target.style.backgroundColor = color;
+        }
+
+        function ControlNinghtDay(self)
+        {
+            var target = document.querySelector('body');
+
+            if(self.value === 'night')
+            {
+                SetBackgroundColor('black');
+                SetBodyColor('white');
+                 self.value = 'day';
+                 SetLinkColor('powderblue');
+            }
+            else
+            {
+                SetBackgroundColor('white');
+                SetBodyColor('black');
+                self.value = 'night';
+                SetLinkColor('black');
+            }
+        }
+
+        </script>
+    </head>
+    <body>
+        <input type="button" value="hi" onclick="alert('hi')">
+        <input type="text" onchange="alert('chaged')">
+        <h1><a href="./WEB.html">WEB</a></h1>
+        <div id="grid">
+            <div>
+                <ol>
+                    <li><a href="./HTML_ex.html" class="saw">HTML</a></li>
+                    <li><a href="./CSS_ex.html" class="saw">CSS</a></li>
+                    <li><a href="./JavaScript_ex.html">JavaScript</a></li>
+                    <li><a href="./Study_related_URL.html">Study</a></li>
+                    <li><a href="./GL_related_URL.html">GL</a></li>
+                    <li><a href="./ect_URL.html">ect</a></li>
+                </ol>
+
+                <input type="button" value="night" onclick="
+               ControlNinghtDay(this);
+                ">
+
+            </div>
+            <div>
+                <h2>JavaScript</h2>
+                <p>
+                Alongside HTML and CSS, JavaScript is one of the core technologies
+                of the World Wide Web.[9] JavaScript enables interactive web pages
+                and is an essential part of web applications. The vast majority of
+                websites use it,[10] and major web browsers have a dedicated JavaScript
+                engine to execute it.
+                As a multi-paradigm language, JavaScript supports event-driven,
+                functional, and imperative (including object-oriented and prototype-based)
+                programming styles. It has APIs for working with text, arrays, dates, regular
+                expressions, and the DOM, but the language itself does not include any I/O, such
+                as networking, storage, or graphics facilities. It relies upon the host environment
+                in which it is embedded to provide these features. 
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
