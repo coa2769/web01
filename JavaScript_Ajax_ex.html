@@ -9,16 +9,22 @@
 
         </article>
         <input type="button" value="fetch" onclick="
-            //fetch함수의 매개변수로 대입한 파일이름에 맞는 파일을 server가 전송해준다.
+           /* //fetch함수의 매개변수로 대입한 파일이름에 맞는 파일을 server가 전송해준다.
            fetch('HTML_ex.html').then(function(response){
                 //text 안에는 server가 전송한 파일의 내용이 있다.
                response.text().then(function(text){
                    //응답이 완료 되고 text의 내용을 응답창에 출력
                    //alert(text);
-
                    document.querySelector('article').innerHTML = text;
                })
-            })
+            })*/
+            fetch('HTML_ex').then(function(response){
+                if(response.status == '404'){
+                    alert('Not found')
+                }
+            });
+            console.log(1);
+            console.log(2);
            ">
     </body>
 </html>
