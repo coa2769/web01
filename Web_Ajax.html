@@ -24,9 +24,10 @@
                     <li><a onclick="
                     fetch('CSS.txt').then(function(response){
                         response.text().then(function(text){
-                            document.querySelector('article').innserHTML=text;
+                                document.querySelector('article').innerHTML=text;
+                            })
                         })
-                    })">CSS</a></li>
+                    ">CSS</a></li>
                     <li><a onclick="
                         fetch('JavaScript.txt').then(function(response){
                             response.text().then(function(text){
