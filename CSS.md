@@ -17,7 +17,7 @@ HTML의 부족한 시각적 부분을 또 다른 언어인 CSS를 만들어 체�
 
 > - CSS의 주석은 **`//`**이다.
 
-<img src="CSS01.PNG" height="200">
+<img src="./image/CSS01.PNG" height="200">
 
 >>```
 >> ex)
@@ -154,7 +154,7 @@ HTML의 부족한 시각적 부분을 또 다른 언어인 CSS를 만들어 체�
 ## 3) CSS로 박스 모델
 HTML태그 하나하나가 박스처럼 부피가 존재하도록 되어있다. 화면 전체를 사용하여 줄 바꿈이 되는 **`block level element`** 과 자기 부피 만큼을 사용하여 줄 바꿈을 하지 않는 **`inline element`** 이다. (여기서 element는 tag와 같은 뜻이다.)
 
-<img src="box-model.png" width="500">
+<img src="./image/box-model.png" width="500">
 
 - **`padding :`** : 이 설정은 content를 둘러싼 테두리안의 크기를 조정할 수 있다.
 >```

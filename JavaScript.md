@@ -43,7 +43,7 @@ ex)
 
 > ### (3) console로 JS code 실행
 > 웹브라우저 >> 마우스 오른쪽 버튼 >> 검사 로 개발자 도구를 켤 수 있다. 여기서 console은 즉석에서 JS code를 실행하는 것이 가능하다.
-> <img src="01.png" height="200">
+> <img src="./image/01.png" height="200">
 > 이 console에서 실행하는 JS code는 지금 해당하는 page의 code인 것 처럼 실행됩니다. element에서 ESC를 눌러 console 창을 보일 수 있다.
 
 - - -
@@ -62,6 +62,7 @@ ex)
 > - **문자열** : 문자 데이터이다. 여러 처리를 도와주는 함수와 Properties이 있다. `Javascript string`로 검색 가능하다. 
 >> ```
 >> ex) 
+>> //\는 긴 code를 줄바꿈하여 표현하고 싶을 때 사용한다.
 >> // 두가지 모두 문자열을 나타낸다.
 >> "문자 데이터"
 >> '문자 데이터'
@@ -72,6 +73,28 @@ ex)
 >> //문자열에서 +연산자는 두 문자열을 결합해준다.
 >> "1" + "1" -> "11"
 >> ```
+> - **Template Literal**
+> Literal : 정보를 표현하는 방법, 기호를 말한다.
+>> ```
+>> //숫자를 나타내는 Literal : 상수만으로 표현한다.
+>> var a = 1;  
+>> //문자를 나타태는 Loteral : "", '' 안에 있는 글자들은 문자열이다.
+>> var text = "tatata";
+>> ```
+> 문자열에서 줄바꿈하고 싶다면 \n을 넣어주면 된다. 그러나 사용이 불편하여 비교적 최신 문법으로 Template Literal로 대체 가능하다. 
+> **` `` `** : Template Literal의 시작과 끝을 나타내는 기호이다.
+>> ```
+>> var letter = `Dear ${name} 
+>>
+>> Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+>> Ratione, perspiciatis ${name} quidem? Maiores, deserunt? Architecto quos, 
+>> excepturi rem magni libero ab minima eius natus doloremque minus unde nihil
+>> provident nemo?${name}`;
+>>
+>> console.log(letter);
+>> ```
+
+
 > - **Boolean** : true와 false의 값만을 갖는 데이터 타입이다.
 >> ```
 >> <script>

@@ -86,13 +86,13 @@ hash
 ex) 3개의 문단 중 2번째에 접근하는 방법
 1) 3개의 문단 중 마지막에 id값을 준다.
 
-<img src="02.png" height="300">
+<img src="./image/02.png" height="300">
 
 2) 주소에 지정한 id값을 주면 마지막 문단으로 이동한다.
-<img src="03.png" height="100">
+<img src="./image/03.png" height="100">
 
 3) a 태그를 이용할 수도 있다.
-<img src="04.png">
+<img src="./image/04.png">
 
 ```
 fragment identifier (조각 식별자)

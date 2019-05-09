@@ -46,7 +46,7 @@ HTML 정리
 >> ```
 > - **`<br>`** : 줄 바꿈이 된다.
 > - **`<p>, </p>`** : HTML에서 단락을 나눌때 사용된다. 여백을 더 주고 싶다면 CSS언어를 사용한다.
-> - **`<img src="arrow.png" height="100">`** : 이미지를 출력한다. 태그 이름만으로 표현 못하는 정보는 Attribute로 표현한다. src == source, width, height 등이 있다.
+> - **`<img src="./image/arrow.png" height="100">`** : 이미지를 출력한다. 태그 이름만으로 표현 못하는 정보는 Attribute로 표현한다. src == source, width, height 등이 있다.
 
 - - -
 
