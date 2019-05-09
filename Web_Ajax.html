@@ -13,32 +13,37 @@
         <h1>WEB</h1>
         <div id="grid">
             <div>
-                <ol>
-                    <li><a onclick="
-                        fetch('HTML.txt').then(function(response){
-                            response.text().then(function(text){
-                                document.querySelector('article').innerHTML=text;
-                            })
-                        })
-                    ">HTML</a></li>
-                    <li><a onclick="
-                        fetch('CSS.txt').then(function(response){
-                            response.text().then(function(text){
-                                document.querySelector('article').innerHTML=text;
-                            })
-                        })
-                    ">CSS</a></li>
-                    <li><a onclick="
-                        fetch('JavaScript.txt').then(function(response){
-                            response.text().then(function(text){
-                                document.querySelector('article').innerHTML = text;
-                            })
-                        })
-                    ">JavaScript</a></li>
-                    <li><a href="./Study_related_URL.html">Study</a></li>
-                    <li><a href="./00play.html">GL</a></li>
-                    <li><a href="./ect_URL.html">ect</a></li>
+                <ol id="nav">
                 </ol>
+                <script>
+                    fetch('list.txt').then(function(response){
+                        response.text().then(function(text){
+                            //string을 매개변수 문자에 따라 나눠서 배열로 만들어준다.
+                            var item = text.split(",");
+                            var i = 0;
+                            var tags = '';
+                            while(i < item.length)
+                            {
+                                //trim은 앞의 공백을 지워준다.
+                                item[i] = item[i].trim();
+                                var name = item[i].split(".");
+                                var tag = '<li><a href="#!' + name[0] + '" onclick="FetchPage(\'' + item[i] + '\)"> ' + name[0] +'</a></li>';
+                                tags = tags + tag;
+                                i = i + 1;
+                            }
+                            document.queryselector('#nav').innerHTML=tag;
+                        })
+                    })
+
+                    if(location.hash)
+                    {
+                        FetchPage(location.hash.substring(2));
+                    }
+                    //else
+                    //{
+                        //여기에 초기 페이지 FetchPage()
+                    //}
+                </script>
             </div>
             <div>
                 <article>

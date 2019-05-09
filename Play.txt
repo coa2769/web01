@@ -1,20 +1,3 @@
-<!doctype html>
-<html>
-<head>
-<title>백합 관련</title>
-<meta charset="utf-8">
-</head>
-
-<body>
-<ol>
-  <li><a href="HTML_study.html">HTML study</a></li>
-  <li><a href="Web_Server.html">Web Server Study</a></li>
-  <li><a href="CSS_study.html">CSS study</a></li>
-  <li><a href="Study_related_URL.html">Study related URL</a></li>
-  <li><a href="GL_related_URL.html">GL related URL</a></li>
-  <li><a href="ect_URL.html">ect URL</a></li>
-</ol>
-
 <h1> GL URL </h1>
 <h3>1) 백합 목록</h3>
 <p>
@@ -64,6 +47,3 @@
   <a href="http://lilybin.tistory.com/m"> 리리아나의 백합공간</a><br>
   <a href="http://gidtlsfy.tistory.com/"> 향신료의 남는 시간을 주체하지 못하는 블로그</a><br>
   <a href="http://yori120203.tistory.com/"> 바다의 파랑 속에 잠긴 도서실</a><br>
-
-</body>
-</html>

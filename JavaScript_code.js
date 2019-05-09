@@ -47,3 +47,13 @@ function ControlNinghtDay(self)
         self.value = 'night';
     }
 }
+
+function FetchPage(fileName)
+{
+    fetch(fileName).then(function(response){
+        response.text().then(function(text){
+            document.querySelector('article').innerHTML=text;
+        })
+    })
+}
+
