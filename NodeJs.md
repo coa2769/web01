@@ -41,3 +41,88 @@ php에서 값에 따라 다른 페이지를 생성하여 전송한다.
 - query string : 웹서버에게 정보를 줄 수 있다. `?` 이후의 부터 query string이다. 
 <img src="./image/12.png">
 
+
+(2) URL의 query string으로 동적인 웹페이지 만들기
+URL에서 query string을 파싱해서 본문의 제목에 적용한다.
+```
+//require는 요구하다라는 뜻으로 우리가 만든 웹 애플리케이션은 http, url, fs 모듈을 가져온다.
+//require() 안의 문자들은 어떤 모듈을 반환할지 나타낸다. nodeJS가 가지고 있는 기능들을 그룹으로 묶을 것을 말한다.
+var http = require('http');
+var fs = require('fs');
+//var url은 nodeJS의 url모듈이 대입된다. 
+var url = require('url');   
+
+var app = http.createServer(function(request,response){
+    var _url = request.url;
+    //받은 url에서 query string부분을 파싱해주는 기능이 url모듈에 있는 것이다.
+    var queryData = url.parse(_url, true).query;
+    
+    var title = queryData.id;
+
+    //queryData가 없다면 
+    if(_url == '/'){
+    //title에 id값 대신 'Welcom'문자열을 넣는다.
+      title = 'Welcome';
+    }
+
+    if(_url == '/favicon.ico'){
+        response.writeHead(404);
+        response.end();
+        return;
+    }
+
+    response.writeHead(200);
+    
+    //출력될 본문, id에 따라 제목이 바뀐다.
+    var template = `
+    <!doctype html>
+        <html>
+            <head>
+                <title>WEB1 - ${title}</title>
+                <meta charset="utf-8">
+            </head>
+            <body>
+                <h1><a href="/">WEB</a></h1>
+                <ol>
+                    <li><a href="/?id=HTML">HTML</a></li>
+                    <li><a href="?id=CSS">CSS</a></li>
+                    <li><a href="?id=JavaScript">JavaScript</a></li>
+                </ol>
+                <h2>${title}</h2>
+                <p><a href="https://www.w3.org/TR/html5/" target="_blank" title="html5 speicification">Hypertext Markup Language (HTML)</a> is the standard markup language for <strong>creating <u>web</u> pages</strong> and web applications.Web browsers receive HTML documents from a web server or from local storage and render them into multimedia web pages. HTML describes the structure of a web page semantically and originally included cues for the appearance of the document.
+                <img src="coding.jpg" width="100%">
+                </p>
+            </body>
+        </html>`
+
+
+    
+    //알맞는 페이지를 보내주는 기능을 한다.
+    response.end(template);
+});
+
+app.listen(3000);
+```
+
+**[추천 검색어]**
+```
+nodejs url parse query string
+```
+
+## 3) nodeJS - 파일 제어
+CRUD (Create Read Update Delete)정보를 다루는 핵심적인 동작이다. 어디든 정보를 제어하기 위해서는 언제 이걸 먼저 알아본다.
+nodejs 공식 홈페이지에는 nodejs의 기능을 모듈별로 정리해둔 문서가 있다. 참고하자.
+
+```
+//filesystem 모듈을 가져온다.
+var fs = require('fs');
+//읽어들일 파일과 그걸 처리할 함수를 매개변수로 받는다. 'utf8'은 파일을 어떤 형식으로 읽은 것인지 알려주는 것이다.
+fs.readFile('sample.txt', 'utf8', function(err,data){
+    console.log(data);
+});
+```
+
+**[추천 검색어]**
+```
+nodejs file read
+```
