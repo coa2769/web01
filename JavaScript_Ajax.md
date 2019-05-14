@@ -3,7 +3,7 @@ Ajax
 한 HTML page에서 사용자의 작용에 따라 부분적으로 변경하는 기술이다. 이런 Web page를 Single-page application이라고 한다.
 
 ## 2) fetch API
-```
+```html
 <!DOCTYPE html>
 <html>
     <head>
@@ -48,7 +48,7 @@ fetch('파일 이름').**`then(함수)`** <br>
 fetch api 함수이다. 서버가 응답할 때까지 웹브라우저가 따른 일을 하기위해 호출된다. 서버에게 응답이 오면 then의 매개변수로 넣은 함수를 호출하도록(call back)등록하는 함수이다. 비동기(Asynchronous) 작동을 위한 함수이다.
 then의 매개변수인 함수에는 **`response객체`** 를 넘겨주기로 되어 있으므로 매개변수 하나를 선언하자.
 response객체에는 응답받은 데이터에 대한 내용이 있는데 이 중 status는 통신의 상태를 알려준다. http에서 200은 통신의 완료를 뜻한다. 찾는 파일이 없다면 status는 404이다.
->```
+>```js
 > function callbackme(response){
 >     //console 창에 log가 출력된다.
 >     console.log('response end');
@@ -60,7 +60,7 @@ response객체에는 응답받은 데이터에 대한 내용이 있는데 이 �
 >```
 
 함수를 객체나 변수 처럼 선언하거나 매개변수로 넣을 수 있다.
->```
+>```js
 > function callbackme(){
 >     console.log('response end');
 > }
