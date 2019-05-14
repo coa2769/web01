@@ -26,14 +26,14 @@ var app = http.createServer(function(request,response){
                 var title = 'Welcom';
                 var description = 'Hello, Node.js';
                 var list = template.makeList(fileList)
-                var template = templat.makeHTML(title, list, 
+                var html = template.makeHTML(title, list, 
                     `<h2>${title}</h2><p>${description}</p>`,
                     //WEB 페이지에서는 페이지 생성만 가능하다.
                     '<a href="/create">create</a>');
     
                 response.writeHead(200);
                 //알맞는 페이지를 보내주는 기능
-                response.end(template);
+                response.end(html);
             });
         }
         //WEB 외의 URL을 눌러서 id값을 전송 했을때
@@ -42,7 +42,7 @@ var app = http.createServer(function(request,response){
             //폴더의 파일 목록을 읽어들인다.
             fs.readdir('./data',function(err, fileList){
                 //query string의 id가 파일이름이다.
-                fs.readFile(`data/${queryData.id}`,'utf8',function(err, description){
+                fs.readFile(`./data/${queryData.id}`,'utf8',function(err, description){
                 
                     //파일에 따라 목록을 나타내는 code자동 생성
                     var list = template.makeList(fileList);
@@ -51,7 +51,7 @@ var app = http.createServer(function(request,response){
                     //(nodeJS는 main.js를 직접 실행하고 있으므로 이 파일에 변경이 일어나면 그때는 nodeJS를 다시 실행해야한다.)
                     
                     //출력될 본문, id에 따라 제목이 바뀐다.
-                    var template = templat.makeHTML(queryData.id, list, 
+                    var html = template.makeHTML(queryData.id, list, 
                         `<h2>${queryData.id}</h2><p>${description}</p>`,
                         //WEB페이지 외에서는 페이지 생성과 수정, 삭제 모두 가능하다.
                         //<a>는 get방식 전송을 한다.
@@ -68,7 +68,7 @@ var app = http.createServer(function(request,response){
                     
                     response.writeHead(200);
                     //알맞는 페이지를 보내주는 기능
-                    response.end(template);
+                    response.end(html);
                 });
             });
         }
@@ -83,7 +83,7 @@ var app = http.createServer(function(request,response){
             //작성하여 전송하는 부분
             //웹브라우저는 자동으로 http를 붙여 주지만 여기서는 http프로토콜을 사용한다고 명시해야 한다.)
             //path만 적는다면 자동으로 앞부분을 붙여준다.
-            var template = templat.makeHTML(title, list,`
+            var html = template.makeHTML(title, list,`
                 <form action="http://192.168.0.81:3000/create_process" method="POST">
                     <p><input type="text" name="title"></p>
                     <p>
@@ -94,7 +94,7 @@ var app = http.createServer(function(request,response){
             `);
 
             response.writeHead(200);
-            response.end(template);
+            response.end(html);
         })
     }
     else if(pathname === '/create_process')
@@ -113,14 +113,11 @@ var app = http.createServer(function(request,response){
             var post = qs.parse(body);
 
             //post의 form data에 title과 description에 대한 데이터가 들어 있다.
-            var title = post.title;
-            var description = post.description;
-
             //파일 생성하고 안에 내용을 추가한다. write할 때 파일이 없다면 자동으로 생성한다.
             fs.writeFile(`./data/${post.title}`,`${post.description}`,'utf8',function(err){
                 //301 : 앞으로 새 URL로 영원히 접근해야한다.
                 //302 : 지금만 이 URL로 이동한다.
-                response.writeHead(302, {Location:`/?id=${title}`});
+                response.writeHead(302, {Location:`/?id=${post.title}`});
                 response.end();
             });
         });
@@ -135,7 +132,7 @@ var app = http.createServer(function(request,response){
                 //편집 UI에 파일의 내용을 넣어주어야한다.
                 //input의 hidden는 수정 필요없이 form data로 전송하고 싶은 데이터를 넣어둔다.
                 //input은 value로 textarea은 <textarea>내용</textarea> 이렇게 넣어준다.
-                var template = templat.makeHTML(title, list,`
+                var html = template.makeHTML(title, list,`
                     <form action="http://192.168.0.81:3000/update_process" method="POST">
                         <p><input type="hidden" name="id" value="${queryData.id}"></p>
                         <p><input type="text" name="title" placeholder="title" value="${queryData.id}"></p>
@@ -147,7 +144,7 @@ var app = http.createServer(function(request,response){
                 `, '');
 
                 response.writeHead(200);
-                response.end(template);
+                response.end(html);
             });
         });
     }
@@ -186,7 +183,7 @@ var app = http.createServer(function(request,response){
             //파일 삭제
             fs.unlink(`./data/${post.id}`, function(err){
                 //파일 삭제 후 WEB 페이지로 리다이렉트 한다.
-                response.writehead(302, {Location:'/'});
+                response.writeHead(302, {Location:'/'});
                 response.end();
             });
         })

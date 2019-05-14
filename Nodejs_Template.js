@@ -35,6 +35,7 @@ var template = {
                 <body>
                     <h1><a href="/"> WEB </a></h1>
                     ${list}
+                    ${control}
                     ${body}
                 </body>
             </html>`;
