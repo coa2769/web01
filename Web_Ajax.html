@@ -17,7 +17,7 @@
 
                 </ol>
                 <script>
-                    fetch('list').then(function(response){
+                    fetch('./data/list').then(function(response){
                         response.text().then(function(text){
                             //string을 매개변수 문자에 따라 나눠서 배열로 만들어준다.
                             var item = text.split(",");
