@@ -12,7 +12,7 @@ Ajax
     </head>
     <body>
         <article>
-
+//'" onclick="FetchPage(' + item[i] + ')"> ' +
         </article>
         <input type="button" value="fetch" onclick="
            //fetch함수의 매개변수로 대입한 파일이름에 맞는 파일을 server가 전송해준다.
