@@ -54,6 +54,6 @@ function FetchPage(fileName)
         response.text().then(function(text){
             document.querySelector('article').innerHTML=text;
         })
-    })
+    });
 }
 
