@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Pong</title>
+    </head>
+    <body>
+        <script>
+            const WIDTH = 700, HEIGHT=600, PI=Math.PI;
+            var canvas, ctx, keyState;
+            var player, ai, ball;
+
+            player = {
+                x:null,
+                y:null,
+                width:20,
+                height:100,
+
+                update:function(){},
+                draw:function(){
+                    ctx.fillRect(this.x, this.y,this.width,this.height);
+                }
+            }
+
+            ai = {
+                x:null,
+                y:null,
+                width:20,
+                height:100,
+
+                update:function(){},
+                draw:function(){
+                    ctx.fillRect(this.x, this.y,this.width,this.height);
+                }
+            }
+
+            ball ={
+                x:null,
+                y:null,
+                side:20,
+
+                update:function(){},
+                draw:function(){
+                    ctx.fillRect(this.x, this.y,this.side,this.side);
+                }
+            }
+
+            function main()
+            {
+                canvas =document.createElement("canvas");
+                canvas.width = WIDTH;
+                canvas.height = HEIGHT;
+                ctx = canvas.getContext("2d");
+                document.body.appendChild(canvas);
+
+                init();
+
+                var loop = function()
+                {
+                    update();
+                    draw();
+
+                    window.requestAnimationFrame(loop, canvas);
+                };
+                window.requestAnimationFrame(loop, canvas);
+            }
+
+            function init() 
+            {
+                player.x = player.width;
+                player.y = (HEIGHT - player.height)/2;
+
+                ai.x = WIDTH - (player.width + ai.width);
+                ai.y = (HEIGHT - ai.height)/2;
+
+                ball.x = (WIDHT - ball.side)/2;
+                ball.y = (HEIGHT - ball.side)/2;
+            }
+
+            function update() {}
+
+            function draw() {}
+
+            main();
+
+            const canvas = document.getElementById('my-house');
+            const ctx = canvas.getContext('2d');
+
+            ctx.lineWidth = 10;
+            ctx.fillStyle = 'green';
+
+            ctx.strokeRect(75,140,150,110);
+            ctx.fillRect(130,190,40,60);
+
+            ctx.moveTo(50,140);
+            ctx.lineTo(150,60);
+            ctx.lineTo(250,140);
+            ctx.closePath();
+            ctx.stroke();
+
+
+            </script>
+        <canvas id="my-house" width="300" height="300"></canvas>
+
+
+    </body>
+</html>
