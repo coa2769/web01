@@ -12,7 +12,7 @@ Ajax
     </head>
     <body>
         <article>
-//'" onclick="FetchPage(' + item[i] + ')"> ' +
+//
 //https://coa2769.github.io/web01/Web_Ajax.html
         </article>
         <input type="button" value="fetch" onclick="
