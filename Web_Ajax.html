@@ -36,10 +36,13 @@
                             document.querySelector('#nav').innerHTML=tags;
                         })
                     });
+
+                    console.log("next");
+                    console.log(location);
+                    
                 
                     if(location.hash)
                     {   
-                        console.log(location);
                         var name = "./data/" + location.hash.substring(2);
                         FetchPage(name);
                     }
