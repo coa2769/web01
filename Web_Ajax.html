@@ -17,6 +17,14 @@
 
                 </ol>
                 <script>
+                    //F5 키를 눌렀을 때 본문을 다시 출력하기 위한 code
+                    if(location.hash)
+                    {   
+                        console.log("In location.hash");
+                        var name = "./data/" + location.hash.substring(2);
+                        FetchPage(name);
+                    }
+
                     fetch('./data/list').then(function(response){
                         response.text().then(function(text){
                             //string을 매개변수 문자에 따라 나눠서 배열로 만들어준다.
@@ -27,6 +35,7 @@
                             {
                                 //trim은 앞의 공백을 지워준다.
                                 item[i] = item[i].trim();
+                                //onclick event 속성에 FetchPage함수를 넣어 눌렸을 때 호출되게 한다.
                                 var tag = '<li><a href="#!' + item[i] + '" onclick="FetchPage(\'./data/'+item[i]+'\')"> ' +  item[i] +'</a></li>';
                                 tags = tags + tag;
                                 i = i + 1;
@@ -37,17 +46,8 @@
                         })
                     });
 
-                
-                    // if(location.hash)
-                    // {   
-                    //     console.log("In location.hash");
-                    //     var name = "./data/" + location.hash.substring(2);
-                    //     FetchPage(name);
-                    // }
-                    //else
-                    //{
-                        //여기에 초기 페이지 FetchPage()
-                    //}
+
+
                 </script>
             </div>
             <div>
