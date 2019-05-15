@@ -38,8 +38,9 @@
                     });
                 
                     if(location.hash)
-                    {
-                        FetchPage("./data/" + location.hash.substring(2));
+                    {   
+                        var fileName = "./data/" + location.hash.substring(2);
+                        FetchPage(fileName);
                     }
                     //else
                     //{
