@@ -39,14 +39,11 @@
                                 var tag = '<li><a href="#!' + item[i] + '" onclick="FetchPage(\'./data/'+item[i]+'\')"> ' +  item[i] +'</a></li>';
                                 tags = tags + tag;
                                 i = i + 1;
-                                console.log(tag);
                             }
-
+                            console.log("./data/list");
                             document.querySelector('#nav').innerHTML=tags;
                         })
                     });
-
-
 
                 </script>
             </div>
