@@ -36,10 +36,10 @@
                             document.querySelector('#nav').innerHTML=tags;
                         })
                     });
-
+                
                     if(location.hash)
                     {
-                        FetchPage(location.hash.substring(2));
+                        FetchPage('./data/' + location.hash.substring(2));
                     }
                     //else
                     //{
