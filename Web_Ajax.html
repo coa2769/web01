@@ -17,14 +17,6 @@
 
                 </ol>
                 <script>
-                    //F5 키를 눌렀을 때 본문을 다시 출력하기 위한 code
-                    if(location.hash)
-                    {   
-                        console.log("In location.hash");
-                        var name = "./data/" + location.hash.substring(2);
-                        FetchPage(name);
-                    }
-
                     fetch('./data/list').then(function(response){
                         response.text().then(function(text){
                             //string을 매개변수 문자에 따라 나눠서 배열로 만들어준다.
@@ -40,11 +32,16 @@
                                 tags = tags + tag;
                                 i = i + 1;
                             }
-                            console.log("./data/list");
                             document.querySelector('#nav').innerHTML=tags;
                         })
                     });
 
+                    //F5 키를 눌렀을 때 본문을 다시 출력하기 위한 code
+                    if(location.hash)
+                    {   
+                        var name = "./data/" + location.hash.substring(2);
+                        FetchPage(name);
+                    }
                 </script>
             </div>
             <div>
