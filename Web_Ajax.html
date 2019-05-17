@@ -28,6 +28,7 @@
                                 //trim은 앞의 공백을 지워준다.
                                 item[i] = item[i].trim();
                                 //onclick event 속성에 FetchPage함수를 넣어 눌렸을 때 호출되게 한다.
+                                //파일 경로가 바뀐다면 그 경로를 다시 적용해야한다.
                                 var tag = '<li><a href="#!' + item[i] + '" onclick="FetchPage(\'./data/'+item[i]+'\')"> ' +  item[i] +'</a></li>';
                                 tags = tags + tag;
                                 i = i + 1;
