@@ -1,0 +1,25 @@
+/*main의 내용을*/
+#columns{
+    column-width: 350px;
+    column-gap: 15px;
+}
+
+/*figure tag에 그림자를 둔다.*/
+#columns figure{
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 0;
+    margin-bottom: 15px;
+    padding: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+#columns figure img{
+    height: 200px;
+}
+
+#columns figure figcaption{
+    border-top:1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin-top: 11px;
+}

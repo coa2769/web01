@@ -17,11 +17,11 @@ ex)
 
 ## 1) 기본 문법
 > ### (1) tag로 JS code 추가하는 방법
-> HTML위에서 동작하는 JS(javaScript)는 웹브라우져에게 이 code가 JS라는 것을 알려줘야한다.
+> HTML위에서 동작하는 JS(javaScript)는 웹브라우저에게 이 code가 JS라는 것을 알려줘야한다.
 > -  **`<script>, </script>`** : 이 태그 안에 작성된 코드들은 JS로 분석한다. body, head 어디든 선언가능하다.
-> - JS를 이용하여 제어하려는 tag를 **`selector(선택자, CSS참고)`**로 선택하고 JS  code의 동작에따라 CSS code를 삽입되어 화면에 변화를 준다.
-> - JS의 주석은 //로 표현한다.
-> 추천 검색어
+> - JS를 이용하여 제어하려는 tag를 **`selector(선택자, CSS참고)`** 로 선택하고 JS  code의 동작에따라 CSS code를 삽입되어 화면에 변화를 준다.
+> - JS의 주석은 //로 표현한다.<br>
+> **[추천 검색어]**
 >> ```
 >> //JS를 이용하여 제어하고자 하는 tag 찾을 때
 >> Javascript select tag by CSS selector
@@ -43,13 +43,15 @@ ex)
 
 > ### (3) console로 JS code 실행
 > 웹브라우저 >> 마우스 오른쪽 버튼 >> 검사 로 개발자 도구를 켤 수 있다. 여기서 console은 즉석에서 JS code를 실행하는 것이 가능하다.
+>
 > <img src="./image/01.png" height="200">
+>
 > 이 console에서 실행하는 JS code는 지금 해당하는 page의 code인 것 처럼 실행됩니다. element에서 ESC를 눌러 console 창을 보일 수 있다.
 
 - - -
 
 ## 2) Data type
- JS는 변수를 사용할 수 있고 `입력하는` 값들에 Data type이있다. 또한 여러 연산자들을 사용할 수 있다. 단, 
+ JS는 변수를 사용할 수 있고 `입력하는` 값들에 Data type이있다. 또한 여러 연산자들을 사용할 수 있다.<br>
  **[추천 검색어]**
  ```
  Javascript Data type
@@ -73,7 +75,7 @@ ex)
 >> //문자열에서 +연산자는 두 문자열을 결합해준다.
 >> "1" + "1" -> "11"
 >> ```
-> - **Template Literal**
+> - **Template Literal** <br>
 > Literal : 정보를 표현하는 방법, 기호를 말한다.
 >> ```
 >> //숫자를 나타내는 Literal : 상수만으로 표현한다.

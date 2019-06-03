@@ -1,0 +1,61 @@
+/* 전체 tag */
+a{
+    text-decoration: none;
+}
+
+/* 구 성 */
+.container{
+    display: grid;
+    /* 행의 비율을 나타낸다.  */
+    grid-template-rows: 150px 50fr 1fr;
+    /* 열의 비율을 나타낸다.*/
+    grid-template-columns: 200px 5fr;
+    /* 각 Semantic tag로 어떻게 배치되는지 나타낸다. */
+    grid-template-areas: 
+        "header header"
+        "nav main"
+        "footer footer";
+    /*grid-gap는 나눈 영역에 간격을 준다.*/
+    /* grid-gap: .75em; */
+
+}
+header{
+    grid-area: header;
+    background-color: #3C5A91;
+    border-style: solid;
+    border-color: #3C5A91;
+}
+nav{
+    grid-area: nav;
+    /*위 | 오른쪽 | 아래 | 왼쪽*/
+    border-style: none solid none solid;
+    border-width: 1px;
+    border-color: #d2d2d2;
+}
+main{
+    grid-area: main;
+}
+footer{
+    grid-area: footer;
+    background-color: lightgreen;
+}
+
+/* main title style*/
+.home_header{
+    text-align: center;
+}
+.home_Link{
+    color: white;
+}
+
+/* 페이지 목록 */
+.category{
+    color: black;
+    font-size: 20px;
+    margin-left: 20px;
+}
+ul{
+    list-style: none;
+    padding-left: 0px;
+}
+

@@ -9,7 +9,7 @@ HTML의 부족한 시각적 부분을 또 다른 언어인 CSS를 만들어 체�
 ## 1) 기본 문법
 >### (1) HTML에서 CSS언어 사용하기
 > Web browser는 기본적으로 코드들을 HTML코트라고 생각하고 번역한다.
-> 그러므로 CSS코드를 쓸 때에는 web broser에게 이 코드가 CSS라는 것을 HTML 코드로 알려줘야 한다. 한 효과에 대한 구분으로 반드시 뒤에 **`Declaration(;)`**를 붙인다.
+> 그러므로 CSS코드를 쓸 때에는 web broser에게 이 코드가 CSS라는 것을 HTML 코드로 알려줘야 한다. 한 효과에 대한 구분으로 반드시 뒤에 **`Declaration(;)`** 를 붙인다.
 
 > - **`<style>, </style>`** : 이 태그 안에 작성된 코드들은 CSS언어로 분석해 달라고 요청하는 태그이다. head태그 안에 들어가서 본문의 전체 내용에 관해서 시각적 변경사항을 작성하는 부분이다.
 
@@ -223,3 +223,12 @@ HTML태그 하나하나가 박스처럼 부피가 존재하도록 되어있다. 
 - 브라우저 > 화면에서 오른쪽 클릭 > 검사(Inspect)
 - 검사(Inspact)에서 **`tag선택 > Styles`** 을 누르면 그 tag에 적용된 Style을 볼 수 있다.
 - > <a href="https://caniuse.com/" target="_blank"> Can I use </a> 이 사이트는 웹의 최신 기술들이 웹브라우저들이 얼마나 사용하는자 알 수 있게 해준다.
+
+**[도전 과제]**
+```
+//위치를 의미만하는 tag
+Semantic tag
+//본문을 구성하는 요소
+Section : https://webdir.tistory.com/310
+
+```

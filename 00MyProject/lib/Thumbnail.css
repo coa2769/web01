@@ -1,0 +1,17 @@
+/* 섬네일 */
+.thumbnail{
+    background-color: gray;
+    margin: 10px;
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.thumbnail.round{
+    border-radius: 10%;
+}
+.thumbnail.circle{
+    border-radius: 100%;
+}

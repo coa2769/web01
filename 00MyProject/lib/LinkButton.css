@@ -1,0 +1,29 @@
+/*a tag로 버튼 모양 만들기*/
+.btn{
+    /*a tag의 text속성을 삭제*/
+    text-decoration: none;
+    font-size: 2rem;
+    /*font 색깔*/
+    color: white;
+    padding: 10px 20px 10px 20px;
+    margin: 20px;
+    /*자기 부피만크만 사용*/
+    display: inline-block;
+    border-radius: 10px;
+    /* ?? */
+    transition: all 0.1s;
+    /* 글자에 그림자 생성 */
+    text-shadow: 0px -2px rgba(0, 0, 0, 0.44);
+    font-family:'Lobster', cursize;
+}
+/* 눌리는 모션 */
+.btn:active{
+    transform: translateY(3px);
+}
+.btn.blue{
+    background-color: #1f75d9;
+    border-bottom: 2px solid #165195;
+}
+.btn.blue:active{
+    border-bottom: 2px solid #165195;
+}

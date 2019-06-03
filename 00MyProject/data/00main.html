@@ -3,34 +3,82 @@
     <head>
         <title>My Project Blog</title>
         <meta charset="UTF-8">
-        <style>
-            div{
-                display: block;
-            }
-            ul{
-                list-style: none;
-                padding-left: 0px;
-            }
-            .wrapper{
-                width: 980px;
-                overflow: hidden;
-            }
-        </style>
+        <link rel="stylesheet" href="../lib/Configuration.css">
+        <link rel="stylesheet" href="../lib/LinkButton.css">
+        <link rel="stylesheet" href="../lib/MultiColumn.css">
+        <link rel="stylesheet" href="../lib/Thumbnail.css">
     </head>
     <body>
-        <!-- main page -->
-        <h1><a href="/"> My Project Blog </a></h1>
+        <script>
+            function ChangeBackground(button)
+            {
+                var navTag = document.querySelector('nav');
+                var mainTag = document.querySelector('main');
+                var categoryList = document.querySelectorAll('.category');
+                if(button.value === 'night')
+                {
+                    navTag.style.backgroundColor = 'black';
+                    
+                    var i = 0;
+                    while(i < categoryList.length)
+                    {
+                        categoryList[i].style.color = 'white';                        
+                        i = i + 1;
+                    }
+                   
+                    mainTag.style.backgroundColor = 'black';
+                    mainTag.style.color = 'white';
+                    button.value = 'day';
+                }
+                else
+                {
+                    navTag.style.backgroundColor = 'white';
+                    
+                    var i = 0;
+                    while(i < categoryList.length)
+                    {
+                        categoryList[i].style.color = 'black';                        
+                        i = i + 1;
+                    }
 
-        <!-- List -->
-        <div class="wrapper">
-            <ul>
-            <li><a href="/?id=one"> One </a></li>
-            <li><a href="/?id=two"> Two </a></li>
-            <li><a href="/?id=three"> Three </a></li>
-            <li><a href="/?id=four"> Four </a></li>
-            </ul>
+                    mainTag.style.backgroundColor = 'white';
+                    mainTag.style.color = 'black';
+                    button.value = 'night';
+                }
+            }
+        </script>
+
+        <div class="container">
+            <header>
+                <h1 class="home_header"><a class="home_Link" href="/"> Main Shop </a></h1>
+                <input type="button" value="night" onclick="ChangeBackground(this)">
+            </header>
+            <nav>
+                <h1 class="category">카테고리</h1>
+                <ul>
+                    <li><a class="category" href="./Weapon">Weapon</a></li>
+                    <li><a class="category" href="./Portion">Portion</a></li>
+                    <li><a class="category" href="./Armor">Armor</a></li>
+                    <li><a class="category" href="./Order">Order sheet</a></li>
+                </ul>
+            </nav>
+            <main id="columns">
+                <figure>
+                    <!-- 섬네일 -->
+                    <div class="thumbnail circle" style="background-image:url('../../MD file/image/01.png')"></div>
+                    상품 이름<br>
+                    <img src="../../MD file/image/01.png">
+                    <figcaption>
+                        1,000 coin<br>
+                        Rapunzel, clothed in 1820’s period fashion<br>
+                    </figcaption>
+                    <a class="btn blue" href="#blue">Buy</a>
+                </figure>
+            </main>
+            <footer>
+                <!-- 댓글 기능 -->
+                FOOTER
+            </footer>
         </div>
-        
-
     </body>
 </html>

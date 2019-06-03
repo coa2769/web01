@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box-container{
+            display:flex;
+        }
+        .box{
+            width: 100px;
+            height: 100px;
+            border: 2px solid;
+            background: rgba(255,255,0,0.7);
+            /*이렇게 시간을 주어서 애니메이션을 줄 수 있다.
+            transition: 1s;는 아래 내용이 축약되어 있는 것이다.
+                transition-property: all;
+                transition-duration: 1s;
+                transition-timing-function: ease;
+                transition-delay: 0s;
+            */
+            transition: 1s cubic-bezier(0.25, 0.1, 1, 1.62);
+        }
+        .box:hover{
+            /*transform을 사용하지 않았고 직접 조절 한다면
+            기준점은 top & left가 되고 다른 나란히 존재하는 tag들을
+            옆으로 밀어낸다.*/
+            /* width: 200px;
+            height: 200px; */
+
+            /*transform를 사용한다면 중앙을 기준점으로 하여 작동하고 
+            웹브라우저는 다른 tag들의 위치를 고려할 필요 없다.
+            그러므로 성능도 뛰어나다.
+            deg = 도*/
+            /*크기 & 회전*/
+            /* transform: scale(1.2) rotate(45deg); */
+            /* 비틀기 */
+            /* transform: skewY(-30deg); */
+            /*이동*/
+            /* transform: translate(30px, 10px); */
+
+            /* 기준점 변경 */
+            /* transform: scale(2);
+            transform-origin: left top;
+            transform-origin: 30% 80%; */
+
+            width: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Trasform</h1>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam debitis facere itaque rerum quisquam optio pariatur ullam ipsum veritatis doloribus, assumenda, sequi iure quasi aut animi blanditiis accusamus asperiores sit, soluta temporibus voluptatem dolorum aliquam neque voluptatum. Facere veritatis itaque recusandae quam aut ab nihil repudiandae in odio veniam eligendi magni voluptate asperiores, porro architecto doloribus? Repellendus natus illo sit nisi velit eius quo aliquid delectus, incidunt illum esse qui dolore possimus unde fugit quis reprehenderit atque accusamus voluptatum dolores animi sunt non ab. Ipsam debitis similique porro. Laborum a dolorum itaque earum! Iure, adipisci itaque! Nulla repellat pariatur vero?
+    </p>
+    <div class="box-container">
+        <div class="box">A</div>
+        <div class="box">B</div>
+        <div class="box">C</div>
+        <div class="box">D</div>
+        <div class="box">E</div>
+    </div>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde voluptatem aperiam sunt quasi quidem debitis iusto odio soluta cumque ipsam suscipit ut voluptas aliquam explicabo doloremque doloribus dolorum nulla laborum, atque officia totam adipisci blanditiis voluptates. Omnis quam nulla, nostrum aut culpa, at necessitatibus obcaecati veritatis veniam voluptates illo dolorum iure? Veritatis consequatur velit id sunt repellat at voluptatum, cum maiores pariatur quae nihil numquam atque eligendi nulla ratione et dolores quos odit perferendis natus. Modi, distinctio officiis? Ab, soluta, mollitia saepe illo iusto neque reprehenderit amet perferendis quasi nam distinctio labore tempore, dolore ipsa voluptatem ut provident! Incidunt, eligendi!
+    </p>    
+</body>
+</html>
