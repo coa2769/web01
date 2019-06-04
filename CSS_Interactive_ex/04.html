@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .world{
+            /*
+            vw : 웹 페이지의 가로 길이를 기준으로한 %값
+                전체 가로 길이를 100vw 이다.
+            vh :  웹 페이지의 세로 길이를 기준으로한 % 값
+                전체 세로 길이를 100vh 이다.
+            */
+            width: 60vw;
+            height: 60vh;
+
+        }
+
+        .card{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 150px;
+            /*
+            em : font size를 기준으로한 비율
+            rem : root인 html의 font size로한 비율
+            */
+            border-radius: 0.5em;
+            font-size: 1.5rem;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="world">
+        <div class="card">CARD</div>
+    </div>
+</body>
+</html>

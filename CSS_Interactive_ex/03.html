@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @keyframes spaceship-ani{
+            /*0% 생략 가능
+            0% => from
+            100% => to
+            */
+            /*1. 이것만 정해주면 보통 animation처럼 이미지가 가속도하여 이동한다.*/
+            100%{
+                /*1-1. 긴 sprite image가 마지막에 이동할 부분을 나타낸다.
+                background-position : 배경 이미지의 위치 속성*/
+                background-position: -2550px 0;
+            }
+        }
+        .spaceship{
+            width: 150px;
+            height: 150px;
+            /*2. 이미지의 어느정도 크기만을 출력할 것인지 정한다.*/
+            background: url('./image/sprite_spaceship.png') no-repeat 0 0 / auto 150px;
+            /*3. steps(frame 단계) : 보통 animation이 아닌
+            다음 동작의 이미지가 바로 보이도록 단계를 정한다.
+            또한 animation을 제어하듯 frame도 제어할 수 있다.*/
+            animation: spaceship-ani 0.5s infinite steps(17);
+        }
+    </style>
+</head>
+<body>
+    <!--frame by frame-->
+    <div class="spaceship"></div>
+</body>
+</html>
