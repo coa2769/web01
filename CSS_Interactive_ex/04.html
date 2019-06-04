@@ -7,6 +7,9 @@
     <title>Document</title>
     <style>
         .world{
+            display: flex;
+            align-items: center;
+            justify-content: center;
             /*
             vw : 웹 페이지의 가로 길이를 기준으로한 %값
                 전체 가로 길이를 100vw 이다.
@@ -15,7 +18,16 @@
             */
             width: 60vw;
             height: 60vh;
-
+            background: #fff000;
+            /*
+            1. 원근감에 대한 속성이다. 
+            눈에 가까이 있을 수록 원근감이 더 확실히 보인다. 이런 정면으로의 거리를
+            임의로 정해주는 값이다.
+            단 여기에 선언할 경우 월드의 중앙에 사용자의 눈이 있다고 생각하고
+            각각의 다른 위치에 있는 이미지들이 각은 각도로 기울였지만 다른 모양으로 
+            보이게 된다.
+            */
+            /* perspective: 500px; */
         }
 
         .card{
@@ -24,6 +36,7 @@
             justify-content: center;
             width: 100px;
             height: 150px;
+            margin: 1em;
             /*
             em : font size를 기준으로한 비율
             rem : root인 html의 font size로한 비율
@@ -31,11 +44,31 @@
             border-radius: 0.5em;
             font-size: 1.5rem;
             background: red;
+            /*
+            2. 각각의 tag에 적용되는 class에 perspective를 적용하면 
+            각각의 tag객체의 모양이 똑같이 보인다.
+            */
+            /* transform: perspective(500px) rotateY(45deg); */
+           
+           /*이렇게 아무런 변화가 없는 0도 이지만 해놓는 다면 웹브라우저가
+           이 class의 tag는 회전하는 작동을 한다고 판단하고 미리 준비를 한다.*/
+           transform: rotateY(0deg);
+            transition: 1s;
         }
+         /*
+        3. 이렇게 3D 작용을 transition과 같이 적용하면 애니메이션 처럼 입체적으로
+        회전, 이동, 변형되는 모습을 볼 수 있다.
+        */
+        .world:hover .card{
+            transform: rotateY(180deg);
+        }
+
     </style>
 </head>
 <body>
     <div class="world">
+        <div class="card">CARD</div>
+        <div class="card">CARD</div>
         <div class="card">CARD</div>
     </div>
 </body>

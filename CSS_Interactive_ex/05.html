@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .world{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60vw;
+            height: 60vh;
+            background: #fff000;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="world">
+        <!--
+        부모 tag를 기준으로 자식 tag의 위치를 정하고 싶다면
+        기본 상태인 position: static(top left가 기준)가 아닌 그외의 설정으로 해주는데
+        보통 postition: relative로 변경하여 어느 위치로도 기준으로 설정
+
+        -->
+        <div class="card">
+            <div class="card-side-front">F</div>
+            <div class="card-side-back">B</div>
+        </div>
+    </div>
+</body>
+</html>
