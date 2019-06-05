@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+            /* flex-direction: column; 축의 방향 */
+            
+            /*flex로 정렬을 줄수도 있다.
+            
+            justify-content : flex의 축과 직각방향으로 정렬
+            
+            align-items : flex의 축 방향으로 정렬
+            기본 축이 row이면 위 아래로 정렬
+            │   │   │   │
+            │   │   │   │
+            │   │   │   │
+            │ a │ b │ c │
+
+            space-between : 양쪽 끝에 요소를 붙이고 사이에 
+            여백을 준다.
+            space-around : 양쪽 끝에 여백을 주고 사이에도 여백을 주다.
+            */
+            /* justify-content: center;
+            align-items: center; */
+
+            height: 80vh;
+            background: gray;
+        }
+        .item {
+            /*flex-grow는 요소가 감싼 컨텐츠(여기서는 문자)를 뺀 여백을 값의 비율로
+            배분한다.
+            */
+            flex-grow: 1;
+            /* 이걸로 flex-grow에서 그대로인 컨텐츠의 비율을
+            변경할 수 있다.  0으로 값을 주면 컨텐츠의 비율이 0으로
+            되기 때문에 flex-grow의 비율을 그대로 적용할 수 있다.*/
+            flex-basis: 0;
+            /*
+            축약형으로 flex를 사용가능하다.
+            flex는 밑의 속성을 축약한 것이다.
+            flex-grow:    늘어날 때의 비율
+            flex-shrink:   줄어들 때의 비율. 디폴트로 grow와 같은 비율을 쓴다.
+            flex-basis:     컨텐츠의 비율. 디폴트 값이 0%이다.            
+            
+            */
+            flex: 1;
+
+            border: 3px solid black;
+            font-size: 3rem;
+            background: white;
+        }
+        /* 이렇게 하여 flex-grow속성을 주어 각각의 child에게
+        여백의 비율을 값에 따라 배분한다. */
+        /* .item:nth-child(1){flex-grow: 1;}
+        .item:nth-child(2){flex-grow: 5;}
+        .item:nth-child(3){flex-grow: 2;}
+        .item:nth-child(4){flex-grow: 3;}
+        .item:nth-child(5){flex-grow: 1;} */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item">AAA</div>
+        <div class="item">B</div>
+        <div class="item">CCCC</div>
+        <div class="item">DDD</div>
+        <div class="item">E</div>
+    </div>
+</body>
+</html>

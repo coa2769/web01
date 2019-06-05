@@ -13,8 +13,71 @@
             width: 60vw;
             height: 60vh;
             background: #fff000;
+            perspective: 500px;
         }
         
+        .card{
+            position: relative;
+            width: 100px;
+            height: 150px;
+            margin: 1em;
+            transform: rotateY(0deg);
+            transition: 1s;
+            /* 
+            3D 효과를 주고 싶은 요소(tag)가 있다면 그 요소 위에 
+            공간을 3D화해주거나 
+            preserve-3d 속성 값을 주어 자식 요소에게도 자신에게
+            적용된 3D공간에 적용할 수 있도록 한다.
+            */
+            transform-style: preserve-3d;
+            /*internet explor는 transform-style: preserve-3d; 이 적용되지
+            않는다. 그러므로 부모 card 요소를 없애고 부모를 world로 두어서
+             두개를 각각 돌리는 방법을 사용한다.*/
+
+            /*기준점 변경으로 다른 작용을 해줄 수 있다.*/
+            transform-origin: left;
+        }
+        /*카드위 앞면 뒷면 모두 해당되는 내용*/
+        .card-side{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*
+            1. absolute : 부모 tag를 기준으로 위치를 정한다.
+            이렇게만 설정한다면 뒷면인 B가 F를 덮어 쓰게 된다.
+            */
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5em;
+            font-size: 1.5rem;
+            /* 
+            backface-visibility는 가려진 이면을 보이게 할 것인지
+            설정하는 속성 값이다.
+             */
+            /*Max의 웹브라우저에서는 webkit 접두어가 필요하다.*/
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden; /*표준 속성을 같이 사용해준다.*/
+        }
+
+        .card-side-front{
+            z-index: 1;
+            background: white;
+
+        }
+        .card-side-back{
+            /* 뒷면이므로 뒤집어 놓자 */
+            transform: rotateY(180deg);
+            background: red;
+
+        }
+        
+        .world:hover .card{
+            
+            transform: rotateY(180deg);
+        }
 
     </style>
 </head>
@@ -23,13 +86,84 @@
         <!--
         부모 tag를 기준으로 자식 tag의 위치를 정하고 싶다면
         기본 상태인 position: static(top left가 기준)가 아닌 그외의 설정으로 해주는데
-        보통 postition: relative로 변경하여 어느 위치로도 기준으로 설정
+        보통 postition: relative로 변경하여 어느 위치로도 기준으로 설정할 수 
+        있도록 한다.
 
         -->
         <div class="card">
-            <div class="card-side-front">F</div>
-            <div class="card-side-back">B</div>
+            <div class="card-side card-side-front">F</div>
+            <div class="card-side card-side-back">B</div>
         </div>
     </div>
 </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .world{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60vw;
+            height: 60vh;
+            background: #fff000;
+            perspective: 500px;
+        }
+        
+        /*카드위 앞면 뒷면 모두 해당되는 내용*/
+        .card-side{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100px;
+            height: 150px;
+            margin: -75 0 0 -50;
+            border-radius: 0.5em;
+            font-size: 1.5rem;
+
+            backface-visibility: hidden;
+
+            transition: 1s;
+
+        }
+
+        .card-side-front{
+            z-index: 1;
+            background: white;
+
+        }
+        .card-side-back{
+            /* 뒷면이므로 뒤집어 놓자 */
+            transform: rotateY(180deg);
+            background: red;
+        }
+        
+        .world:hover .card-side-front{
+            
+            transform: rotateY(180deg);
+        }
+
+        .world:hover .card-side-back{
+            
+            transform: rotateY(360deg);
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="world">
+        <div class="card-side card-side-front">F</div>
+        <div class="card-side card-side-back">B</div>
+    </div>
+</body>
+</html> -->
