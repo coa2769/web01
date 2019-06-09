@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/02_02.css">
+</head>
+<body>
+   
+    <div class="stage">
+        <div class="ilbuni"></div>
+        <div class="ilbuni"></div>
+        <div class="ilbuni"></div>
+    </div>
+    <script>
+
+        (function(){
+            //이전 code
+            //const ilbuniGroup = document.querySelectorAll('.ilbuni');
+            //const stage = document.querySelector('.stage');
+            
+            //function clickHandler(e){
+                ////console.log(this);
+                
+                ////stage.removeChild(this);
+                ////this.parentNode.removeChild(this);
+                //stage.removeChild(e.currentTarget);
+            //}
+
+            // for(let i=0;i<ilbuniGroup.length;i++)
+            // {
+                
+            //     ilbuniGroup[i].addEventListener('click', clickHandler);
+            // }
+
+            //수정 후 code
+            //이벤트 위임
+            //for문으로 각각 요소에 이벤트를 등록하는 code가 있다.
+            //이렇게 이벤트에 대한 처리 등록이 많을 수록 메모리를
+            //많이 소비하기 때문에성능에 좋지않다.
+            //이를 해결하기 위해 '이벤트 위임' 이라는 기능을 사용한다.
+            //부모에게 이벤트를 처리를 넘기는 방법이다.
+            
+            const stage = document.querySelector('.stage');
+
+            function clickHandler(e){
+                //classList.contains(문자열) : 대입된 문자열의 이름으로 된 class
+                //있는지 판변하는 함수.
+                if(e.target.classList.contains('ilbuni'))
+                {
+                    stage.removeChild(e.target);
+                }
+            }
+
+            stage.addEventListener('click', clickHandler);
+
+        })();
+    </script>
+</body>
+</html>
