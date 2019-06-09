@@ -227,6 +227,12 @@ char.getAttribute('data-id');
 ```js
 //요소의 추가
 const pElem = document.createElement('p');
+/*
+결과
+pElem안에
+    <p></p>
+    라는 값이 들어가 있다.
+*/
 pElem.innerHTML = '<a href="#">안녕</a>???'
 /*
 결과
@@ -239,5 +245,93 @@ pElem에 아래의 값이 들어가 있다.
 
 const charactersElem = document.querySelector('.characters');
 characterElem.appendChild(pElem);
+/* 가져온 객체의 자식으로 pElem의 HTML code내용을 대입한다.*/
 
+charactersElem.removeChild(document.querySelector('.b'));
+/* 객체의 내용을 삭제한다. */
+
+const ilbuni = document.querySelector('.ilbuni');
+ilbuni.classList.add('special');
+/* 가져온 객체에 새로운 class를 추가한다.*/
+
+ilbuni.className = 'special';
+/* 기존 class속성을 지우고 대입되는 문자열로 초기화한다. */
+
+ilbuni.classList.remove('ilbuni');
+/* 가져온 객체에서 대입된 문자열과 같은 이름의 class 속성값을 삭제한다. */
+
+ilbuni.classList.toggle('ilbuni');
+/* 가져온 객체에서 대입된 문자열과 같은 이름의 class속성값이 적용되어 있다면 해제하고 해제되어 있다면 적용된다. 이렇듯 class 속성값이 아예 삭제되는 것이 아닌 사용을 제어하는 함수이다. */
+```
+
+# 9) JS 이벤트
+사용자의 작용, server와의 통신 등으로 생겨나는 신호를 이벤트라고 하고 각 이벤트에 맞게 웹 페이지에 code가 추가, 삭제, 수정 된다면 동적인 웹 페이지를 보여 줄 수 이다.
+
+```js
+const ibuni = document.querySelector('.ibuni:nth-child(3)');
+ilbuni.addEventListener('click', function(){
+    /*이벤트가 생겼을 때 처리할 행동*/
+    ilbuni.classList.add('special');
+})
+/*
+addEventListener(이벤트 문자열, callback 함수, ...)
+*/
+
+window.addEventListener('load', function(){});
+/*
+windows객체는 HTML문서 자체를 나타낸다.
+
+js가 DOM객체를 가져오고 싶다면 load가 되어야 한다.
+
+그러므로 아래와 같은 이벤트를 사용하거나 맨 아래에 Script를 추가한다.
+
+load 이벤트 : 문서를 모두 읽었을 때 호출되는 이벤트.
+DOMContentLoaded : 문서 전체가 아닌, DOM객체들을 모두 읽어 들였을 때 호출된다.(문서에 포함된 이미지나 다른 파일들이 로드되지 않았어도 html 요소들이 모두 로드되었다면 이벤트가 불린다.) load이벤트보다 효율적이다.
+*/
+
+/* 전역함수 : script 태그 안에 선언한 변수는 그 페이지에서 전역 변수로 사용된다. 하지만 JS는 전역변수의 최소화를 권장하고 있다. 그러므로 이런 기능들을 함수 단위로 묶는다.*/
+
+(function() {
+    const libuni = document.Selector('.ilbuni');
+    /*이렇게 함수 내부에서*/
+})(); /*()로 선언을 묶고 함수 호출자를 바로 사용하여 생성과 실행을 동시에 할 수 있다.*/
+
+```
+```html
+<body>
+    <div class="characters">
+        <div class="ilbuni a">
+            <img src="images/ilbuni_0.png" alt="일분이">
+        </div>
+        <div class="ilbuni b">
+            <img src="images/ilbuni_1.png" alt="일분이">
+        </div>
+        <div class="ilbuni c">
+            <img src="images/ilbuni_2.png" alt="일분이">
+        </div>
+        <div class="ilbuni d">
+            <img src="images/ilbuni_3.png" alt="일분이">
+        </div>
+    </div>
+    <script>
+        /* 여러 캐릭터 요소 중 하나가 선택 됐을 때 각각 이벤트를 주는 예제 */
+        (function(){
+            const characters = document.querySelector('.characters');
+
+            function clickHandler(e){
+                //이벤트에 의해 호출되는 CallBack은  매개변수로 이벤트 객체를 입력받는다.
+                //이 이벤트 객체는 이벤트와 관련해서 여러 속성들이 들어 있는 객체이다.
+                
+                //console.log(this); currentTarget은 이벤트 클릭을 기다리고 있는 요소이며 this도 마찬가지 이다. 
+                console.log(e.currentTarget);
+
+                //target은 내가 클릭한 요소 자체이다. 만약 이미지인 첫번째 일분이를 클릭했다면
+                //결과 : <img src="images/ilbuni_0.png" alt="일분이">
+                console.log(e.target);
+            }
+            //여기서의 click 이벤트를 기다리는 요소는 .characters class 요소이다.
+            characters.addEventListener('click', clickHandler);
+        })();
+    </script>
+</body>
 ```
