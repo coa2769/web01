@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>frame window</title>
+    <style>
+        body{
+            width: 100%;
+            height: 100%;
+            background-color: chocolate;
+        }
+
+        h2{
+            background-color: green;
+            -webkit-app-region: drag; /* 지정한 요소의 영역을 drag할 수 있도록 설정 */
+            -webkit-user-select: none; /* 내부의 문자열 drag가 되지 않게 하기 위한 설정 */
+        }
+    </style>
+</head>
+<body>
+    <h2>electron-basic-BrowserWindow-Frameless</h2>
+
+    <!-- window를 숨기는 버튼 -->
+    <button id="btn_hide">hide</button>
+
+    <!-- window id를 제어창으로 출력해준다. -->
+    <button id="btn_current">current</button>
+    <button id="btn_all">all</button>                
+
+    <!-- dialog를 띄우는  -->
+    <button id="btn_open">open</button>
+    <button id="btn_save">save</button>
+    <button id="btn_message">message</button>
+    <button id="btn_error">error</button>
+
+    <!-- ipc를 사용한 데이터 전달을 위한 button -->
+    <button id="btn_send_async">send async</button>
+    <button id="btn_send_sync">send sync</button>
+
+    <script>
+        const {remote} = require('electron');
+        const {BrowserWindow} = remote;        
+
+        const btnCurrent = document.querySelector('#btn_current');
+        const btnAll = document.querySelector('#btn_all');
+        const btnHide = document.querySelector('#btn_hide');
+
+        //current
+        btnCurrent.addEventListener('click', () => {
+            /* 지금 Focus가 있는 window 객체 */
+            const current = BrowserWindow.getFocusedWindow();
+            alert(current.id); /* 고유 id 값*/
+        });
+
+        //all
+        btnAll.addEventListener('click', () => {
+            /* 모든 window 객체. 배열로 반환한다. */
+            const all = BrowserWindow.getAllWindows();
+            /* window들의 배열인 all의 map함수로 id를 추출한다. */
+            const ids = all.map(win => win.id);
+            alert(ids);
+        });
+
+        //hide
+        btnHide.addEventListener('click', () => {
+            const win = remote.BrowserWindow.getFocusedWindow();
+            win.hide();
+        });
+
+        //※ Popup Menu(render Process에서 메뉴를 작성하는 방법)
+        //electron의 remote 모듈을 가져온다.
+        const {Menu, MenuItem} = require('electron').remote;
+        
+        const menu = new Menu();
+        
+        //Menu를 구성한다.
+        const menuItem1 = new MenuItem({
+            label: 'MenuItem1',
+            click: () => {
+                console.log('MenuItem1 click');
+            }
+        });
+
+        const menuItem2 = new MenuItem({
+            label: 'MenuItem2',
+            type: 'checkbox',  //메뉴 타입
+            checked: true
+        });
+        
+        //MenuItem을 추가한다.
+        menu.append(menuItem1);
+        menu.append(menuItem2);
+
+        //분단선을 추가
+        const separator = new MenuItem({
+            type: 'separator'
+        });
+
+        //menu의 위치 값에 menuItem을 추가한다.
+        menu.insert(1, separator);
+
+        //popmenu를 열기 위해 요소의 오른쪽 클릭을 할 때 발생한다.
+        window.addEventListener('contextmenu', e => {
+            console.log('contextmenu');
+            e.preventDefault();
+            menu.popup(BrowserWindow.getFocusedWindow());
+        });
+
+        //※ Dialog
+        const {dialog} = require('electron').remote;
+
+        const btnOpen = document.querySelector('#btn_open');
+        btnOpen.addEventListener('click', () => {
+            //파일을 open에 쓰이는 dialog
+            dialog.showOpenDialog({
+                filters:[
+                    //open할 파일에 제한을 줄 수 있다.
+                    {name: 'Images', extensions:['jpg', 'png']}
+                ],
+                //이 함수에 대한 속성
+                properties:[
+                    'openFile',
+                    //여러 파일을 선택할 수 있게 하는 속성, openFile도 같이 설정해줘야 한다.
+                    'multiSelections'
+                ]
+            }, 
+            //파일을 선택하면 그 결과를 받아오는 callback
+            (filepaths) => { 
+                console.log(filepaths);
+            });
+        });
+
+
+        const btnSave = document.querySelector('#btn_save');
+        btnSave.addEventListener('click', () => {
+            //파일 save에 쓰이는 dialog
+            dialog.showSaveDialog({
+                //dialog의 title를 바꿔줄 수 있다.
+                title: 'title',
+                message: 'message', 
+                filters: [
+                    {name: 'Images', extensions:['jpg', 'png']}
+                ]
+            }, (filename) => {
+                console.log(filename);
+            });
+        });
+
+        const btnMessage = document.querySelector('#btn_message');
+        btnMessage.addEventListener('click', () => {
+            //가장 기본적인 dialog
+            dialog.showMessageBox({
+                message: '메세지입니다.',
+                detail: '디테일입니다.',
+                //button이 생기고 선택한다면 id를 반환한다.
+                buttons:[
+                    'First',
+                    'Second'
+                ],
+                //체크 박스도 추가할 수 있다.
+                checkboxLabel:'체크박스',
+                checkboxChecked: true
+            },
+            //선택을 처리할 callback
+            (index, checkboxChecked) => {
+                //index : 버튼의 id,  checkboxChecked : 체크박스가 체크되어 있는가?
+                console.log(index, checkboxChecked);
+            });
+        });
+
+        const btnError = document.querySelector('#btn_error');
+        btnError.addEventListener('click', () => {
+            //Error를 띄우는 dialog
+            dialog.showErrorBox('제목', '내용');
+        });
+
+        //※ IpcRender
+        //Render Process에서 Main Process로 데이터를 전송하는 모듈이다.
+        const {ipcRenderer} = require('electron');
+
+        //동기
+        const btnSendAsync = document.querySelector('#btn_send_async');
+        //비동기
+        const btnSendSync = document.querySelector('#btn_send_sync');
+
+        btnSendAsync.addEventListener('click', () => {
+            console.log('btnSendAsync');
+            //ipcRenderer.send(채널 문자열, 전송할 데이터[JS Object or String])
+            //채널 문자열은 data를 전송하는 ipcMain의 on의 채널 문자열과 같아야 한다.
+            ipcRenderer.send('send_async_channel', '이것은 랜더러프로세스에서 보낸 비동기 메세지입니다.');
+        });
+        btnSendSync.addEventListener('click', () => {
+            console.log('btnSendSync');
+
+            const reply = ipcRenderer.sendSync('send_sync_channel', '이것은 랜더러프로세스에서 보낸 동기 메세지입니다.');
+        });
+
+        ipcRenderer.on('reply_async_channel',(event, message) => {
+            console.log(message);
+        })
+    </script>
+</body>
+</html>

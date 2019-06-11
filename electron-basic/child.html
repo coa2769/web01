@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Child window</title>
+</head>
+<body>
+    <h2>Child</h2>
+    <button id='btn_close'>Close</button>
+
+    <script>
+        //모듈을 가져온다.
+        const {remote} = require('electron');
+
+        const btnClose = document.querySelector('#btn_close');
+
+        btnClose.addEventListener('click',() => {
+            alert('!!!')
+
+            const childWin = remote.getCurrentWindow();
+            childWin.hide();
+        });
+    </script>
+</body>
+</html>
