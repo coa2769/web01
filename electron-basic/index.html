@@ -37,9 +37,12 @@
     <button id="btn_send_async">send async</button>
     <button id="btn_send_sync">send sync</button>
 
+    <!-- remote 모듈 -->
+    <button id="btn_win_id">win.id</button>
+    <button id="btn_open_browser">open browser</button>
+
     <script>
-        const {remote} = require('electron');
-        const {BrowserWindow} = remote;        
+        const {BrowserWindow} = require('electron').remote;        
 
         const btnCurrent = document.querySelector('#btn_current');
         const btnAll = document.querySelector('#btn_all');
@@ -63,7 +66,7 @@
 
         //hide
         btnHide.addEventListener('click', () => {
-            const win = remote.BrowserWindow.getFocusedWindow();
+            const win = BrowserWindow.getFocusedWindow();
             win.hide();
         });
 
@@ -130,7 +133,6 @@
             });
         });
 
-
         const btnSave = document.querySelector('#btn_save');
         btnSave.addEventListener('click', () => {
             //파일 save에 쓰이는 dialog
@@ -183,21 +185,52 @@
         //비동기
         const btnSendSync = document.querySelector('#btn_send_sync');
 
+        //비동기
         btnSendAsync.addEventListener('click', () => {
             console.log('btnSendAsync');
             //ipcRenderer.send(채널 문자열, 전송할 데이터[JS Object or String])
             //채널 문자열은 data를 전송하는 ipcMain의 on의 채널 문자열과 같아야 한다.
-            ipcRenderer.send('send_async_channel', '이것은 랜더러프로세스에서 보낸 비동기 메세지입니다.');
-        });
-        btnSendSync.addEventListener('click', () => {
-            console.log('btnSendSync');
-
-            const reply = ipcRenderer.sendSync('send_sync_channel', '이것은 랜더러프로세스에서 보낸 동기 메세지입니다.');
+            ipcRenderer.send('send_async_channel', 'async: this send from renderProcess. ');
         });
 
+        //ipcRenderer도 on함수로 데이터를 받을 수 있고 ipcMain과 같은 사용방법과 작동을 제공한다.
         ipcRenderer.on('reply_async_channel',(event, message) => {
             console.log(message);
-        })
+        });
+
+        //동기
+        btnSendSync.addEventListener('click', () => {
+            console.log('btnSendSync');
+            //sendSync가 동기 함수이다. sendSync함수의 반환값이 대답이다.
+            //이 함수는 데이터를 받은 상대가 받고 처리를 해줄 때까지 반환하지 않는다. 
+            const reply = ipcRenderer.sendSync('send_sync_channel', 'sync : this send from renderProcess');
+            console.log(reply);
+        });
+
+        //※ remote, shell, process 모듈
+        const {remote, shell} = require('electron');
+
+        const btnWinId = document.querySelector('#btn_win_id');
+        btnWinId.addEventListener('click', () => {
+            //remote 모듈은 ipc통신을 추상화한 모듈. MainProcess에서 사용되는 모듈들을 
+            //render process에서도 사용할 수 있도록 해준다.
+            const win = remote.getCurrentWindow(); //이 window의 render process를 반환한다.
+            console.log(win.id);
+        });
+
+        
+        const btnOpenBrowser = document.querySelector('#btn_open_browser');
+        btnOpenBrowser.addEventListener('click', () => {
+            //shell 모듈은 electron외부 프로그램을 실행하는데 사용한다.
+            shell.openExternal('https://github.com'); //Default browser에 github 페이지가 띄워진다.
+        });
+
+        // process 모듈은 main process, render process에서 모두 사용할 수 있는 전역 객체이다.
+        //Nodejs의 process를 상속 받아 만든 모듈이다.
+        console.log(process.versions); 
+        console.log(process.platform); 
+        console.log(process.type);     //main process인지 render process인지
+
     </script>
 </body>
 </html>

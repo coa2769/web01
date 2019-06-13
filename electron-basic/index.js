@@ -386,7 +386,46 @@
 //Main Process와 Render Process 사이의  데이터를 전달을 위해 사용되는 기술이다.
 //이 때 동기와 비동기 방식이 있다.
 //IpcMain 모듈, IpcRenderer 모듈이 있다.
-const {app, BrowserWindow, ipcMain} = require('electron');
+//const {app, BrowserWindow, ipcMain} = require('electron');
+
+// app.on('ready', () => {
+//     const win = new BrowserWindow({
+//         webPreferences:{
+//             nodeIntegration: true
+//         }
+//     });
+//     win.loadURL(`file://${__dirname}/index.html`);
+//     win.webContents.openDevTools();
+
+//     //ipcMain.on(채널 문자열, callback 함수)
+//     //데이터를 받는 함수이다.
+//     //채널 문자열 : 전송 쪽과 같은 문자열 채널
+//     //callback 함수: event와 message 매개변수가 있다. event 객체는 ipMain이 특정 채널로 데이터를 받았을 때의 정보를 가지고 있다.
+//     ipcMain.on('send_async_channel', (event, message) => {
+//         console.log(message);
+
+//         //매세지를 보낸 render process의 webContents를 반환한다. send()를 통해 비동기 메시지를 보내는 것이 가능하다.
+//         //event.sender.send('reply_async_channel', '이것은 메인프로세스에서 보낸 비동기 대답입니다.');
+//         //이미 내가 받은 render process의 객체를 가지고 있으므로 이렇게 전송하는 것도 가능하다.
+//         win.webContents.send('reply_async_channel', '이것은 메인프로세스에서 보낸 비동기 대답입니다.');
+//     });
+
+//     ipcMain.on('send_sync_channel', (event, message) =>{
+//         console.log(message);
+//         //event.returnValue에 값을 지정해주는 것이 동기 대답이다.
+//         event.returnValue = '이것은 메인프로세스에서 동기 대답입니다.';
+//     });
+
+//     setInterval(() => {
+//         //render process 객체를 가지고 있다면 바로 send를 보내는 것도 가능하다.
+//         win.webContents.send('reply_async_channel', '이것은 메인프로세스에서 보낸 비동기 대답입니다.');
+//     }, 3000);
+
+// });
+
+/* Remote, Shell, process 모듈 알아보기 */
+
+const {app, BrowserWindow, shell} = require('electron');
 
 app.on('ready', () => {
     const win = new BrowserWindow({
@@ -397,23 +436,10 @@ app.on('ready', () => {
     win.loadURL(`file://${__dirname}/index.html`);
     win.webContents.openDevTools();
 
-    //ipcMain.on(채널 문자열, callback 함수)
-    //데이터를 받는 함수이다.
-    //채널 문자열 : 전송 쪽과 같은 문자열 채널
-    //callback 함수: event와 message 매개변수가 있다. 
-    ipcMain.on('send_async_channel', (event, message) => {
-        console.log(message);
-        //event.sender.send('reply_async_channel', '이것은 메인프로세스에서 보낸 비동기 대답입니다.');
-        win.webContents.send('reply_async_channel', '이것은 메인프로세스에서 보낸 비동기 대답입니다.');
-    });
+    //render process의 id
+    console.log(win.id);
 
-    ipcMain.on('send_sync_channel', (event, message) =>{
-        console.log(message);
-        event.returnValue = '이것은 메인프로세스에서 동기 대답입니다.';
-    });
-
-    setInterval(() => {
-        win.webContents.send('reply_async_channel', '이것은 메인프로세스에서 보낸 비동기 대답입니다.');
+    setTimeout(() => {
+        shell.openExternal('https://www.protopie.io');
     }, 3000);
-
 });

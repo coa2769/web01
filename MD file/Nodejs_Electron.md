@@ -228,3 +228,4 @@ const mainWindow = new BrowserWindow();
 mainWindow.webContents.openDevTools(); //생성한 Window에서 함수로 호출
 ```
 
+그외는 electron-basic 예제에서
