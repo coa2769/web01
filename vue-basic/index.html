@@ -1,0 +1,320 @@
+<!-- 기본 vue와 기본 directive-->
+<!-- 
+    Virtual Dom에 대해 
+    https://medium.com/js-dojo/whats-new-in-vue-js-2-0-virtual-dom-dc4b5b827f40
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>hello vue.js</title>
+    <style>
+        #list {
+            width: 400px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        
+        #list td,
+        #list th {
+            border: 1px solid black;
+            text-align: center;
+        }
+        
+        #list>thead>tr {
+            color: yellow;
+            background-color: purple;
+        }
+        
+        .divider {
+            height: 2px;
+            background-color: gray;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- MVVM 패턴이다. -->
+    <!-- 
+        v-text, {{}} : html의 innerText속성에 연결됨. tag문자열에
+        들어 있어도 HTML인코딩으로 태그가 문자열로 출력된다. 보안상 좋다.
+    -->
+    <div id="simple">
+        <!--template 표현식 , Interpolation(보간법) -->
+        <h2>{{message}}</h2>
+    </div>
+    <div id="v-text-ex">
+        <!-- v-text directive를 사용하여 -->
+        <h2 v-text="message"></h2>
+    </div>
+    <!--
+        v-html : html의  innerHTML속성에 연결된. tag문자열이 파싱되어
+        html문서에 적용된다. XSS 공격에 취약.
+    -->
+    <div id="v-html-ex">
+        <!-- v-html directive를 사용하여 -->
+        <h2 v-html="message"></h2>
+    </div>
+
+    <!-- v-bind : 요소객체의 속성들을 model이 가지고 있는 데이터와 바인딩 하기위해 사용 
+        bind:src=""를 :src=""로 줄일 수 있다.
+    -->
+    <div id="v-bind-ex">
+        <input id="a" type="text" v-bind:value="message">
+        <br />
+        <img v-bind:src="imagePath" />
+    </div>
+
+    <!-- v-model : model의 데이터를 변경한다.(양 반향 데이터 바인딩)
+        다른 direcvie는 입력 가능한 ui에서 사용자가 입력을 하여도 model의 데이터에는 적용이 안됐다.
+        수식어 사용 가능. 특별한 기능 추가 가능. Vue.js directive 문법을 확인.
+    -->
+    <div id="v-model-ex">
+        <input type="text" v-model="name" placeholder="이름을 입력하세요" />
+        <br /> 입력된 이름 :
+        <h2 v-html="name"></h2>
+    </div>
+
+    <!-- v-if, v-else, v-else-if : data값이 조건에 따라 출력을 결정한다.-->
+    <div id="v-if-ex">
+        잔고 : <input type="text" v-model="balance" />
+        <br /> 회원님의 등급 :
+        <span v-if="balance >= 1000000">Gold</span>
+        <span v-else-if="balance >= 500000">Silver</span>
+        <span v-else-if="balance >= 200000">Bronze</span>
+        <span v-else>Basic</span>
+        <br /> 예금액 : <input type="text" v-model="amount" />
+        <img v-if="amount < 0" src="http://sample.bmaster.kro.kr/img/error.png" title="마이너스는 허용하지 않습니다." style="width:15px; height:15px; vertical-align:middle" />
+    </div>
+
+    <!-- v-show : html요소는 일단 출력. 조건에 따라 display속성이 적용될 것인지 결정한다.
+        자주 화면 변경이 일어나는 곳에는 v-if보다 v-show를 사용한다.
+    -->
+    <div id="v-show-ex">
+        <br /> 예금액 : <input type="text" v-model="amount" />
+        <img v-show="amount < 0" src="http://sample.bmaster.kro.kr/img/error.png" title="마이너스는 허용하지 않습니다." style="width:15px; height:15px; vertical-align:middle" />
+    </div>
+
+    <!-- v-for : JS의 for문과 유사하다. model에 배열 데이터가 들어가 있다. 
+    model에 객체가 들어가 있다면 key, value로 값을 얻을 수 있다.
+    v-if와 같이 사용 가능. 한 tag에서 v-for가 언제나 먼저 실행된다. -->
+    <div id="v-for-ex">
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>주소</th>
+                </tr>
+            </thead>
+            <tbody id="contacts">
+                <!-- contacts의 배열 개수 만큼 반복 (contact, index)-->
+                <tr v-for="contact in contacts">
+                    <td>{{contact.no}}</td>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.tel}}</td>
+                    <td>{{contact.address}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="v-for-ex02">
+        <select id="regions">
+            <option disabled="disabled" selected>지역을 선택하세요</option>
+            <!-- 객체를 v-for로 반복 (val, key, index)-->
+            <option v-for="(val, key) in regions" v-bind:value="key">{{val}}</option>
+        </select>
+    </div>
+
+    <div id="v-for-ex03">
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>주소</th>
+                </tr>
+            </thead>
+            <tbody id="contacts01">
+                <!-- template태그는 요소들을 그룹으로 묶어주는 tag이다. -->
+                <template v-for="(contact, index) in contacts">
+                    <!-- key 속성을 부여하고 나중에 변경을 위해 추적하는데 사용할 수 있다. -->
+                    <tr v-bind:key="contact.no">
+                        <td>{{contact.no}}</td>
+                        <td>{{contact.name}}</td>
+                        <td>{{contact.tel}}</td>
+                        <td>{{contact.address}}</td>
+                    </tr>
+                    <!-- 5번째 마다 구분라인 추가 -->
+                    <tr class="divider" v-if="index % 5 === 4">
+                            <td colspan="4"></td>
+                    </tr>
+                    </template>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <script type="text/javascript">
+        //model : model객체. 데이터를 가지고 있다.
+        var model = {
+            //이 값을 개발자도구에서 model.message = ""로 값을
+            //바꾸면 페이지가 변경됩니다.
+            message: '첫 번째 Vue.js 앱입니다.',
+        };
+        var model01 = {
+            message: 'v-text를 이용'
+        };
+        var model02 = {
+            message: 'v-html를 이용'
+        }
+
+        //Vue객체이자 ViewModel객체이다.
+        var simple = new Vue({
+            el: '#simple', //html의 요소
+            data: model //참조하는 데이터
+        })
+        var v_Text = new Vue({
+            el: '#v-text-ex',
+            data: model01
+        })
+        var V_HTML = new Vue({
+            el: '#v-html-ex',
+            data: model02
+        })
+
+        //===========
+
+        var model03 = {
+            message: 'v-bind 디렉티브',
+            imagePath: "http://sample.bmaster.kro.kr/photos/61.jpg"
+        };
+
+        var V_Bind = new Vue({
+            el: '#v-bind-ex',
+            data: model03
+        })
+
+        //==========
+        var twoway = new Vue({
+            el: "#v-model-ex",
+            data: {
+                name: ''
+            }
+        })
+
+        //=========
+        var V_IF = new Vue({
+            el: '#v-if-ex',
+            data: {
+                amount: 0,
+                balance: 0
+            }
+        })
+
+        //========
+        var V_Show = new Vue({
+            el: "#v-show-ex",
+            data: {
+                amount: 0
+            }
+        })
+
+        //=========
+        var model04 = {
+                "pageno": 1,
+                "pagesize": 10,
+                "totalcount": 100,
+                "contacts": [{
+                    "no": 100,
+                    "name": "설현",
+                    "tel": "010-3456-7899",
+                    "address": "서울"
+                }, {
+                    "no": 99,
+                    "name": "혜리",
+                    "tel": "010-3456-7898",
+                    "address": "서울"
+                }, {
+                    "no": 98,
+                    "name": "하니",
+                    "tel": "010-3456-7897",
+                    "address": "경기"
+                }, {
+                    "no": 97,
+                    "name": "성소",
+                    "tel": "010-3456-7896",
+                    "address": "제주"
+                }, {
+                    "no": 96,
+                    "name": "지아",
+                    "tel": "010-3456-7897",
+                    "address": "서울"
+                }, {
+                    "no": 95,
+                    "name": "정연",
+                    "tel": "010-3456-7897",
+                    "address": "강원"
+                }, {
+                    "no": 94,
+                    "name": "쯔위",
+                    "tel": "010-3456-7897",
+                    "address": "경기"
+                }, {
+                    "no": 93,
+                    "name": "사나",
+                    "tel": "010-3456-7897",
+                    "address": "서울"
+                }, {
+                    "no": 92,
+                    "name": "모모",
+                    "tel": "010-3456-7897",
+                    "address": "충남"
+                }, {
+                    "no": 91,
+                    "name": "소진",
+                    "tel": "010-3456-7897",
+                    "address": "서울"
+                }]
+            }
+            //index번호를 통해 직접 변경하면 적용되지 않는다. (Vue.set함수를 사용해야한다.)
+            //model04.contacts[0] = {no:100, name:"다혜", tel:"010-1111-1111", address:"제주"};
+            //내분 속성을 변경하면 Vue인스턴스 내부의 감시자(Watcher)가 추적하여 변경한다.
+            //model04.contacts[0].name = "다혜";
+
+        var V_For = new Vue({
+            el: "#v-for-ex",
+            data: model04
+        });
+
+        var regions = {
+            "A": "Asia",
+            "B": "America",
+            "C": "Europe",
+            "D": "Africa",
+            "E": "Oceania"
+        };
+
+        var v_For_01 = new Vue({
+            el: "#v-for-ex02",
+            data: {
+                regions: regions
+            }
+        });
+
+        var v_For_02 = new Vue({
+            el: "#v-for-ex03",
+            data: model04
+
+        })
+    </script>
+</body>
+
+</html>

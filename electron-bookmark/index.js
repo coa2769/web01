@@ -10,12 +10,21 @@ let tray = null;
 const DATA_PATH = path.join(__dirname, './data.json');
 const data = JSON.parse(fs.readFileSync(DATA_PATH).toString());
 
+//js snippets : 자동완성
+
 //Tray icon disappearing문제가 있다.(해결)
 
 //electron-package를 사용하는 법.
 //1. npm install electron-packager -D명령어로 설치
 //2. package.json에 pack 명령어를 등록
 //3. npm run pack로 electron-packager를 실행한다.
+
+//마지막 강의는 render process부분을 react하는 방법이다.
+//지금 상태는 데이터가 추가되면 페이지 전체가 다시 render되고 있다.
+//data가 추가되어도 그 추가 부분만을 render하는 라이브러리이다.
+//webpack사용 -D
+//babel-loader + babel-core -D
+//babel-preset-es2015 + babel-preset-react -D
 
 const template = [
     {   
@@ -70,23 +79,24 @@ app.on('ready', () => {
     });
 
     const bounds = tray.getBounds();
-    console.log(bounds);
+    
     win = new BrowserWindow({
         width: 400,
         height: 400,
-        x: bounds.x - 200 - 10,
-        y: bounds.y - 400,
-        acceptFirstMouse: true,
+        x: Math.round(bounds.x + (bounds.width / 2) - 200),
+        y: bounds.y - 400 - 10,
+        acceptFirstMouse : true,
         frame: false,
         show: false,
         resizable: false,
         movable:false,
+        skipTaskbar: true,
         webPreferences:{
             nodeIntegration: true
         }
     });
 
-    win.webContents.openDevTools();
+    //win.webContents.openDevTools();
 
     win.loadURL(`file://${__dirname}/index.html`);
     //ready-to-show는 최초 한번만 불리므로 once()를 사용한다.
@@ -103,6 +113,7 @@ app.on('ready', () => {
         fs.writeFileSync(DATA_PATH, JSON.stringify(data));
         win.webContents.send('update', data);
     });
+
 });
 
 function toggle(){
