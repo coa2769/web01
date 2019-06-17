@@ -1,0 +1,103 @@
+<!-- 인라인 이벤트 처리 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>04-01</title>
+    <!-- bootstrap : 디자인 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        .layout1 {
+            margin: 30px 30px 30px 30px;
+        }
+        
+        #vue-stop-event {
+            height: 98vh;
+            min-height: 100%;
+            padding: 5px;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="vue-on" class="container layout1">
+        <p><input type="text" v-model="amount" class="form-control" /></p>
+        <p>
+            <!-- v-on 이벤트 처리하는 directive (v-on:click = @click)
+                이벤트를 처리하기위해 직접 code 연결 or 함수.
+            -->
+            <!--<button id="deposit" v-on:click="balance += parseInt(amount)" class="btn btn-primary">예금</button>-->
+            <button id="deposit" v-on:click="deposit" class="btn btn-primary">예금</button>
+            <!--<button id="withdraw" v-on:click="balance -= parseInt(amount)" class="btn btn-primary">인출</button>-->
+            <button id="withdraw" v-on:click="withdraw" class="btn btn-primary">인출</button>
+        </p>
+        <h3>계좌 잔고 : {{balance}} </h3>
+    </div>
+
+    <!-- 마우스 오른쪽 버튼을 누르면 menu가 열리는 기본 이벤트를 막는다. -->
+    <!-- <div id="vue-stop-event" v-on:contextmenu.prevent="ctxStop"> 이벤트 수식어를 사용한 방법. preventDefault를 호출할 필요없다.-->
+    <div id="vue-stop-event" v-on:contextmenu="ctxStop">
+        <!-- url에 따라 이동하는 이벤트를 사용자에게 묻는다. -->
+        <a href="https://facebook.com" @click="confirmFB">페이스북</a>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#vue-on",
+            data: {
+                //입력받는 공간
+                amount: 0,
+                //저장되는 공간
+                balance: 0,
+            },
+            methods: {
+                //이벤트 객체 : 이벤트 처리 메서드의 첫 번째 파라미터는 이벤트 객체이다.
+                //W3C 표준 HTML DOM Event모델을 따르며 추가적인 속성 제공.
+                //이미 어떤 기능이 정의되어 있는 이벤트를 Default Event라고 한다.
+                //ex) <a> tag를 클릭했을 때
+
+                deposit: function(e) {
+                    var amt = parseInt(this.amount);
+                    if (amt <= 0) {
+                        alert("0보다 큰 값을 예금해야 합니다.");
+                    } else {
+                        this.balance += amt;
+                    }
+                },
+                withdraw: function(e) {
+                    var amt = parseInt(this.amount);
+                    if (amt <= 0) {
+                        alert("0보다 큰 값을 인출할 수 있습니다.");
+                    } else if (amt > this.balance) {
+                        alert("잔고보다 많은 금액을 인출할 수 없습니다.")
+                    } else {
+                        this.balance -= amt;
+                    }
+                }
+            }
+        });
+
+        //또한 이런 기본 이벤트를 중지하는 방법도 있다.
+        //기본적으로 이 방법은 기본 contextmenu이벤트를 막을 때 많이 사용된다.
+        var vm01 = new Vue({
+            el: "#vue-stop-event",
+            methods: {
+                ctxStop: function(e) {
+                    //기본 이벤트 실행을 막기위해 제공되는 함수.
+                    e.preventDefault();
+                },
+                confirmFB: function(e) {
+                    //취소 버튼이 클릭되면 호출되어 기본 이벤트의 실행을 막는다.
+                    //조건식을 이용한 방법
+                    if (!confirm("페이스북으로 이동할까요?")) {
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

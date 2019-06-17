@@ -1,0 +1,150 @@
+<!-- Vue의 인스턴스 (model)-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="vue-data">{{name}}</div>
+
+    <div id="vue-computed">
+        <input type="text" v-model="num">
+        <br /> 1부터 입력된 수까지 합 : <span>{{sum}}</span>
+        <!-- 함수 호출 기호 사용-->
+        <br /> 1부터 입력된 수까지 합(sum01) : <span>{{sum01()}}</span>
+    </div>
+
+    <div id="get_set_fun">
+        금액 : <span>{{amount}} 원</span>
+    </div>
+
+    <script type="text/javascript">
+        var model01 = {
+            name: "홍길동"
+        }
+
+        //data 옵션 : 위 객체와 data옵션 사이에는 프록시를 둠.
+        //위 객체가 변하든, data옵션의 값이 변하든 바로 화면에 적용됨.
+        // ```
+        // //브라우저 console에서 적용하면 모두 화면이 바뀐다.
+        // vm.name = "이몽룡"
+        // model01.name = "향단이"
+        // vm.$data.name = "성춘향"
+        // ```
+
+        // 내장 옵션들을 접근할 때는 $식별자가 붙는다.
+        // vm.$data.name
+        var vm = new Vue({
+            //el 옵션 : Vue 인스턴스와 연결 HTML DOM요소를 지정한다.
+            //여러개 지정 못함(class로 여러개 지정 못함). CSS선택자.
+            //Vue와 HTML요소 동적 연결 할 수 있음. but 권장하지 않음.
+            //도중 HTML요소 변경 불가.
+            el: '#vue-data',
+            data: model01
+        });
+
+        var vm01 = new Vue({
+            el: "#vue-computed",
+            data: {
+                num: 0
+            },
+
+            //computed 옵션 : 함수가 지정된지만 속성과 같이 취급된다.
+            //set매서드를 지정하여 편집이 가능하다.
+            // ```
+            //이렇게 속성 처럼 값으로 출력 된다.
+            // vm01.sum
+            // 55
+            // vm01.$data.sum
+            // undefined
+            // vm01.$options.computed.sum
+            // ƒ () {
+            //         var n = Number(this.num);
+            //         if (Number.isNaN(n) || n < 1) return 0;
+            //         return ((1 + n) * n) / 2;
+            // }
+            // ```
+            computed: {
+                sum: function() {
+                    var n = Number(this.num);
+                    if (Number.isNaN(n) || n < 1) return 0;
+                    return ((1 + n) * n) / 2;
+                }
+            },
+
+            //method 옵션 : 함수 등록,  vue인스턴스로 직접 호출. 
+            //directive 표현식, 콧수염 표현식에서도 사용 가능.
+            //computed는 캐싱으로 num이 바뀌면 바뀌고 method는 언제나 호출됨.
+            //ES6가 제공하는 =>함수를 사용하면 this가 Vue가 아닌 Windows객체를 가리킴.
+            methods: {
+                sum01: function() {
+                    var n = Number(this.num);
+                    if (Number.isNaN(n) || n < 1) return 0;
+                    return ((1 + n) * n) / 2;
+                }
+            }
+        });
+
+        //set, get 매서드 지정 but ???
+        var vm02 = new Vue({
+            el: "#get_set_fun",
+            data: {
+                amt: 1234567
+            },
+            computed: {
+                amount: {
+                    //(이 함수는 맞지 않음) 둘다 console에서 제대로 작동하지 않음, amount를 이용해야함.
+                    // ```
+                    // vm02.amount = "2,000,000,000"
+                    // set
+                    // get
+                    // "2,000,000,000"
+
+                    // vm02.amt
+                    // 2000000000
+
+                    // vm02.amount
+                    // "2,000,000,000"
+                    // ```
+                    //1,000,000 이런 형식에 맞게 편집하여 문자열 생성
+                    get: function() {
+                        console.log("get");
+                        var s = new String("" + this.amt);
+                        var result = "";
+                        var num = 0;
+                        for (var i = s.length - 1; i >= 0; i--) {
+                            result = s[i] + result;
+                            if (num % 3 === 2 && i !== 0) {
+                                result = "," + result;
+                            }
+                            num++;
+                        }
+                        return result;
+                    },
+                    //문자열 입력받아 ,를 제거하여 숫자로 반환
+                    set: function(amt) {
+                        console.log("set");
+                        if (typeof(amt) === "string") {
+                            //정규표현식
+                            var result = parseInt(amt.replace(/,/g, ""))
+                            if (isNaN(result)) this.amt = 0;
+                            else this.amt = result;
+                        } else if (typeof(amt) === "number") {
+                            this.amt = amt;
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

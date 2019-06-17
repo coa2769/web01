@@ -1,0 +1,73 @@
+<!-- 
+    5장 스타일 적용
+    class로 css 스타일을 묶고 같은 스타일이 필요한 요소에 적용.
+    style tag 순서대로 => html요소의 style특성
+
+    HTML요소에 style 속성으로 CSS를 바로 기술하는 것을 권장하지 않으며 
+    Vue.js도 마찬가지 이다. 하지만 방법은 알아두자.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>05-02</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="vue-css">
+        <!-- v-bind:style="style1" 를 통새 데이트가 바인딩 되고 그 안의 내용들은 스타일 속성이다. -->
+        <button id="a" v-bind:style="style1" @mouseover.stop="overEvent" @mouseout.stop="outEvent">테스트</button>
+        <!-- 
+            이렇게 직접 작성하는 것도 가능하지만 권장하지 않는다.
+            :style="{ backgroundColor: 'aqua', border: 'solid 1px gray', with: '100px', textAlign: 'center'}" -->
+    </div>
+
+    <div id="vue-css-01">
+        <!-- 이렇게 Vue인스턴스에 있는 여러개의 객체를 바인딩하는 것도 가능하다. -->
+        <button id="btn1" v-bind:style="[myColor, myLayout]">버튼1</button>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#vue-css",
+            data: {
+                style1: {
+                    //CSS의 케밥 표기법이 아닌 카멜 표기법으로 스타일 속성을 나타낸다.
+                    backgroundColor: 'aqua',
+                    border: 'solid 1px gray',
+                    with: '100px',
+                    textAlign: 'center'
+                }
+            },
+            methods: {
+                overEvent: function(e) {
+                    this.style1.backgroundColor = "purple";
+                    this.style1.color = "yellow";
+                },
+                outEvent: function(e) {
+                    this.style1.backgroundColor = "aqua";
+                    this.style1.color = "black";
+                }
+            }
+        });
+
+        var vm01 = new Vue({
+            el: "#vue-css-01",
+            data: {
+                myColor: {
+                    backgroundColor: 'purple',
+                    color: 'yellow'
+                },
+                myLayout: {
+                    width: '150px',
+                    height: '80px',
+                    textAlign: 'center'
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

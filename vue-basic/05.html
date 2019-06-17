@@ -1,0 +1,80 @@
+<!-- 이벤트 전파와 버블링 -->
+<!--
+    이벤트 처리 3단계
+    1. CAPTURING_PHASE (포착 단계) 
+    HTML문서 외부 ==> 내부 로 발생시킨 HTML 요소 포착
+    2. RAISING_PHASE : AT_TARGET (이벤트 발생 단계)
+    이벤트에 연결된 함수를 직접 호출
+    3. BUBBLING_PHASE(버블링 단계)
+    발생 요소로 부터 상위요소로 이동하여 동일한 이벤트를 호출
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>04-05</title>
+    <style>
+        #outer {
+            width: 200px;
+            height: 200px;
+            border: solid 3px black;
+            background-color: aqua;
+            position: absolute;
+            top: 100px;
+            left: 50px;
+            padding: 10px 10px 10px 10px;
+        }
+        
+        #inner {
+            width: 100px;
+            height: 100px;
+            border: solid 2px black;
+            background-color: yellow;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="html-bubbling">
+        <!-- <div id="outer" @click.capture.stop="outerClick"> 이벤트 수식어-->
+        <div id="outer" @click="outerClick">
+            <div id="inner" @click="innerClick"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //inner를 클릭 : innerClick() => couterClick()
+        //outer를 클릭 : outerClick()
+        //MouseEvent 객체의 target(이벤트가 일어난 요소)과 current target(호출된 이벤트의 요소)이 다름
+        var vm = new Vue({
+            el: "#html-bubbling",
+            methods: {
+                outerClick: function(e) {
+                    console.log("### OUTER CLICL");
+                    console.log("Event phase : ", e.eventPhase);
+                    console.log("Current Target :", e.currentTarget);
+                    console.log("Target : ", e.target);
+                    e.stopPropagation(); //Propagation : 전파
+                },
+                innerClick: function(e) {
+                    console.log("### INNER CLICL");
+                    console.log("Event phase : ", e.eventPhase);
+                    console.log("Current Target :", e.currentTarget);
+                    console.log("Target : ", e.target);
+                    e.stopPropagation();
+                }
+            }
+        });
+
+        //bubbling은 막아야할 작업이다.
+        //stopPropagation()를 이벤트 함수에서 호출하여 bubbling을 막는다.
+        //또다른 방법으로 이벤트 수식어로 대처 가능하다.
+        //.stop : 이벤트 전파 중단.
+        //.capture : 지금 요소의 CAPTURING_PHASE단계에서만 이벤트 처리하고 끝난다.
+        //.self : RAISING_PHASE단계에서만 이벤트 처리. 자식에게 적용되지 않는다.
+    </script>
+</body>
+
+</html>

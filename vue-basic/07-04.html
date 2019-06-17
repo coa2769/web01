@@ -1,0 +1,52 @@
+<!-- 
+    5.5 컴포넌트에서 스타일 적용
+    여기서 나오는 컴포넌트는 6장에 자세한 내용이 나온다.
+    컴포넌트 단위로도 class를 적용하는 것이 가능하다.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>05-08</title>
+    <style>
+        .boxcolor {
+            background-color: orange;
+        }
+        
+        .center {
+            width: 200px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            border: 1px solid gray;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="vue-component">
+        <!--componet 적용 방법. 
+        boxstyle인 vue인스턴스로 적용할지 정한다.-->
+        <center-box v-bind:class="boxstyle"></center-box>
+    </div>
+
+    <script type="text/javascript">
+        Vue.component('center-box', {
+            //이미 center class가 적용되어 있다.
+            template: '<div class="center">중앙에 위치</div>'
+        })
+
+        var vm = new Vue({
+            el: "#vue-component",
+            data: {
+                boxstyle: {
+                    boxcolor: true
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
