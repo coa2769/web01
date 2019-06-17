@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>03-07</title>
+    <style>
+        #list {
+            width: 600px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        
+        #list td,
+        #list th {
+            border: 1px solid black;
+            text-align: center;
+        }
+        
+        #list>thead>tr {
+            color: yellow;
+            background-color: purple;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- v-clock : Vue인스턴스가 준비되기 전까지 html코드 숨기기 -->
+    <div id="example" v-cloak>
+        <p>
+            이름 : <input type="text" v-model="name" placeholder="두자 이상 입력하세요" />
+        </p>
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>주소</th>
+                </tr>
+            </thead>
+            <tbody id="contacts">
+                <tr v-for="contact in contactlist">
+                    <td>{{contact.no}}</td>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.tel}}</td>
+                    <td>{{contact.address}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div v-show="isProcessing === true">조회중</div>
+    </div>
+
+
+    <!-- vue, fetch, lodash 라이브러리 -->
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.4/fetch.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#example',
+            data: {
+                name: "",
+                isProcessing: false,
+                contactlist: []
+            },
+            //Watched Property (관찰 속성) : 긴 처리 시간이 필요한 비동기 처리에 적합
+            //ex) 외부서버와의 통신 
+            //해당 속성이 변경 되었을 때 함수가 호출된다.
+            //이 예제는 computed를 사용하는 것이 더 좋다.
+            watch: {
+                //val 변경되는 값
+                name: function(val) {
+                    //두자 이상 입력
+                    if (val.length >= 2) {
+                        this.fetchContacts();
+                    } else {
+                        this.contactlist = [];
+                    }
+                }
+            },
+            methods: {
+                //일정 시간이 지나도록 연속적인 호출이 일어나지 않으면 실제 API를 요청한다.
+                fetchContacts: _.debounce(function() {
+                    this.contactlist = [];
+                    this.isProcessing = true;
+                    //이 서버에서 가져온다.
+                    var url = "http://sample.bmaster.kro.kr/contacts_long/search/" + this.name;
+                    var vm = this;
+                    //fetch()의 반환값은 promise객체(비동기 처리를 위해 사용하는 함수)
+                    //fetch()이 호출되고 서버로부터 응답이 오면 .then()에 전달한 함수 호출
+                    fetch(url).then(function(response) {
+                        return response.json()
+                    }).then(function(json) {
+                        //data의 contactlist가 갱신된다.
+                        vm.contactlist = json;
+                        vm.isProcessing = false;
+                    }).catch(function(ex) {
+                        console.log('parsing failed', ex);
+                        vm.contactlist = [];
+                        vm.isProcessing = false;
+                    })
+                }, 300)
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- Vue 인스턴스 라이프 사이클 
+    생성 후 데이터에 대한 관찰을 위한 초기화를 수행한다.
+    이 과정에서 메서드를 적용 가능. 이걸 라이프 사이클 훅
+
+    나중에 쓰임
+    여기서 3장 끝
+-->

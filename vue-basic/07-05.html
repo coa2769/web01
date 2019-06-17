@@ -1,0 +1,197 @@
+<!-- 5.6 TodoList 예제(배운걸 적용하는 예제)
+html기본 틀 => css 스타일 => js(vue 인스턴스) => vue가 적용
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        
+        ul li {
+            cursor: pointer;
+            position: relative;
+            padding: 8px 8px 8px 40px;
+            background: #eee;
+            font-size: 14px;
+            transition: 0.2s;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        ul li:hover {
+            background: #ddd;
+        }
+        
+        ul li.checked {
+            background: #BBB;
+            color: #fff;
+            text-decoration: line-through;
+        }
+        
+        ul li.checked::before {
+            content: '';
+            position: absolute;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 0px 1px 1px 0px;
+            top: 10px;
+            left: 16px;
+            transform: rotate(45deg);
+            height: 8px;
+            width: 8px;
+        }
+        
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 12px 16px 12px 16px
+        }
+        
+        .close:hover {
+            background: #f44336;
+            color: white;
+        }
+        
+        .header {
+            background-color: purple;
+            padding: 30px 30px;
+            color: yellow;
+            text-align: center;
+        }
+        
+        .header:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .input {
+            border: none;
+            width: 75%;
+            height: 35px;
+            padding: 10px;
+            float: left;
+            font-size: 16px;
+        }
+        
+        .addbutton {
+            padding: 10px;
+            width: 25%;
+            height: 35px;
+            background: #d9d9d9;
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .addbutton:hover {
+            background-color: #bbb;
+        }
+        
+        .completed {
+            text-decoration: none;
+        }
+    </style>
+
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="todolistapp">
+        <div id="header" class="header">
+            <h2>Todo List App</h2>
+            <input class="input" type="text" id="task" v-model.trim="todo" placeholder="입력 후 엔터!" v-on:keyup.enter="addTodo">
+            <span class="addbutton" v-on:click="addTodo">추  가</span>
+        </div>
+        <ul id="todolist">
+            <li v-for="a in todolist" v-bind:class="checked(a.done)" v-on:click="doneToggle(a.id)">
+                <span>{{a.todo}}</span>
+                <span v-if="a.done">(완료)</span>
+                <span class="close" v-on:click.stop="deleteTodo(a.id)">&#x00D7;</span>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        //id는 각 todo의 고유키 역할. 추가할 때 id필드의 값으로 타임스탬프를 사용하였다.
+        //실무에서는 UUID나 ObjectId와 같은 고유키를 사용하거나 서버를 이용하는 경우라면 데이터베이스 서버의 sequence 값을 사용한다.
+
+        var vm = new Vue({
+            el: "#todolistapp",
+            data: {
+                todo: "",
+                todolist: [{
+                    id: 1,
+                    todo: "영화보기",
+                    done: false
+                }, {
+                    id: 2,
+                    todo: "주말 산책",
+                    done: true
+                }, {
+                    id: 3,
+                    todo: "ES6 학습",
+                    done: false
+                }, {
+                    id: 1,
+                    todo: "잠실 야구장",
+                    done: false
+                }, ]
+            },
+            methods: {
+                //todolist 데이터 속성에서done속성이 true인 경우 checked클래스를 적용 여부를 결정하는 기능
+                checked: function(done) {
+                    if (done) return {
+                        checked: true
+                    };
+                    else return {
+                        checked: false
+                    };
+                },
+                //추가 버튼을 클릭하거나 입력 필드에서 엔터 키를 눌렀을 때 할 일을 목록에 추가하는 기능
+                addTodo: function(e) {
+                    if (this.todo.trim() !== "") {
+                        this.todolist.push({
+                            todo: this.todo.trim(),
+                            done: false
+                        });
+                        this.todo = "";
+                    }
+                },
+                //할 일 목록 오른쪽 끝의 x를 클릭하면 목록에서 삭제합니다. 삭제를 위해서 배열의 splice메서드를 사용합니다.
+                deleteTodo: function(id) {
+                    var index = this.todolist.findIndex(function(item) {
+                        return item.id === id;
+                    });
+                    this.todolist.splice(index, 1);
+                },
+                //할 일 목록을 클릭하면 done속성을 true/false로 토글합니다.
+                doneToggle: function(id) {
+                    var index = this.todolist.findIndex(function(item) {
+                        return item.id === id;
+                    });
+                    this.todolist[index].dome = !this.todolist[index].done;
+                }
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>

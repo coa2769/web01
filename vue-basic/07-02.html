@@ -1,0 +1,76 @@
+<!-- 5.3 CSS 클래스 바인딩-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>05-05</title>
+    <style>
+        .set1 {
+            background-color: aqua;
+            color: purple
+        }
+        
+        .set2 {
+            text-align: center;
+            width: 120px;
+        }
+        
+        .set3 {
+            border: sandybrown dashed 1px;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="vue-css-class">
+        <!-- 
+            여기서 Vue 인스턴스의 데이터인 s1, s2, s3둘은 boolean값이다.
+            각 class들이 true이면 적용이 된다.
+        -->
+        <button id="btn1" v-bind:class="{ set1:s1, set2:s2, set3:s3 }">버튼1</button>
+        <p>
+            <!-- chekcbox에 따라 s1, s2, s3들에 ture/false값이 들어간다. -->
+            <input type="checkbox" v-model="s1" value="true" />set1 디자인<br/>
+            <input type="checkbox" v-model="s2" value="true" />set2 디자인<br/>
+            <input type="checkbox" v-model="s3" value="true" />set3 디자인<br/>
+        </p>
+    </div>
+
+    <div id="vue-css-class02">
+        <button id="btn1" v-bind:class="mystyle">버튼1</button>
+        <p>
+            <!-- 이렇게 클래스 이름을 data속성 이름으로 지정하면 쉽게 가능하다. -->
+            <input type="checkbox" v-model="mystyle.set1" value="true" />set1 디자인<br/>
+            <input type="checkbox" v-model="mystyle.set2" value="true" />set2 디자인<br/>
+            <input type="checkbox" v-model="mystyle.set3" value="true" />set3 디자인<br/>
+        </p>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#vue-css-class",
+            data: {
+                s1: false,
+                s2: false,
+                s3: false
+            }
+        });
+
+        var vm = new Vue({
+            el: "#vue-css-class02",
+            data: {
+                mystyle: {
+                    set1: false,
+                    set2: false,
+                    set3: false
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
