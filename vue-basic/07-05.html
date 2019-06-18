@@ -185,7 +185,7 @@ html기본 틀 => css 스타일 => js(vue 인스턴스) => vue가 적용
                     var index = this.todolist.findIndex(function(item) {
                         return item.id === id;
                     });
-                    this.todolist[index].dome = !this.todolist[index].done;
+                    this.todolist[index].done = !this.todolist[index].done;
                 }
             }
 

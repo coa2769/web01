@@ -1,0 +1,81 @@
+<!-- 
+    6장 컴포넌트 기초
+    6.1 컴포넌트 조합
+    Vue는 컴포넌트들 조합으로 애플리케이션 작성.
+    특징
+    1) 부모-자식관계 & 트리구조
+    2) 속성으로 부모->자식 정보 전달.(단방향 권장)
+    3) 이벤트로 자식->부모 정보 전달.
+    4) Vue 인스턴스의 옵션 사용 가능(data 옵션 주의 -> 로컬 상태를 관리
+    하기 위해서만 사용. )
+    5) 애플리케이션에서 여러번 사용 가능.
+    
+ -->
+
+<!-- 
+    6.2 컴포넌트의 작성
+    Vue.component(tagname, options)
+    tagname : 컴포넌트를 사용할 태그명 (케밥 표기법을 따른다. ex) my-banana )
+    option : 컴포넌트에서 렌더링할 templet 등을 지정
+
+    vue devtool을 설치하면 개발자 도구에서 vue 탭을 볼 수 있다.
+  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06-01</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <hello-component></hello-component>
+        <hello-component></hello-component>
+        <hello-component></hello-component>
+    </div>
+
+    <div id="app02">
+        <!-- 이렇게 template || script type="text/x-template" 에 id를 지정하는 방법도 있다. -->
+        <!-- <script type="text/x-template" id="helloTemplate02"></script> 를 이용 -->
+        <template id="helloTemplate02">
+            <div>hello world!!!</div>
+        </template>
+    </div>
+
+
+    <script type="text/javascript">
+        Vue.component('hello-component', {
+            template: '<div>hello world!!!</div>' //이런 걸 inline template. 권장하지 않음.
+        });
+
+        var vm = new Vue({
+            el: '#app'
+        });
+
+        //=======
+
+        Vue.component('helloTemplate02', {
+            template: '#helloTemplate02'
+        });
+
+        var vm = new Vue({
+            el: '#app02'
+        });
+    </script>
+</body>
+
+</html>
+
+<!--
+    live-server 
+    코드 변경을 브라우저에 즉시 갱싱 해준다.
+
+    설치
+    npm install -g live-server
+    
+    터미널에서 실행
+    live-server
+-->

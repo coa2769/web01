@@ -1,0 +1,80 @@
+<!--
+    6.4 컴포넌트에서의 data옵션
+    - 함수를 지정하는 이유
+    컴포넌트가 여러 번 사용되더라도 함수가 호출 될때 마다 만들어지 객체를 받게 된다.
+    만약 객체를 지정하게 된다면 모든 컴포넌트가 똑같은 객체를 참조하게 될 수도 있다.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06-09</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<template id='timeTemplate'>
+    <div>
+        <span>{{nowTS}}</span>
+        <button v-on:click="timeClick">현재 시간</button>
+    </div>
+</template>
+
+<script text="text/javascript">
+    Vue.component('time-component', {
+        template: '#timeTemplate',
+        //※ 함수가 호출되어 리턴된 객체가 data옵션에 주어져야 한다.
+        // data: {
+        //     nowTS: 0
+        // },
+        //밑에 처럼 변경해주면 된다.
+        data: function() {
+            return {
+                nowTS: 0
+            }
+        },
+        methods: {
+            timeClick: function(e) {
+                //data에서 반환되는 객체 중 nowTS를 선택한 것이다.
+                this.nowTS = (new Date()).getTime();
+            }
+        }
+    });
+
+    //같은 객체를 참조하여 문제가 되는 code
+    //전역 변수
+    var data = {
+        nowTS: 0
+    };
+    Vue.component('time-component02', {
+        template: '#timeTemplate',
+        data: function() {
+            return data;
+        },
+        methods: {
+            //한 컴포넌트가 클릭되면 모든 컴포넌트들의 렌더링이 똑같이 작동한다.
+            timeClick: function(e) {
+                this.nowTS = (new Date()).getTime();
+            }
+        }
+    })
+</script>
+
+<body>
+    <div id="app">
+        <time-component></time-component>
+        <time-component></time-component>
+        문제가 되는 code <br />
+        <time-component02></time-component02>
+        <time-component02></time-component02>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.devtools = true;
+    var vm = new Vue({
+        el: "#app"
+    });
+</script>
+
+
+</html>

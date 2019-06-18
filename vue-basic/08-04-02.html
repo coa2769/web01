@@ -1,0 +1,108 @@
+<!--
+    배열 데이터를 전달해 출력하는 예제 06-17
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06-17</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+<style>
+    #list {
+        width: 400px;
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+    #list td,
+    #list th {
+        border: 1px solid black;
+        text-align: center;
+    }
+    
+    #list>thead>tr {
+        color: yellow;
+        background-color: purple;
+    }
+</style>
+
+<!-- 랜더링 되는 template -->
+<template id="listTemplate">
+    <div>
+        <table id = "list">
+            <thead>
+                <tr>
+                    <th>번호</th><th>이름</th><th>전화번호</th><th>주소</th>
+                </tr>
+            </thead>
+            <tbody id="contacts">
+                <tr v-for="contact in contacts">
+                    <td>{{contact.no}}</td>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.tel}}</td>
+                    <td>{{contact.address}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script type="text/javascript">
+    Vue.component('contactlist-component', {
+        template: '#listTemplate',
+        props: ['contacts']
+    });
+</script>
+
+
+<body>
+    <div id="app">
+        <h1>예방 접종</h1>
+        <br />
+        <h3>1차 대상자 : 5월 1~3일</h3>
+        <!-- Vue인스턴스의 data에서 각 배열을 출력 -->
+        <contactlist-component :contacts="list1"></contactlist-component>
+        <h3>2차 대상자 : 5월 13~15일</h3>
+        <contactlist-component :contacts="list2"></contactlist-component>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.devtools = true;
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            list1: [{
+                "no": 97,
+                "name": "Kalisa Regers",
+                "tel": "020-34567-8976",
+                "address": "서울시"
+            }, {
+                "no": 96,
+                "name": "jeson",
+                "tel": "020-323467-84576",
+                "address": "서울시"
+            }, {
+                "no": 95,
+                "name": "Tomkit",
+                "tel": "020-34457-8976",
+                "address": "서울시"
+            }],
+            list2: [{
+                "no": 82,
+                "name": "Konger",
+                "tel": "010-34567-8976",
+                "address": "서울시"
+            }, {
+                "no": 81,
+                "name": "Kumber",
+                "tel": "010-34567-8976",
+                "address": "서울시"
+            }]
+        }
+    })
+</script>
+
+</html>

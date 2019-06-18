@@ -1,0 +1,182 @@
+<!-- 04-10예제를 컴포넌트화 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06-19</title>
+    <style>
+        #list {
+            width: 600px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        
+        #list td,
+        #list th {
+            border: 1px solid black;
+            text-align: center;
+        }
+        
+        #list>thead>tr {
+            color: yellow;
+            background-color: purple;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.4/fetch.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+</head>
+<!-- ※ contactlist-component 시작 -->
+<template id="listTemplate">
+    <div>
+        <table id="list">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>주소</th>
+                </tr>
+            </thead>
+            <tbody id="contacts">
+                <tr v-for="contact in contacts">
+                    <td>{{contact.no}}</td>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.tel}}</td>
+                    <td>{{contact.address}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script type="text/javascript">
+    Vue.component('contactlist-component', {
+        template: '#listTemplate',
+        props: ['contacts'] //입력 받을 결과
+    });
+</script>
+
+<!-- ※ contactlist-component 끝 -->
+
+<!-- ※ search-component 시작 -->
+<template id="searchTemplate">
+    <p>
+        <!-- 
+            v-model.trim="name" 문자열을 Vue 인스턴스의 data가 참조한 객체로 전달 
+            :placeholder="placeholder" 컴포넌트의 props이므로 부모에게 입력은걸 출력한다.
+            @keyup.enter="keyupEvent" 엔터가 눌리면 부모에게 이벤트로 데이터 전송
+        -->
+        이름 : <input type="text" v-model.trim="name" :placeholder="placeholder" 
+        @keyup.enter="keyupEvent" />
+    </p>
+</template>
+
+<script type="text/javascript">
+    Vue.component('search-component', {
+        template: '#searchTemplate',
+        props: ['placeholder'],
+        data: function() {
+            return {
+                name: ''
+            };
+        },
+        methods: {
+            //보모에게 검색할 문자열을 전달하기위해 이벤트 발생
+            keyupEvent: function(e) {
+                var val = e.target.value;
+                if (val.length >= 2) {
+                    console.log(val);
+                    this.$emit('search', val);
+                } else {
+                    this.$emit('search', '');
+                }
+            }
+        }
+    })
+</script>
+
+<!-- ※ search-component 끝 -->
+
+<!-- ※ search-contact-component 시작 -->
+<template id="searchcontactTemplate">
+    <div>
+        <!-- ※ search-component 입력 
+            v-on:search="searchEvent" search 이벤트로 검색 문자열을 받는다.
+        -->
+        <search-component placeholder="두글자 이상 입력후 엔터!" 
+        v-on:search="searchEvent"></search-component>
+
+        <!-- ※ contactlist-component 결과  전달 받은 결과 출력 -->
+        <contactlist-component v-bind:contacts="contactlist">
+        </contactlist-component>
+
+        <div v-show="isProcessing === true">조회중</div> 
+    </div>
+</template>
+
+<script type="text/javascript">
+    Vue.component('search-contact-component', {
+        template: '#searchcontactTemplate',
+        data: function() {
+            return {
+                contactlist: [], //이걸로 자식 contactlist-component의 contacts로 객체 배열 전달
+                isProcessing: false
+            }
+        },
+        methods: {
+            //searchTemplate로 키워드를 입력받는다.
+            searchEvent: function(name) {
+                if (name === '')
+                    this.contactlist = [];
+                else
+                    this.fetchContacts(name); //밑의 요청 함수 호출
+            },
+            //서버로 요청 후 부터 객체 배열을 받고 contactlist
+            fetchContacts: function(name) {
+                this.contactlist = [];
+                this.isProcessing = true;
+                var url = "http://sample.bmaster.kro.kr/contacts_long/search/" + name;
+
+                var vm = this; //Vue인스턴스
+                console.log(this);
+                fetch(url).then(function(response) {
+                    return response.json()
+                }).then(function(json) {
+                    //data옵션의 함수가 반환하는 객체의 변수중 contactlist를 선택
+                    vm.contactlist = json;
+                    vm.isProcessing = false;
+                }).catch(function(ex) {
+                    console.log('parsing failed', ex);
+                    vm.contactlist = [];
+                    vm.isProcessing = false;
+                })
+            }
+        }
+    })
+</script>
+
+<!-- ※ search-contact-component 끝 -->
+
+<body>
+    <!-- ※ search-contact-component 전체 => search로 부터 입력받아서 검색 -->
+    <div id="app">
+        <search-contact-component></search-contact-component>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app'
+        });
+    </script>
+</body>
+
+</html>

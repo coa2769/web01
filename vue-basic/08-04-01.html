@@ -1,0 +1,110 @@
+<!--
+    6.5 props와 event
+    컴포넌트 내부의 데이터는 캡슐화. 다른 컴포넌트나 앱에서는 접근 불가.
+    컴포넌트으 자식과 부모 관계에서는 Props와 Event로 상호 작용한다.
+    부모 => 자식 : Props로 데이터를 넘긴다.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06-12</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<template id="listTemplate">
+    <li>{{message}}</li> <!-- 받은 데이터를 사용 -->
+</template>
+
+<script type="text/javascript">
+    Vue.component('list-component', {
+        template: '#listTemplate',
+        props: ['message'] //props옵션에 부모 컴포넌트의 속성 이름을 등록
+            //(속성 명은 꼭 케밥 표기법을 사용. 대소문자를 구분하지 않기 때문이다.)
+    });
+
+    Vue.component('list-component02', {
+        template: '#listTemplate',
+        //기본은 배열이지만 엄격한 유효성 검증이 필요하다면 객체 형태를 사용한다.
+        props: {
+            message: {
+                type: String,
+                default: '안녕하세요'
+            },
+            count: {
+                type: Number,
+                required: true //필수 입력이라는 의미
+            }
+        }
+    });
+
+    Vue.component('list-component03', {
+        template: '#listTemplate',
+        props: {
+            message: {
+                type: String,
+                default: '안녕하세요'
+            },
+            count: {
+                type: Number,
+                required: true
+            },
+            countries: {
+                type: Array,
+                //배열이나 객체의 기본 값을 부여할 때는 반드시 함수를 사용한다.
+                default: function() {
+                    return ['대한민국'];
+                }
+            }
+        }
+    });
+</script>
+
+<body>
+    <div id="app">
+        <ul>
+            <!-- 속성에 데이터 등록 -->
+            <list-component message="Hello"></list-component>
+            <list-component message="씬짜오"></list-component>
+            <list-component message="니하오마"></list-component>
+        </ul>
+
+        <ul>
+            <!-- 또다른 방법 -->
+            <!-- 
+                count="100"는 리터럴로 속성을 전달하기 때문에 JS구문으로 인식되지 않기 때문에 
+                문자열로 값이 들어가 문제가 난다.
+
+                <해결>
+                v-bind:count="100" 로 입력하면 JS 로 인식한다.
+             -->
+            <list-component02 message="Hello" v-bind:count="100"></list-component02>
+            <list-component02 message="씬짜오" :count="21"></list-component02>
+            <!-- 
+                필수 입력인count를 넣지 않았기 오류 메세지가 뜨지만 렌더링에는 문제가 나지 않는다.
+                문자열을 입력하면 변수명으로 간주한다. 이 변수나 객체가 없다면 오류.
+             -->
+            <list-component02 message="니하오마" :count="wor"></list-component02>
+            <list-component02 :count="1000"></list-component02>
+        </ul>
+
+        <ul>
+            <!-- 속성으로 배열이나 객체를 전달할 경우 
+                숫자를 전달 할때와 같이 v-bind:를 사용해야 한다.
+            -->
+            <list-component03 message="Hello" v-bind:count="100" v-bind:countries="['미국','영국','호주']"></list-component03>
+            <list-component03 message="씬짜오" v-bind:count="21" v-bind:countries="['베트남']"></list-component03>
+            <list-component03 message="니하오마" v-bind:countries="['중국','타이완']"></list-component03>
+            <list-component03 v-bind:count="100"></list-component03>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.devtools = true;
+    var vm = new Vue({
+        el: "#app"
+    });
+</script>
+
+</html>

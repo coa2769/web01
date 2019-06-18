@@ -1,0 +1,112 @@
+<!--
+    6.5 props와 event
+    자식 => 부모 : 이벤트로 데이터를 전달한다
+
+    자식 컴포넌트에서는 이벤트 발신(emit)
+    부모 컴포넌트에서는 v-on 디렉티브를 이용해 이벤트 수신
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06-18</title>
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+</head>
+<!--child Component 시작-->
+<style>
+    .buttonstyle {
+        width: 120px;
+        height: 30px;
+        text-align: center;
+    }
+</style>
+
+<template id="childTemplate">
+    <div>
+        <!-- v-bind:data-lang="buttonInfo.value" : 임의로 요소의 속성으로 데이터를 넣어두는 방법 -->
+        <button class="buttonstyle" v-on:click="clickEvent"
+         v-bind:data-lang="buttonInfo.value">{{buttonInfo.text}}</button>
+    </div>
+</template>
+
+<script type="text/javascript">
+    Vue.component('child-component', {
+        template: '#childTemplate',
+        props: ['buttonInfo'],
+        methods: {
+            clickEvent: function(e) {
+                //부모에게 이벤트 발신 ('timeclick'이벤트 발신, 전달할 데이터들....)
+                //e.target.innerText : 자식객체의 버튼 text,
+                //e.target : 이벤트 발생 요소 + dataset.lang : HTML이나 DOM요소의 커스텀 데이터 속성에 접근하는 방법
+                this.$emit('timeclick', e.target.innerText, e.target.dataset.lang);
+            }
+        }
+    });
+</script>
+<!-- child Component 끝 -->
+
+<!-- parent Component 시작 -->
+<template id="parent-template">
+    <div>
+        <!-- 
+            child Component 랜더링 + 자식에게 데이터 전달
+
+            렌더링에서는 Vue인스턴스이 data옵션에 참조된 배열의 개수 만큼 자식을 출력한다.
+            timeclick이벤트로 호출될 메서드를 부모 컴포넌트에서 지정. 자식이 발생시키는 이벤트이다.
+            자식한테 button-info(자식 컴포넌트에서의 속성이름 : buttonInfo)속성으로 출력될 버튼에 대한 내용을 전달한다.
+        -->
+        <child-component v-for="s in buttons" v-bind:button-info="s" v-on:timeclick="timeclickEvent">
+        </child-component>
+        <hr />
+        <!-- buttons.text, buttons.value -->
+        <div>{{msg}}</div>
+    </div>
+</template>
+
+<script type="text/javascript">
+    Vue.component('parent-component', {
+        template: '#parent-template',
+        props: ['buttons'], //Vue인스턴스의 data옵션에 들어간 배열이 들어간다.
+        data: function() {
+            return {
+                msg: ""
+            };
+        },
+        methods: {
+            timeclickEvent: function(k, v) {
+                //화면에 출력할 문자를 구성
+                this.msg = k + "," + v;
+            }
+        }
+    })
+</script>
+<!-- parent Component 끝 -->
+
+<body>
+    <div id="app">
+        <!-- Vue인스턴스으 data의 배열을 :buttons에 입력 -->
+        <parent-component :buttons="buttons"></parent-component>
+    </div>
+</body>
+
+<script type="text/javascript">
+    Vue.config.devtools = true;
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            buttons: [{
+                text: "Hello",
+                value: "영어"
+            }, {
+                text: "씬짜오",
+                value: "베트남어"
+            }, {
+                text: "니하오",
+                value: "중국어"
+            }, ]
+        }
+    })
+</script>
+
+</html>
