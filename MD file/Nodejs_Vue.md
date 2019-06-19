@@ -387,3 +387,110 @@ vue-cli-service의 내장된 기본 설정을 통해서 복잡한 webpack 번들
 ### 8.1 Vue CLI의 구성요소와 설치
 책 참고
 
+## 9. 컴포넌트 심화
+### 9.1 단일 파일 컴포넌트
+[전역 수준 컴포넌트의 문제점]
+- ES2015, TypeScript와 같은 최신 스트립트 문법 사용 불가.
+- CSS를 지원하지 않음.
+(위의 문제들은 빌드 단계가 없어서 생김)
+- HTML파일안에서 여러 개의 `<template />` 태그가 작성되어 가독성이 떨어진다.
+
+Vue CLI로 생성한 프로젝트는 vue-loader를 이용해 단일 파일 컴포넌트를 지원한다.
+.vue 파일에 컴포넌트 작성. vue-loader가 파일 파싱.
+
+todolistapp예제를 Vue CLI로 스캐폴딩 코드를 생성하여 단일 파일 컴포넌트로 작성하려한다.
+
+스캐폴딩 : 자동 생성된 코드? 
+
+Vue CLI를 이용해서 프로젝트 생성
+
+cd [프로젝트 생성할 폴더]
+vue create [프로젝트 이름]
+
+빌드 방법
+cd [프로젝트 폴더]
+yarn serve
+
++ package.json의 serve스크립트에 --opne 옵션을 지정하면 실행 후 브라우저가 자동 구동된다.
+
+[샘플 코드]
+src/App.vue & src/components/HelloWorld.vue : 컴포넌트를 선언하는 파일
+src/main.js : App.vue 컴포넌트를 화면 출력을 위한 작업을 하는 script
+public/index.html : 실제 컴포넌트가 출력된 html page
+
+### 9.2 컴포넌트에서의 스타일
+전역 스타일과 다른 컴포넌트의 스타일에서 동일한 CSS클래스 명을 사용 중이라면 충돌이 발생한다.
+[해결]
+특정 컴포넌트만의 스타일 지정.
+1) 범위 CSS(Scoped CSS)
+2) CSS Module
+
+styletest예제
+
+#### 9.2.1 범위 CSS
+하나의 컴포넌트에는 여러개의 <style>태그 작성 가능. 전역과 범위 CSS를 구분하자.
+
+[선언 방법]
+```html
+<style scoped>
+</style>
+```
+
+[주의 사항]
+1) 특성 선택자는 적용이 느리다. 반드시 ID, Class, tag이름 선택자로 요소를 선택하여야 느려지는 것을 보완할 수 있다.
+2) 부모 컴포넌트에 적용된 범위 CSS는 하위 컴포넌트에도 반영된다.
+
+#### 9.2.2 CSS 모듈
+객체처럼 다룰 수 있다.
+
+[CSS 선언방법]
+```html
+<template>
+    <div>
+        <!-- $style이라는 계산형 속성을 통해서 style module을 이용한다. -->
+        <button :class="$style.hand">CSS Modeule을 적용한 버튼 </button>
+        <div :class="[$style.hand, &style.border]">CSS Modeule을 적용한 버튼 </div>
+    </div>
+</template>
+
+
+<style module>
+</style>
+```
+### 9.3 슬롯
+props로 자신에게 정보를 전달할 때 정보가 HTML태그이면 불편하다.
+이걸 해결하기 위해 슬록을 사용한다.
+슬롯은 부모 => 자식 HTML마크업을 전달한다.
+
+[자식 컴포넌트 쪽]
+```html
+<slot></slot>
+```
+
+[부모 컴포넌트 쪽]
+콘텐츠 영역에 HTML마크업 작성
+```
+```
+
+#### 9.3.2 명명된 슬롯
+이름을 부여한 슬롯이다.
+이걸 사용하면 여러 개의 슬롯을 작성할 수 있다.
+
+#### 9.3.3 범위 슬롯
+자식 컴포넌트에서 부모 컴포넌트에 정보 전달하는 방법.
+자주 쓰이지는 않지만 알아두면 좋다.
+
+### 9.4 동적 컴포넌트
+동일한 위치에 여러 컴포넌트를 표현해야할 때 쓰인다.
+
+단 `<component>`에 표시되는 자식 컴포넌트가 정적 콘텐츠라면 매번 실행되는 것은 비효율적이므로 이 문제를 해결하기 위해 `<component>`를 `<keep-alive>`감싸서 캐싱한다.
+캐싱하고 싶지 않다면 include, excululde특성에 컴포넌트들의 name을 나열하면 된다.
+```js
+<keep-alive include="about,home">
+    <component v-bind:is="currentView"></component>
+</keep-alive>
+```
+
+### 9.5 재귀 컴포넌트
+템플릿에서 자기 자신을 호출하는 컴포넌트를 말한다.
+사용시에 꼭 name옵션을 지정해야만한다.
