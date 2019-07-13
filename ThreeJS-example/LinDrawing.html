@@ -1,0 +1,72 @@
+<!--
+    텍스트 만드는 방법
+    1. DOM + CSS  html에 tag를 추가해서
+    2. canvas 태그에 그리고 texture로 출력
+    3. 3D응용 프로그램에서 만들어지 text관련 모델을 three.js가 화면에 출력
+    4. three.js의 text객체를 만든다.
+    5. bitmap 글꼴 사용
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>My first three.js app</title>
+    <style>
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            display: block;
+        }
+        
+        body {
+            margin: 0;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="info">Description</div>
+    <script src="js/three.js"></script>
+    <script>
+        //엔진
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        //장면
+        var scene = new THREE.Scene();
+        //카메라
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+        camera.position.set(0, 0, 100);
+        camera.lookAt(0, 0, 0);
+
+        //물질 정의? (재질 생성)
+        //LineBasicMaterial 또는 LineDasheMaterial
+        var material = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+
+        //뼈대인 Geometry를 생성. Geometry또는 BufferGeometry
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
+        geometry.vertices.push(new THREE.Vector3(0, 10, 0));
+        geometry.vertices.push(new THREE.Vector3(10, 0, 0));
+
+        //선생성
+        var line = new THREE.Line(geometry, material);
+        scene.add(line);
+        renderer.render(scene, camera);
+    </script>
+</body>
+
+</html>
