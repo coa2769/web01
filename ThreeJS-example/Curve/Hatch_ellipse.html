@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example geometries-plane</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas'></canvas>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        let WIDTH = 32;
+        let HEIGHT = 32;
+
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            //shape에는 여러 그리기 함수가 있다. ellipse, spline도 적용 가능하다.
+            var smileyShape = new THREE.Shape();
+            smileyShape.moveTo(0, 0);
+            smileyShape.absellipse(0, 0, 50, 100, 0, Math.PI * 2, false);
+
+            var geometry = new THREE.ShapeBufferGeometry(smileyShape);
+            var ellipse = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+                color: 0xffffff
+            }));
+
+            //mesh
+            scene.add(ellipse);
+
+            renderer.render(scene, camera);
+
+        };
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
