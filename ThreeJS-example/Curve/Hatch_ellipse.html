@@ -33,12 +33,30 @@
             //html 추가
             document.body.appendChild(renderer.domElement);
 
+
             //shape에는 여러 그리기 함수가 있다. ellipse, spline도 적용 가능하다.
             var smileyShape = new THREE.Shape();
-            smileyShape.moveTo(0, 0);
-            smileyShape.absellipse(0, 0, 50, 100, 0, Math.PI * 2, false);
+            //smileyShape.moveTo(0, 0);
+            //smileyShape.absellipse(0, 0, 50, 100, 0, Math.PI * 2, false);
 
-            var geometry = new THREE.ShapeBufferGeometry(smileyShape);
+            var arcShape = new THREE.Shape();
+            arcShape.moveTo(50, 50);
+            arcShape.lineTo(-50, 50);
+
+            //arcShape.moveTo(50, 50);
+            arcShape.lineTo(50, -50);
+
+            //arcShape.moveTo(-50, 50);
+            arcShape.lineTo(-50, -50);
+
+
+            // arcShape.moveTo(-50, 50);
+            // arcShape.lineTo(-50, -50);
+
+
+            //arcShape.absarc(0, 0, 40, 0, Math.PI * 2, false);
+
+            var geometry = new THREE.ShapeBufferGeometry(arcShape);
             var ellipse = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
                 color: 0xffffff
             }));
