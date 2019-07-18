@@ -28,58 +28,53 @@
             scene = new THREE.Scene();
 
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
-            camera.position.set(0, 0, 100); //위치
+            camera.position.set(0, 0, 200); //위치
             camera.lookAt(0, 0, 0);
 
-            //texture class의 minFilter
-            //texture constants에 상수가 선언되어 있다.
-            //texture.minFilter = THREE.LinearFilter;
-            //texture.magFilter = THREE.LinearFilter;
-            texture = new THREE.Texture(canvas);
+            const WIDTH = 50;
+            const HEIGHT = 50;
+
+            let count = 10;
+            let dis = WIDTH / count;
+            let i;
+            for (i = 0; i < count; i++) {
+                let point = new THREE.Geometry();
+                point.vertices.push(
+                    new THREE.Vector3(, i * dis, 0),
+                    new THREE.Vector3(WIDTH, i * dis, 0)
+                );
+                let material = new THREE.LineBasicMaterial({
+                    color: 0xffff00
+                });
+                let line = new THREE.Line(point, material);
+                scene.add(line);
+            }
+
+            let shape = new THREE.Shape();
+
+            shape.moveTo(0, 0);
+            shape.lineTo(WIDTH, 0);
+            shape.lineTo(WIDTH, HEIGHT);
+            shape.lineTo(0, HEIGHT);
+
+            let hole = new THREE.Path();
+            hole.absarc(25, 25, 15, 0, Math.PI * 2, false);
+            shape.holes.push(hole);
+
+
+            let geometry = new THREE.ShapeGeometry(shape);
             let material = new THREE.MeshBasicMaterial({
-                color: 0xffff00,
-                side: THREE.DoubleSide,
-                //map: texture
+                color: 0x000000,
             });
+            let mesh = new THREE.Mesh(geometry, material);
 
-            geometry = new THREE.PlaneGeometry(50, 50, 32);
-            plane = new THREE.Mesh(geometry, material);
 
-            scene.add(plane);
 
-            canvas.width = canvas.height = WIDTH;
-        }
-
-        function drawCanvas() {
-            // // !! patern이 들어간 이미지 생성
-
-            // //1. canvas는 직사각형외의 다른 도형을 그리기 위해서는 
-            // //하나 이상의 path와 여러점으로 이어진 선을 만들어야한다.
-            // ctx.beginPath();
-
-            // //2. path 메소드 : 물체를 구설할 때 필요한 경로 설정
-
-            // //※ 나중에 어떻게 움직이는지 확인
-            // ctx.translate(canvas.width / 2, canvas.height / 2);
-            // ctx.rotate(205 * Math.PI / 180);
-
-            // let x = -WIDTH;
-            // let y = -HEIGHT;
-            // for (i = 0; i < 200; i++) {
-            //     ctx.moveTo(x, y + i * 10 + 1);
-            //     ctx.lineTo(x + WIDTH * 2, y + i * 10 + 1);
-            //     ctx.stroke(); //이걸로 선을 끊는다.
-            // }
-            // //3. 현재 하위 경로의 시작 부분과 연결된 직선을 추가
-            // ctx.closePath();
-
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+            scene.add(mesh);
             renderer.render(scene, camera);
         }
 
         init();
-        drawCanvas();
     </script>
 
 </body>
