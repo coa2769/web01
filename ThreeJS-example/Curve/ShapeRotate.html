@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hatch</title>
+</head>
+
+<body>
+    <!-- <canvas>
+    </canvas> -->
+    <script src="../js/three.js"></script>
+
+    <script>
+        let camera, scene, renderer, geometry, mesh, material;
+        let temp = new THREE.Object3D();
+
+        function init() {
+            //엔진 생성
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 200); //위치
+            camera.lookAt(0, 0, 0);
+
+            const WIDTH = 20;
+            const HEIGHT = 20;
+            // let shape = new THREE.Shape();
+            // // shape.moveTo(-WIDTH, -HEIGHT);
+            // // shape.lineTo(-WIDTH, HEIGHT);
+            // // shape.lineTo(WIDTH, HEIGHT);
+            // // shape.lineTo(WIDTH, -HEIGHT);
+
+            // geometry = new THREE.ShapeGeometry(shape);
+            // material = new THREE.MeshBasicMaterial({
+            //     color: 0xffff00
+            // });
+            // mesh = new THREE.Mesh(geometry, material);
+            // mesh.translateX(50);
+            // scene.add(mesh);
+
+            //※ temp는 왼쪽 아래가 기준
+            let i, dis = 3;
+            for (i = 0; i < 10; i++) {
+                let geometry = new THREE.Geometry();
+                geometry.vertices.push(
+                    //(0,0)을 원점으로 패턴을 맟줘서 그린다.
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, -HEIGHT * 0.5, 0),
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, HEIGHT * 0.5, 0)
+                );
+                let material = new THREE.LineBasicMaterial({
+                    color: 0xffff00
+                });
+                let line = new THREE.Line(geometry, material);
+                temp.add(line);
+            }
+            //방향에 의한 이동
+            //temp.translateOnAxis(new THREE.Vector3(1, 0, 0), 50);
+            //temp.translateX(50);
+            scene.add(temp);
+
+
+            renderer.render(scene, camera);
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        const axis = new THREE.Vector3(0, 0, 1).normalize();
+
+        let quaternion = new THREE.Quaternion();
+
+        function render() {
+            //star.rotation.z += 0.0001;
+            // mesh.rotation.z += 0.01;
+            temp.rotation.z += 0.01;
+            //quaternion.setFromAxisAngle(axis, 0.005);
+            //mesh.position.applyQuaternion(quaternion);
+
+            renderer.render(scene, camera);
+        }
+
+
+
+        init();
+    </script>
+
+</body>
+
+</html>
