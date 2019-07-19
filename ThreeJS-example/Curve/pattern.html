@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example geometries-plane</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas'></canvas>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        let WIDTH = 32;
+        let HEIGHT = 32;
+
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            //material
+            var material = new THREE.LineBasicMaterial({
+                color: 0xffff00
+            });
+
+            let WIDTH = 50;
+            let HEIGHT = 50;
+            let COUNT = 20;
+            let dis = 5;
+
+            let temp = new THREE.Object3D();
+            let i;
+            for (i = 0; i < COUNT; i++) {
+
+                let geometry = new THREE.Geometry();
+
+                geometry.vertices.push(
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, -HEIGHT * 0.5, 0),
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, HEIGHT * 0.5, 0)
+                );
+
+                let line = new THREE.Line(geometry, material);
+                temp.add(line);
+            }
+
+            // 180 / 4 * 3 시계 방향 회전 중 45도 => 135도
+            temp.rotation.z = Math.PI / 4 * 3;
+            scene.add(temp);
+
+            let shape = new THREE.Shape();
+            shape.moveTo(-WIDTH, -HEIGHT);
+            shape.lineTo(WIDTH, -HEIGHT);
+            shape.lineTo(WIDTH, HEIGHT);
+            shape.lineTo(-WIDTH, HEIGHT);
+
+            let path = new THREE.Path();
+            path.moveTo((-WIDTH * 0.5), -HEIGHT * 0.5);
+            path.lineTo((WIDTH * 0.5), -HEIGHT * 0.5);
+            path.lineTo(WIDTH * 0.5, HEIGHT * 0.5);
+            path.lineTo(-WIDTH * 0.5, (HEIGHT * 0.5));
+            shape.holes.push(path);
+
+            //geometry = new THREE.Geometry(shape);
+            let shGeometry = new THREE.ShapeGeometry(shape);
+
+            let plane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0.8);
+
+            let shMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff0000,
+                clippingPlanes: [plane],
+                clipShadows: true
+            });
+            let mesh = new THREE.Mesh(shGeometry, shMaterial);
+            scene.add(mesh);
+
+            renderer.render(scene, camera);
+        };
+
+
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>
