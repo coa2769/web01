@@ -14,12 +14,13 @@
 </head>
 
 <body>
+    <canvas id='canvas'></canvas>
     <div id="WebGL-output">
 
     </div>
     <script>
-        let WIDTH = 100;
-        let HEIGHT = 100;
+        let WIDTH = 32;
+        let HEIGHT = 32;
 
         //로딩이 끝나면 Three.js를 숭행한다.
         function init() {
@@ -33,61 +34,87 @@
             document.body.appendChild(renderer.domElement);
 
             //Geometries
-            //let geometry = THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
-            //widthSegments : 너비가 분할되어야 할 세그먼트의 수.
-            //heightSegments : 높이가 분할되어야 할 세그먼트 수.
-            let geometry = new THREE.PlaneGeometry(WIDTH, HEIGHT, 20, 32);
+            var curve = new THREE.EllipseCurve(
+                0, 0, // ax, aY
+                50, 10, // xRadius, yRadius
+                0, 2 * Math.PI, // aStartAngle, aEndAngle
+                false, // aClockwise
+                0 // aRotation
+            );
+
+            var heartShape = new THREE.Shape();
+
+            var points = curve.getPoints(50);
+            console.log(points);
+            heartShape.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                heartShape.lineTo(points[i], points[i]);
+            }
+
+            var geometry = new THREE.ShapeGeometry(heartShape);
+
+            //=
+            //let geometry = new THREE.CircleGeometry(100, 32);
+
 
             //canvas
-            let bitmap = document.createElement('canvas');
+            let bitmap = document.querySelector('canvas');
+
             let ctx = bitmap.getContext('2d');
             bitmap.width = WIDTH;
             bitmap.height = HEIGHT;
 
-            //ctx.fillStyle = 'red';
-            //ctx.fillRect(0, 0, bitmap.width, bitmap.height);
+            // ctx.fillStyle = 'red';
+            // ctx.fillRect(0, 0, bitmap.width, bitmap.height);
             ctx.fillStyle = 'white';
-            ctx.fillRect(10, 10, bitmap.width - 20, bitmap.height - 20);
+            ctx.fillRect(0, 0, bitmap.width, bitmap.height);
 
             //1. canvas는 직사각형외의 다른 도형을 그리기 위해서는 
             //하나 이상의 path와 여러점으로 이어진 선을 만들어야한다.
             ctx.beginPath();
             // ctx.strokeStyle = '#000000'; 선 색깔 변경
 
-
             //2. path 메소드 : 물체를 구설할 때 필요한 경로 설정
-            //※ 나중에 어떻게 움직이는지 확인
-            ctx.translate(bitmap.width / 2, bitmap.height / 2);
-            ctx.rotate(300 * Math.PI / 180);
+            //※ 중심점을 이동 시킨다.
+            //ctx.translate(bitmap.width / 2, bitmap.height / 2);
+            //210 ,330
+            //ctx.rotate(90 * Math.PI / 180);
 
-            let x = -WIDTH;
-            let y = -HEIGHT;
-            for (i = 0; i < 200; i++) {
-                ctx.moveTo(x, y + i * 10 + 1);
-                ctx.lineTo(x + WIDTH * 2, y + i * 10 + 1);
+            ctx.lineWidth = 1;
+            let x = 0;
+            let y = 0;
+            let dis = WIDTH / 5;
+            for (i = 0; i < 5; i++) {
+                ctx.strokeStyle = '#ff0000';
+                ctx.moveTo(x, y + i * dis + 1);
+                ctx.lineTo(x + WIDTH * 2, y + i * dis + 1);
+
                 ctx.stroke(); //이걸로 선을 끊는다.
             }
             //3. 현재 하위 경로의 시작 부분과 연결된 직선을 추가
             //ctx.closePath();
 
+            //다시 중심점을 원점으로
+            //ctx.translate(-(bitmap.width / 2), -(bitmap.height / 2));
+
 
             //texture
             let texture = new THREE.Texture(bitmap);
             texture.needsUpdate = true;
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(4, 4);
 
             //material
-            let material = new THREE.MeshBasicMaterial({
-                map: texture
+            var material = new THREE.MeshBasicMaterial({
+                color: 0xff0000
             });
 
-            // let material = new THREE.MeshBasicMaterial({
-            //     color: 0xffff00,
-            //     side: THREE.DoubleSide
-            // });
+            // Create the final object to add to the scene
+            var ellipse = new THREE.Mesh(geometry, material);
 
             //mesh
-            let plane = new THREE.Mesh(geometry, material);
-            scene.add(plane);
+            //let plane = new THREE.Mesh(geometry, material);
+            scene.add(ellipse);
 
             renderer.render(scene, camera);
             // let meshMaterial = new THREE.MeshNormalMaterial();
@@ -96,16 +123,36 @@
 
         };
 
-        function createMesh(geom) {
-            let texture = THREE.ImageUtils.loadTexture("../texture.jpeg");
-            let mat = new THREE.MeshPhongMaterial();
-            mat.map = texture;
-
-            let mesh = new THREE.Mesh(geom, mat);
-            return mesh;
-        }
-
         window.onload = init;
+
+
+        // /*
+        //  *   x1  패턴이 적용될 위치 X(left)
+        //  *   y1  패턴이 적용될 위치 Y(top)
+        //  *   dx  패턴의 넓이
+        //  *   dy  패턴의 높이
+        //  *   delta 간격
+        //  *   color 선 색상
+        //  */
+        // var hatchRect = function(x1, y1, dx, dy, delta, color) {
+        //     ctx.rect(x1, y1, dx, dy);
+        //     ctx.save();
+        //     ctx.clip();
+        //     //입력 받은 배열중 최대 값 반환.
+        //     var majorAxe = _.max([dx, dy]);
+        //     ctx.strokeStyle = color;
+        //     //each : 요소 list에 callback함수를 반복 호출한다. (callback의 n : 값, i :index)
+        //     //range : 각 및 지도 루프에 사용할 수 있는 유연하게 숫자화된 정수 목록을 만드는 기능.
+        //     _.each(_.range(-1 * (majorAxe), majorAxe, delta), function(n, i) {
+        //         ctx.beginPath();
+        //         //왼쪽 선
+        //         ctx.moveTo(n + x1, y1);
+        //         //오른쪽 선
+        //         ctx.lineTo(dy + n + x1, y1 + dy);
+        //         ctx.stroke();
+        //     })
+        //     ctx.restore();
+        // }
     </script>
 </body>
 
