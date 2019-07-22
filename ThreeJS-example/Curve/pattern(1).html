@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example geometries-plane</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        //HPWAV4E0 = [
+        // {angle:0, oriX:0,oriY:30,deltaX:0,deltaY:60,Dash:[5,-55]},
+        // {angle:14.03624344,oriX:5,oriY:30,14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:14.03624344,oriX:65,oriY:30,14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:14.03624344,oriX:125,oriY:30,14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:14.03624344,oriX:185,oriY:30,14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:26.5650501,oriX:9,oriY:31,26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:26.5650501,oriX:69,oriY:31,26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:18.434948,oriX:11,oriY:32,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:71,oriY:32,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:131,oriY:32,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:33.6900673,oriX:14,oriY:33,33.2820129,49.9230156,3.6055512,-212.7275238},
+        // {angle:33.6900673,oriX:74,oriY:33,33.2820129,49.9230156,3.6055512,-212.7275238},
+        // {angle:33.6900673,oriX:134,oriY:33,33.2820129,49.9230156,3.6055512,-212.7275238},
+        // {angle:-33.6900673,oriX:43,oriY:35,-33.2820129,49.9230156,3.6055512,-212.7275238},
+        // {angle:-33.6900673,oriX:103,oriY:35,-33.2820129,49.9230156,3.6055512,-212.7275238},
+        // {angle:-33.6900673,oriX:163,oriY:35,-33.2820129,49.9230156,3.6055512,-212.7275238},
+        // {angle:-18.434948,oriX:46,oriY:33,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:106,oriY:33,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:166,oriY:33,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-26.5650501,oriX:49,oriY:32,-26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:-26.5650501,oriX:109,oriY:32,-26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:-14.03624344,oriX:51,oriY:31,-14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:-14.03624344,oriX:111,oriY:31,-14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:-14.03624344,oriX:171,oriY:31,-14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:-14.03624344,oriX:231,oriY:31,-14.5521374,58.2085495,4.1231055,-243.2632294},
+        // {angle:0,oriX:55,oriY:30,0,60,5,-55},
+        // {angle:26.5650501,oriX:17,oriY:35,26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:26.5650501,oriX:77,oriY:35,26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:18.434948,oriX:19,oriY:36,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:79,oriY:36,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:139,oriY:36,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:22,oriY:37,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:82,oriY:37,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:18.434948,oriX:142,oriY:37,18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:0,oriX:25,oriY:38,0,60,10,-50},
+        // {angle:-18.434948,oriX:35,oriY:38,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:95,38,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:155,38,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:38,37,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:98,37,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-18.434948,oriX:158,37,-18.9736652,56.9209976,3.1622777,-186.5743866},
+        // {angle:-26.5650501,oriX:41,36,-26.8328152,53.6656303,2.236068,-131.928009},
+        // {angle:-26.5650501,oriX:101,36,-26.8328152,53.6656303,2.236068,-131.928009}]
+
+        let WIDTH = 32;
+        let HEIGHT = 32;
+
+        // let render = new FileReader();
+        // let fileData = [];
+
+        // //모두 읽어들였을때 호출
+        // reander.onload = function(e) {
+        //     let data = e.target.result;
+        //     //줄 별로 나누기
+        //     let lineBreaks = data.split('\n');
+        //     //Object로 나누기
+        //     let backSpace, i;
+        //     for (i = 0; i < lineBreaks.length; i++) {
+        //         //\b로 나누기
+        //         backSpace = lineBreaks[i].split('\b');
+        //         let obj = {
+        //             angle: 0,
+        //             oriX: 0,
+        //             oriY: 0,
+        //             deltaX: 0,
+        //             deltaY: 0,
+        //             dash: []
+        //         };
+
+        //         obj.angle = backSpace[0];
+        //         obj.oriX = backSpace[1];
+        //         obj.oriY = backSpace[2];
+        //         obj.deltaX = backSpace[3];
+        //         obj.deltaY = backSpace[4];
+
+        //         let j;
+        //         for (j = 0; j < backSpace.length - 5; j++) {
+        //             obj.dash.push(backSpace[j + 5]);
+        //         }
+
+        //         fileData.push(obj);
+        //     }
+
+        // };
+
+        //※ 만약 위와 같은 일을 한다면 패턴의 크기는 0도를 기준으로 계산
+        //※ 선의 Dash를 적용해야하므로 LineDashedMaterial 사용
+        //※ 보편적인 pattern 적용을 위해서는 필요할 지도
+
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            // Create a sine-like wave
+            // let curve = new THREE.SplineCurve([
+            //     new THREE.Vector2(0, 30),
+            //     new THREE.Vector2(5, 30),
+            //     new THREE.Vector2(25, 38),
+            //     new THREE.Vector2(35, 38),
+            //     new THREE.Vector2(60, 30),
+
+            //     new THREE.Vector2(65, 30),
+            //     new THREE.Vector2(85, 38),
+            //     new THREE.Vector2(95, 38),
+            //     new THREE.Vector2(120, 30)
+            // ]);
+
+            let curve = new THREE.SplineCurve([
+                new THREE.Vector2(0, 30),
+                new THREE.Vector2(25, 38),
+                new THREE.Vector2(55, 30),
+
+                new THREE.Vector2(80, 38),
+                new THREE.Vector2(110, 30),
+            ]);
+
+            let points = curve.getPoints(50);
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+            let material = new THREE.LineBasicMaterial({
+                color: 0xff0000
+            });
+
+            // Create the final object to add to the scene
+            let splineObject = new THREE.Line(geometry, material);
+            scene.add(splineObject);
+
+            renderer.render(scene, camera);
+        };
+
+        init();
+
+        //※ 파일 읽어오기
+        //reader.readAsText(`HPWAV4E0.pat`, 'utf-8');
+    </script>
+</body>
+
+</html>
