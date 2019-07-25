@@ -29,6 +29,7 @@
             let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
             camera.position.set(0, 0, 500);
             let renderer = new THREE.WebGLRenderer();
+            renderer.localClippingEnabled = true;
             renderer.setSize(window.innerWidth, window.innerHeight);
             //html 추가
             document.body.appendChild(renderer.domElement);
@@ -44,23 +45,6 @@
             let dis = 5;
 
             let temp = new THREE.Object3D();
-            let i;
-            for (i = 0; i < COUNT; i++) {
-
-                let geometry = new THREE.Geometry();
-
-                geometry.vertices.push(
-                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, -HEIGHT * 0.5, 0),
-                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, HEIGHT * 0.5, 0)
-                );
-
-                let line = new THREE.Line(geometry, material);
-                temp.add(line);
-            }
-
-            // 180 / 4 * 3 시계 방향 회전 중 45도 => 135도
-            temp.rotation.z = Math.PI / 4 * 3;
-            scene.add(temp);
 
             let shape = new THREE.Shape();
             shape.moveTo(-WIDTH, -HEIGHT);
@@ -78,15 +62,35 @@
             //geometry = new THREE.Geometry(shape);
             let shGeometry = new THREE.ShapeGeometry(shape);
 
-            let plane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0.8);
+            let plane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0.11);
 
-            let shMaterial = new THREE.MeshPhongMaterial({
-                //color: 0xff0000,
-                clippingPlanes: [plane],
-                clipShadows: true
+            let shMaterial = new THREE.MeshBasicMaterial({
+                color: 0xff0000,
+                clippingPlanes: [plane]
             });
             let mesh = new THREE.Mesh(shGeometry, shMaterial);
             scene.add(mesh);
+
+            let i;
+            for (i = 0; i < COUNT; i++) {
+
+                let geometry = new THREE.Geometry();
+
+                geometry.vertices.push(
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, -HEIGHT * 0.5, 0),
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, HEIGHT * 0.5, 0)
+                );
+
+                let line = new THREE.Line(geometry, material);
+                temp.add(line);
+            }
+
+            // 180 / 4 * 3 시계 방향 회전 중 45도 => 135도
+            temp.rotation.z = Math.PI / 4 * 3;
+            //temp.translateZ(1);
+
+            // scene.add(mesh);
+            scene.add(temp);
 
             renderer.render(scene, camera);
         };

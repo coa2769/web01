@@ -29,9 +29,9 @@
             //html 추가
             document.body.appendChild(renderer.domElement);
 
-            let scale = 50;
+            let scale = 20;
 
-            let maxLen = 300;
+            let maxLen = 200;
             let radius = 0.5 * 0.5 * scale;
             let distance = 1 * scale; //0.5은 두 원의 반지름 + 0.5는 원의 간격 = 1
 
@@ -61,20 +61,39 @@
                     parent.add(circle);
                 }
             }
+            //※ 이동을 먼저하고 회전을 해야한다. 
+            //object3D의 축도 같이 회전하는 걸 확인
+            //회전 후 이동하게 되면 회전된 축의 방향으로 이동하게 된다.
+
+            parent.translateX(100);
+
+            parent.rotation.z = Math.PI / 4;
 
             scene.add(parent);
 
-            let geometry = new THREE.Geometry();
-            geometry.vertices.push(
-                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
-                new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
-                new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
-                new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
-                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
-            );
+            // let geometry = new THREE.Geometry();
+            // geometry.vertices.push(
+            //     new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
+            //     new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
+            //     new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
+            //     new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
+            //     new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
+            // );
 
-            let line = new THREE.Line(geometry, material);
-            scene.add(line);
+            // let line = new THREE.Line(geometry, material);
+            // line.rotation.z = Math.PI / 4;
+
+            // //parent.translateY(100);
+
+            // scene.add(line);
+
+            geometry = new THREE.Geometry();
+            geometry.vertices.push(
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(100, 0, 0)
+            )
+
+            line = new THREE.Line(geometry, material);
 
             renderer.render(scene, camera);
         };
