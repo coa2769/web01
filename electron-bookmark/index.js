@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, dialog, Tray, Menu, clipboard} = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Tray, Menu, clipboard } = require('electron');
 const request = require('superagent');
 const getTitle = require('get-title');
 const fs = require('fs');
@@ -26,19 +26,17 @@ const data = JSON.parse(fs.readFileSync(DATA_PATH).toString());
 //babel-loader + babel-core -D
 //babel-preset-es2015 + babel-preset-react -D
 
-const template = [
-    {   
-        label:'Open',
+const template = [{
+        label: 'Open',
         click: () => {
             win.show();
 
         }
     },
     {
-        label:'Save',
-        submenu:[
-            {
-                label:'Home',
+        label: 'Save',
+        submenu: [{
+                label: 'Home',
                 click: () => {
                     const item = {
                         type: 'home',
@@ -48,7 +46,7 @@ const template = [
                 }
             },
             {
-                label:'Github',
+                label: 'Github',
                 click: () => {
                     const item = {
                         type: 'github',
@@ -63,7 +61,7 @@ const template = [
         type: 'separator'
     },
     {
-        label:'Quit',
+        label: 'Quit',
         click: () => {
             app.quit();
         }
@@ -72,31 +70,31 @@ const template = [
 
 app.on('ready', () => {
     const menu = Menu.buildFromTemplate(template);
-    tray = new Tray(path.join(__dirname,'./icon.png'));
+    tray = new Tray(path.join(__dirname, './icon.png'));
     tray.setContextMenu(menu);
     tray.on('click', () => {
         toggle();
     });
 
     const bounds = tray.getBounds();
-    
+
     win = new BrowserWindow({
         width: 400,
         height: 400,
         x: Math.round(bounds.x + (bounds.width / 2) - 200),
         y: bounds.y - 400 - 10,
-        acceptFirstMouse : true,
+        acceptFirstMouse: true,
         frame: false,
         show: false,
         resizable: false,
-        movable:false,
+        movable: false,
         skipTaskbar: true,
-        webPreferences:{
+        webPreferences: {
             nodeIntegration: true
         }
     });
 
-    //win.webContents.openDevTools();
+    win.webContents.openDevTools();
 
     win.loadURL(`file://${__dirname}/index.html`);
     //ready-to-show는 최초 한번만 불리므로 once()를 사용한다.
@@ -116,22 +114,17 @@ app.on('ready', () => {
 
 });
 
-function toggle(){
-    if(win.isVisible())
-    {
+function toggle() {
+    if (win.isVisible()) {
         win.hide();
-    }
-    else
-    {
-        win.show();        
+    } else {
+        win.show();
     }
 }
 
-function save(item)
-{
+function save(item) {
     //url이 유효한가?
-    if(item.url.indexOf('http://') > -1 || item.url.indexOf("https://") > -1)
-    {
+    if (item.url.indexOf('http://') > -1 || item.url.indexOf("https://") > -1) {
         const type = item.type;
         const url = item.url;
         //title 추출
@@ -140,14 +133,12 @@ function save(item)
         request.get(url).end((err, response) => {
             const contents = response.res.text;
             getTitle(contents).then(title => {
-                data.push({type, url, title});
+                data.push({ type, url, title });
                 fs.writeFileSync(DATA_PATH, JSON.stringify(data));
                 win.webContents.send('update', data);
             });
         });
-    }
-    else
-    {
+    } else {
         dialog.showErrorBox('경고', '유효한 url이 아닙니다.');
     }
 }

@@ -1,37 +1,40 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <!-- photonkit모듈을 설치하여 미리 디자인된 html&css파일을 다운받는다.
+<html lang="en">
+
+<head>
+    <!-- photonkit모듈을 설치하여 미리 디자인된 html&css파일을 다운받는다.
         npm install photonkit -S -->
-        <meta charset="UTF-8">
-        <title>Electron BookMark</title>
-        <link rel="stylesheet" href="./node_modules/photonkit/dist/css/photon.css">
-    </head>
-    <body>
-        <div class="window">
+    <meta charset="UTF-8">
+    <title>Electron BookMark</title>
+    <link rel="stylesheet" href="./node_modules/photonkit/dist/css/photon.css">
+</head>
+
+<body>
+    <div class="window">
         <!-- 상단 부분 -->
-        <header class="toolbar toolbar-header">         
+        <header class="toolbar toolbar-header">
             <div class="toolbar-actions">
-                <h1 class="title">Mark's Bookmark</h1>   
+                <h1 class="title">Mark's Bookmark</h1>
                 <div class="btn-group">
-                <button class="btn btn-default" id="btn-home">
+                    <button class="btn btn-default" id="btn-home">
                     <span class="icon icon-home"></span>
                 </button>
-                <button class="btn btn-default" id="btn-github">
+                    <button class="btn btn-default" id="btn-github">
                     <span class="icon icon-github"></span>
                 </button>
                 </div>
             </div>
-            </header>
-            <!-- 본문 부분 -->
-            <div class="window-content">
-                <ul class="list-group" id="data">
-   
-                </ul>
-            </div>
+        </header>
+        <!-- 본문 부분 -->
+        <div class="window-content">
+            <ul class="list-group" id="data">
+
+            </ul>
         </div>
-        <script>
-            require('./renderer.js');
-        </script>
-    </body>
+    </div>
+    <script>
+        let node = require('./renderer.js');
+    </script>
+</body>
+
 </html>
