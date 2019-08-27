@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Line Dash Example</title>
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+    </div>
+    <script>
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+
+            let render = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            let firPos = new THREE.Vector3(0, 0, 0);
+            let secPos = new THREE.Vector3(200, 200, 0);
+
+            //※ 단 pattern이 선or점 과 공백을 쌍으로 묶어서 하나라면 그냥 LineDashedMateria()를 적용한다.
+
+
+            //전체 선 길이
+            let length = Math.sqrt(Math.pow(secPos.x - firPos.x) + Math.pos(secPos.y - firPos.y));
+            //타입이 적용되는 선의 길이
+            let lineTypeLen = 50;
+            //전체 길이에서 타입이 적용되는 선분의 개수
+            let lineTypeCount = length % lineTypeLen > 0 ? length / lineTypeLen + 1 : length / lineTypeLen;
+
+            //lineTypeCount만큼 geometry를 나눈다.
+
+            //선의 pattern의 Dash에 대한 정보를 2로 나눈다.(선or점 과 공백이 번가라 가면서 나온다.)
+
+            //이 결과는 나눠진 line에 적용할 pattern의 개수이다. 그러므로 또 선을 나눈다.
+
+            //for문을 돌면서 geometry를 만들고 group으로 묶는다.
+
+            let geometry = new THREE.Geometry();
+
+
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

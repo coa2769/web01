@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example geometries-plane</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        let WIDTH = 32;
+        let HEIGHT = 32;
+
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.localClippingEnabled = true;
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            let group = new THREE.Object3D();
+
+            let WIDTH = 100;
+            let HEIGHT = 100;
+            let geometry, material, mesh, shape, i;
+
+            shape = new THREE.Shape();
+            shape.moveTo(-WIDTH, -HEIGHT);
+            shape.lineTo(WIDTH, -HEIGHT);
+            shape.lineTo(WIDTH, HEIGHT);
+            shape.lineTo(-WIDTH, HEIGHT);
+
+            //방향성을 정해서 
+            let planes = [];
+            let count = 3;
+            for (i = 0; i < count; i++) {
+                let plane = new THREE.Plane();
+                //0 -> 0
+                //1 -> 60
+                //2 -> 120
+                //and 180 넘어가면 -로 부호변경
+                let angle = i * Math.PI / count;
+                //x, y, z
+                plane.normal.set(-Math.cos(angle), +Math.sin(angle), 0);
+                plane.constant = 100;
+                planes.push(plane);
+            }
+
+            geometry = new THREE.ShapeGeometry(shape);
+            material = new THREE.MeshBasicMaterial({
+                color: 0xff0000,
+                clippingPlanes: planes,
+                clipIntersection: false
+            });
+
+            mesh = new THREE.Mesh(geometry, material);
+            group.add(mesh);
+
+            material = new THREE.LineBasicMaterial({
+                color: 0xffffff,
+                clippingPlanes: planes,
+                clipIntersection: false
+            });
+
+            scene.add(group);
+
+            let COUNT = 20;
+            let dis = 5;
+            geometry = new THREE.Geometry();
+            let z = -1;
+            for (i = 0; i < COUNT; i++) {
+                z = z * (-1);
+                geometry.vertices.push(
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, -HEIGHT * 0.5 * z, 0),
+                    new THREE.Vector3((-WIDTH * 0.5) + i * dis, HEIGHT * 0.5 * z, 0)
+                );
+            }
+            let line = new THREE.Line(geometry, material);
+            line.position.x = 100;
+            line.position.y = 0;
+            line.position.z = 0;
+
+            scene.add(line);
+
+            shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.absellipse(0, 0, 10, 10, 0, Math.PI * 2, false);
+            geometry = new THREE.ShapeBufferGeometry(shape);
+            var ellipse = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+                color: 0xffffff
+            }));
+            scene.add(ellipse);
+            // shape = new THREE.Shpae();
+            // shape.moveTo(-300, -300);
+            // shape.lineTo(300, -300);
+            // shape.lineTo(300, 300);
+            // shape.lineTo(-300, 300);
+
+            // geometry = new THREE.ShapeGeometry(shape);
+            // material = new THREE.MeshBasicMaterial({
+            //     color: 0xffff00
+            // });
+
+            // mesh = new THREE.Mesh(geometry, material);
+            // scene.add(mesh);
+
+
+            renderer.render(scene, camera);
+        };
+
+
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>

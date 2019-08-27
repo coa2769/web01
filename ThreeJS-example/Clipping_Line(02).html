@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="js/three.js"></script>
+    <script>
+        let pos = function(x, y) {
+            this.x = x;
+            this.y = y;
+        };
+
+        const INSIDE = 0;
+        const LEFT = 1;
+        const RIGHT = 2;
+        const BOTTOM = 4;
+        const TOP = 8;
+
+        let arrLine = [];
+        // arrLine.push(new pos(0, 60));
+        // arrLine.push(new pos(60, 0));
+
+        //기울기 계산 : (pos2.y - pos1.y) / (pos2.x - pos1.x);
+
+        //왼쪽 아래 => 오른쪽 위 ( + )
+        arrLine.push(new pos(20, 60));
+        arrLine.push(new pos(30, 70));
+
+        //왼쪽 아래 => 오른쪽 위 ( + )
+        arrLine.push(new pos(40, 60));
+        arrLine.push(new pos(20, -70));
+
+        //왼쪽 아래 => 오른쪽 위 ( + )
+        arrLine.push(new pos(40, -10));
+        arrLine.push(new pos(20, -70));
+
+
+        //오른쪽 아래 => 왼쪽 위 ( - )
+        arrLine.push(new pos(20, 60));
+        arrLine.push(new pos(30, -70));
+
+
+        //지금 point에서 angle 방향으로 distance만큼 떨어져 있는 point 반환
+        function polar(point, distance, angle) {
+            var result = {};
+            result.x = point.x + distance * Math.cos(angle);
+            result.y = point.y + distance * Math.sin(angle);
+            return result;
+        }
+
+        //선의 기울기
+        function slopeOfLine(pos1, pos2) {
+            let disX = pos2.x - pos1.x;
+            let disY = pos2.y - pos1.y;
+
+            return (pos2.y - pos1.y) / (pos2.x - pos1.x);
+        }
+
+        //선 방정식의 상수
+        function constantOfLine(pos, slope) {
+            //상수를 구하려면 기울기를 알아낸 선 방정식에 x,y값을 대입하여 계산
+            return pos.y - (slope * pos.x);
+        }
+
+        let arrRect = [];
+        //1
+        arrRect.push(new pos(0, 50));
+        arrRect.push(new pos(50, 50));
+        //2
+        arrRect.push(new pos(50, 50));
+        arrRect.push(new pos(50, 0));
+        //3
+        arrRect.push(new pos(50, 0));
+        arrRect.push(new pos(0, 0));
+        //4
+        arrRect.push(new pos(0, 0));
+        arrRect.push(new pos(0, 50));
+
+        //교차점
+        let crossPos = [];
+
+        function clipping() {
+            //x = mX + b (m : 기울기 = y증가량 / x증가량, b : 상수)
+            //두 직선의 교차점은 두 직선의 방정식을 연립시켜서 구하게 됩니다.
+
+            //직선A : Y = maX + ba (ma : 직선A 기울기, ba : 직선A 상수)
+            //직선B : Y = mbX + bb (mb : 직선B 기울기, bb : 직선B 상수)
+
+            //maX + ba = mbX + bb
+            //maX + ba - (mbX + bb) = 0
+            //(ma - mb)X (ba - bb) = 0
+
+            //X = -(ba -bb)/(ma - mb)
+            //Y = ma * (-(ba -bb)/(ma - mb)) + ba
+
+            let i, j;
+            for (j = 0; j < arrLine.length; j += 2) {
+                console.log(`${j /2} 번째`);
+
+                let ma = slopeOfLine(arrLine[j], arrLine[j + 1]);
+                let ba = constantOfLine(arrLine[j], ma);
+                console.log(' ma : ' + ma + ' ba : ' + ba);
+                console.log('#####################################');
+
+                for (i = 0; i < arrRect.length; i += 2) {
+
+                    //다각형의 선 방정식
+                    let mb = slopeOfLine(arrRect[i], arrRect[i + 1]);
+                    let bb = constantOfLine(arrRect[i], mb);
+
+                    console.log(' mb : ' + mb + ' bb : ' + bb);
+                    let x, y;
+
+                    //기울기 y증가량/x증가량 에서 x증가량이 0 이므로
+                    if (Math.abs(ma) !== Infinity && Math.abs(mb) !== Infinity) {
+                        x = -(ba - bb) / (ma - mb);
+                        y = ma * x + ba;
+                    } else {
+                        if (Math.abs(ma) == Math.abs(mb)) {
+                            x = NaN;
+                            y = NaN;
+                        } else if (Math.abs(ma) === Infinity) {
+                            x = arrLine[j].x;
+                            y = mb * x + bb;
+                        } else if (Math.abs(mb) === Infinity) {
+                            x = arrRect[i].y;
+                            y = ma * x + ba;
+                        }
+                    }
+
+                    // console.log(' ## x : ' + x + ' y : ' + y);
+                    console.log('====================================');
+
+                    if (!isNaN(x) && !isNaN(y)) {
+                        let max = {
+                            x: arrRect[i].x > arrRect[i + 1].x ? arrRect[i].x : arrRect[i + 1].x,
+                            y: arrRect[i].y > arrRect[i + 1].y ? arrRect[i].y : arrRect[i + 1].y
+                        };
+                        let min = {
+                            x: arrRect[i].x < arrRect[i + 1].x ? arrRect[i].x : arrRect[i + 1].x,
+                            y: arrRect[i].y < arrRect[i + 1].y ? arrRect[i].y : arrRect[i + 1].y
+                        };
+
+                        // let max = {
+                        //     x: arrLine[0].x > arrLine[1].x ? arrLine[0].x : arrLine[1].x,
+                        //     y: arrLine[0].y > arrLine[1].y ? arrLine[0].y : arrLine[1].y
+                        // }
+
+                        // let min = {
+                        //     x: arrLine[0].x < arrLine[1].x ? arrLine[0].x : arrLine[1].x,
+                        //     y: arrLine[0].y < arrLine[1].y ? arrLine[0].y : arrLine[1].y
+                        // }
+
+                        if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
+                            crossPos.push(new pos(x, y));
+
+                            // console.log(i + ' => ' + 'x : ' + x + '  y : ' + y);
+                        }
+                    }
+                    // if (!isNaN(x) && !isNaN(y)) {
+                    //     crossPos.push(new pos(x, y));
+                    // }
+                }
+            }
+
+        }
+
+        let renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+        camera.position.set(0, 0, 200);
+        camera.lookAt(0, 0, 0);
+
+        let shape, geometry, material, mesh;
+
+        shape = new THREE.Shape();
+        shape.moveTo(arrRect[0].x, arrRect[0].y);
+        shape.lineTo(arrRect[1].x, arrRect[1].y);
+        shape.lineTo(arrRect[3].x, arrRect[3].y);
+        shape.lineTo(arrRect[5].x, arrRect[5].y);
+        shape.lineTo(arrRect[7].x, arrRect[7].y);
+
+        geometry = new THREE.ShapeBufferGeometry(shape);
+        material = new THREE.MeshBasicMaterial({
+            color: 0xffff00
+        });
+        mesh = new THREE.Line(geometry, material);
+        scene.add(mesh);
+
+        clipping();
+
+        let max = {
+            x: 50,
+            y: 50
+        };
+        let min = {
+            x: 0,
+            y: 0
+        };
+        let size = 50;
+
+        //left : minX, top : maxY
+        //right : maxX, bottom : minY
+
+
+        let i;
+        for (i = 0; i < crossPos.length; i += 2) {
+
+            geometry = new THREE.BufferGeometry();
+            // let vertices = new Float32Array([
+            //     arrLine[0].x, arrLine[0].y, 0,
+            //     arrLine[1].x, arrLine[1].y, 0
+            // ]);
+            // let vertices = new Float32Array([
+            //     crossPos[0].x, crossPos[0].y, 0,
+            //     crossPos[1].x, crossPos[1].y, 0
+            // ]);
+
+            let vertices = new Float32Array(6);
+            console.log(vertices);
+
+            vertices[0] = crossPos[i].x;
+            vertices[1] = crossPos[i].y;
+            vertices[2] = 0;
+
+            vertices[3] = crossPos[i + 1].x;
+            vertices[4] = crossPos[i + 1].y;
+            vertices[5] = 0;
+
+            geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            material = new THREE.MeshBasicMaterial({
+                color: 0xffff00
+            });
+            mesh = new THREE.Line(geometry, material);
+            scene.add(mesh);
+
+        }
+
+        //패턴이 있는 선분
+
+
+        renderer.render(scene, camera);
+    </script>
+</body>
+
+</html>

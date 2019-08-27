@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example HPWAV4E0 Pattern</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            //원래 0각도에서의 각 시작 점들
+            //0, 30
+            //25, 38
+            //110, 30
+
+            let scale = 1;
+
+            //<spline에 대한>
+            //spline선의 각 고지점의 간격
+            let hDistance = 8 * scale;
+            let wDistance = 25 * scale; //일정하게 하기 위해 25로 
+            //다음 선의 간격
+            let distance = 60 * scale;
+            //시작 점
+            let x = 0 * scale;
+            let y = 30 * scale;
+
+            //<pattern에 대한>
+            let maxLen = 300;
+            let rowCount = maxLen / distance;
+            let colCount = maxLen / (wDistance * 2) + 1;
+
+            let parent = new THREE.Object3D();
+            let material = new THREE.LineBasicMaterial({
+                color: 0xffff00
+            });
+
+
+            let i, j;
+            //행
+            for (i = 0; i < rowCount; i++) {
+                //spline의 맨 처음 줄
+                let base = new THREE.Vector2((-maxLen * 0.5) + x, (-maxLen * 0.5) + y + (distance * i));
+                let curve = new THREE.SplineCurve([
+                    new THREE.Vector2(base.x, base.y)
+                ]);
+                //열
+                //j = 1;
+                for (j = 1; j < colCount; j++) {
+                    curve.points.push(new THREE.Vector2(base.x + (wDistance * 2 * (j - 1)) + wDistance, base.y + hDistance));
+                    curve.points.push(new THREE.Vector2(base.x + (wDistance * 2 * j), base.y));
+                }
+
+                let points = curve.getPoints(50);
+                let geometry = new THREE.BufferGeometry().setFromPoints(points);
+                let spline = new THREE.Line(geometry, material);
+                parent.add(spline);
+            }
+
+            scene.add(parent);
+
+            let geometry = new THREE.Geometry();
+            geometry.vertices.push(
+                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
+                new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
+                new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
+                new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
+                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
+            );
+
+            let line = new THREE.Line(geometry, material);
+            scene.add(line);
+
+
+            renderer.render(scene, camera);
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

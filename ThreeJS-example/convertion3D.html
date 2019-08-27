@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Line Dash Example</title>
+    <script src="./js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body style="height: 500px;">
+    <div id="WebGL-output">
+    </div>
+    <script>
+        //enum과 namespaced 구현 https://www.sohamkamani.com/blog/2017/08/21/enums-in-javascript/
+        // const MouseStateEnum = {
+        //     MOUSE_DEFAULT: 0,
+        //     DRAW_SQUARE: 1,
+        //     MOVE_SQUARE: 2,
+        //     DRAG_SCREEN: 4
+        // };
+        // let mouse = {
+        //     state: MouseStateEnum.MOUSE_DEFAULT
+        // };
+
+        let posList = [];
+        let scene; //이놈에게 child가 있다.
+        let camera;
+        let renderer;
+        let body;
+        // let canvas3D = document.getElementById('WebGL-output');
+
+        function init() {
+
+            //여기에 Three.js코드를 추가한다.
+            scene = new THREE.Scene();
+            console.log(document.body.clientHeight);
+            camera = new THREE.PerspectiveCamera(45, document.body.clientWidth / document.body.clientHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(document.body.clientWidth, document.body.clientHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            //그리는 Rect
+
+            //mouse event 관련 : https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event
+            document.body.addEventListener('mousedown', e => {
+                let rect = document.body.getBoundingClientRect();
+                console.log(rect);
+
+                let point = {
+                    x: 0,
+                    y: 0
+                };
+                // point.x = e.clientX - rect.left;
+                // point.y = e.clientY - rect.top;
+
+                point.x = ((e.clientX - rect.left) / document.body.clientWidth) * 2 - 1;
+                point.y = -((e.clientY - rect.top) / document.body.clientHeight) * 2 + 1;
+
+
+
+                let vector = new THREE.Vector3(point.x * 250, point.y * 250, 0).unproject(camera);
+                console.log(vector);
+                posList.push(vector);
+
+                if (posList.length == 2) {
+                    console.log('draw');
+                    let geometry = new THREE.Geometry();
+                    geometry.vertices.push(new THREE.Vector3(posList[0].x, posList[0].y, 0));
+                    geometry.vertices.push(new THREE.Vector3(posList[1].x, posList[1].y, 0));
+
+                    let material = new THREE.LineBasicMaterial({
+                        color: 0xffff00
+                    });
+
+                    let line = new THREE.Line(geometry, material);
+                    scene.add(line);
+
+                    posList.shift();
+                    renderer.render(scene, camera);
+
+                }
+            });
+
+            let geometry = new THREE.Geometry();
+            geometry.vertices.push(new THREE.Vector3(-100, -100, 0));
+            geometry.vertices.push(new THREE.Vector3(100, 100, 0));
+
+            let material = new THREE.LineBasicMaterial({
+                color: 0xffff00
+            });
+
+            let line = new THREE.Line(geometry, material);
+            scene.add(line);
+
+            renderer.render(scene, camera);
+        }
+
+        function update() {
+
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

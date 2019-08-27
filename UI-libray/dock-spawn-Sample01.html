@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="./dock-spawn-ts-master/lib/css/dock-manager.css">
+    <link rel="stylesheet" href="./dock-spawn-ts-master/lib/css/dock-manager-style.css">
+
+</head>
+
+<body>
+
+    <!-- <div class="demo-header" id="header" style="width:100%">
+        <div class="demo-header-title">Dock Spawn Demo</div>
+    </div>
+    <div id="dock_div1" style="height:500px;width:500px;top:150px;left:100px;position:absolute;">
+        <div id="my_dock_manager1" class="my-dock-manager" style="position: relative;"></div>
+        <div id="edt1_1" data-panel-caption="Steering.h" style="background: lightcoral"></div>
+        <div id="edt2_1" data-panel-caption="Steering.cpp" style="background: lightgoldenrodyellow"></div>
+    </div>
+
+    <div id="dock_div2" style="height:500px;width:500px;top:150px;left:700px;position:absolute;">
+        <div id="my_dock_manager2" class="my-dock-manager" style="position: relative;"></div>
+        <div id="edt1_2" data-panel-caption="Steering.h" style="background: lightblue"></div>
+        <div id="edt2_2" data-panel-caption="Steering.cpp" style="background: lightgreen"></div>
+    </div> -->
+
+    <div id="dock_div" style="height: calc(100% - 45px);">
+        <div id="my_dock_manager" class="my-dock-manager" style="position: relative;"></div>
+        <div id="solution_window" data-panel-caption="Solution Explorer" data-panel-icon="test.png" class="solution-window" hidden></div>
+        <!-- <div id="properties_window" data-panel-caption="Properties" class="properties-window" hidden></div>
+        <div id="problems_window" data-panel-caption="Problems" class="problems-window" hidden></div>
+        <div id="editor1_window" data-panel-caption="Steering.h" class="editor1-window editor-host" hidden></div>
+        <div id="editor2_window" data-panel-caption="Steering.cpp" class="editor2-window editor-host" hidden></div>-->
+        <div id="infovis" data-panel-caption="Dock Tree Visualizer" class="editor2-window editor-host" hidden></div>
+        <!-- <div id="output_window" data-panel-caption="Output" class="output-window editor-host" hidden></div>
+        <div id="outline_window" data-panel-caption="Outline" class="outline-window" hidden></div>
+        <div id="toolbox_window" data-panel-caption="Toolbox" class="toolbox-window" hidden></div> -->
+    </div>
+
+    <!-- 
+        import를 쓰지 않는 이유
+        https://stackoverflow.com/questions/41722621/es6-in-the-browser-uncaught-syntaxerror-unexpected-token-import
+
+        단 이걸 사용하기 위해서는 이 html파일을 http로 불러들여야 한다.
+     -->
+    <script type="module" src="./dock-spawn-Sample01.js"></script>
+
+</body>
+
+</html>

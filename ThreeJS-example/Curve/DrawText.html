@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example CIRCLE32 Pattern</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            var loader = new THREE.FontLoader();
+
+            //./font//BM_HANNA_Air_Regular.json
+            //NYJ Gothic L_Regular
+            //NYJ Gothic M_Regular
+            loader.load('font\\NYJ Gothic L_Regular.json', function(font) {
+                console.log('load');
+                //특수문자가 출력되지 않는다.
+                var geometry = new THREE.TextGeometry('안녕 three.js! yes', {
+                    font: font,
+                    size: 30,
+                    height: 5
+                });
+
+                let material = new THREE.MeshBasicMaterial({
+                    color: 0xffff00
+                });
+                let text = new THREE.Mesh(geometry, material);
+                text.rotation.z = Math.PI * 0.5;
+
+                text.position.x = 100;
+                text.position.y = 0;
+                text.position.z = 0;
+
+
+                scene.add(text);
+                renderer.render(scene, camera);
+
+            });
+
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

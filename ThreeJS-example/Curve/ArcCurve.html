@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example CIRCLE32 Pattern</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            var curve = new THREE.ArcCurve(
+                0, 0,
+                50,
+                65 * (Math.PI / 180), 175 * (Math.PI / 180),
+                false
+            );
+
+            console.log(Math.PI);
+
+            var points = curve.getPoints(50);
+
+            let shape = new THREE.Shape();
+            shape.moveTo(points[0].x, points[0].y);
+            let e;
+            for (e = 1; e < points.length; e++) {
+                shape.lineTo(points[e].x, points[e].y);
+            }
+            let material = new THREE.MeshBasicMaterial({
+                color: 0xffff00
+            });
+            //let material = makeMaterial(entity, data);
+            let geometry = new THREE.ShapeGeometry(shape);
+            let mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+
+            // var geometry = new THREE.CircleGeometry(50, 32, 0, Math.PI);
+            // var material = new THREE.MeshBasicMaterial({
+            //     color: 0xffff00
+            // });
+            // var circle = new THREE.Mesh(geometry, material);
+            // scene.add(circle);
+
+            renderer.render(scene, camera);
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

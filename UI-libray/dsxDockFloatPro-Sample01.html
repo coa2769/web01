@@ -1,0 +1,39 @@
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <script type="text/javascript" src="./dsxDockFloatProFullDemo/Scripts/dsxDockFloatPro.js"></script>
+    <script type="text/javascript">
+        //http://www.htmldockfloat.com/document/dfdoc1.html
+        let dfutil
+        let dfw1 = null;
+
+        function init() {
+            dfutil = DSXDFUtil.createDSXDFUtil();
+            dfutil.addFixedPanel(document.getElementById("con"), DSXDFUtil.fixedCenter);
+
+            let id = "myPanel";
+            dfw1 = dfutil.createDFPanel("Panel A", id);
+
+            dfw1.addContentDiv(document.getElementById("diva"), 0);
+            dfw1.initLayout(300, 150, 250, 300, DSXDFPanel.floated);
+
+        }
+    </script>
+
+</head>
+
+
+<body onload="init()">
+
+    <!-- 배경 -->
+    <div id="con" style="overflow: auto"></div>
+
+    <!-- 색상을 matro4에서 적용 가능 -->
+    <div id="diva" class="ribbed-red fg-white border bd-amber" width=200 height=200 scrolling='auto'>
+    </div>
+
+</body>
+
+</html>

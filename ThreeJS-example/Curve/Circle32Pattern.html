@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example CIRCLE32 Pattern</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            let scale = 20;
+
+            let maxLen = 200;
+            let radius = 0.5 * 0.5 * scale;
+            let distance = 1 * scale; //0.5은 두 원의 반지름 + 0.5는 원의 간격 = 1
+
+            let rowCount = maxLen / distance - 1;
+            let colCount = maxLen / distance - 1; //맨 마지막도 없어도 되므로 
+
+            let parent = new THREE.Object3D();
+            let material = new THREE.LineBasicMaterial({
+                color: 0xffff00
+            });
+
+            console.log(rowCount);
+            console.log(colCount);
+            let i, j;
+            //행 (아래에서 위로)
+            for (i = 0; i < rowCount; i++) {
+                //열 (가로로 원의 개수)
+                for (j = 0; j < colCount; j++) {
+                    let geometry = new THREE.CircleGeometry(radius, 32);
+                    geometry.vertices.shift();
+                    let circle = new THREE.Line(geometry, material);
+
+                    circle.position.x = (-maxLen * 0.5) + (distance * (j + 1));
+                    circle.position.y = (-maxLen * 0.5) + (distance * (i + 1));
+                    circle.position.z = 0;
+
+                    parent.add(circle);
+                }
+            }
+            //※ 이동을 먼저하고 회전을 해야한다. 
+            //object3D의 축도 같이 회전하는 걸 확인
+            //회전 후 이동하게 되면 회전된 축의 방향으로 이동하게 된다.
+
+            parent.translateX(100);
+
+            parent.rotation.z = Math.PI / 4;
+
+            scene.add(parent);
+
+            // let geometry = new THREE.Geometry();
+            // geometry.vertices.push(
+            //     new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
+            //     new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
+            //     new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
+            //     new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
+            //     new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
+            // );
+
+            // let line = new THREE.Line(geometry, material);
+            // line.rotation.z = Math.PI / 4;
+
+            // //parent.translateY(100);
+
+            // scene.add(line);
+
+            geometry = new THREE.Geometry();
+            geometry.vertices.push(
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(100, 0, 0)
+            )
+
+            line = new THREE.Line(geometry, material);
+
+            renderer.render(scene, camera);
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

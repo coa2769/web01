@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example geometries-plane</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        let WIDTH = 32;
+        let HEIGHT = 32;
+
+        // let render = new FileReader();
+        // let fileData = [];
+
+        // //모두 읽어들였을때 호출
+        // reander.onload = function(e) {
+        //     let data = e.target.result;
+        //     //줄 별로 나누기
+        //     let lineBreaks = data.split('\n');
+        //     //Object로 나누기
+        //     let backSpace, i;
+        //     for (i = 0; i < lineBreaks.length; i++) {
+        //         //\b로 나누기
+        //         backSpace = lineBreaks[i].split('\b');
+        //         let obj = {
+        //             angle: 0,
+        //             oriX: 0,
+        //             oriY: 0,
+        //             deltaX: 0,
+        //             deltaY: 0,
+        //             dash: []
+        //         };
+
+        //         obj.angle = backSpace[0];
+        //         obj.oriX = backSpace[1];
+        //         obj.oriY = backSpace[2];
+        //         obj.deltaX = backSpace[3];
+        //         obj.deltaY = backSpace[4];
+
+        //         let j;
+        //         for (j = 0; j < backSpace.length - 5; j++) {
+        //             obj.dash.push(backSpace[j + 5]);
+        //         }
+
+        //         fileData.push(obj);
+        //     }
+
+        // };
+
+        //※ 만약 위와 같은 일을 한다면 패턴의 크기는 0도를 기준으로 계산
+        //※ 선의 Dash를 적용해야하므로 LineDashedMaterial 사용
+        //※ 보편적인 pattern 적용을 위해서는 필요할 지도
+        //※ pat 파일 파싱하게 된다면 ;;는 파일에 대한 설명을 하는 주석이고 *과 ,사이에 패턴이름이 있다.
+
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            let curve = new THREE.SplineCurve([
+                new THREE.Vector2(0, 30),
+                new THREE.Vector2(25, 38),
+                new THREE.Vector2(55, 30),
+
+                new THREE.Vector2(80, 38),
+                new THREE.Vector2(110, 30),
+            ]);
+
+            let points = curve.getPoints(50);
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+            let material = new THREE.LineBasicMaterial({
+                color: 0xff0000
+            });
+
+            // Create the final object to add to the scene
+            let splineObject = new THREE.Line(geometry, material);
+            scene.add(splineObject);
+
+            renderer.render(scene, camera);
+        };
+
+        init();
+
+        //※ 파일 읽어오기
+        //reader.readAsText(`HPWAV4E0.pat`, 'utf-8');
+    </script>
+</body>
+
+</html>

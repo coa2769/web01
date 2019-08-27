@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Example CIRCLE32 Pattern</title>
+    <meta charset="UTF-8">
+    <script src="./js/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WebGL-output">
+
+    </div>
+    <script>
+        let scene, renderer, mesh, camera;
+        const LENGTH = 100;
+        let length = LENGTH;
+
+        //로딩이 끝나면 Three.js를 숭행한다.
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+            renderer = new THREE.WebGLRenderer({
+                preserveDrawingBuffer: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            let shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.lineTo(LENGTH, 0);
+            shape.lineTo(LENGTH, LENGTH);
+            shape.lineTo(0, LENGTH);
+            //geometry으로 생성될때 position.array에 반대 순서대로 적제된다. 또한 z -> y -> x 이다.
+
+            let geometry = new THREE.ShapeGeometry(shape);
+            // let geometry = new THREE.ShapeBufferGeometry(shape);
+            let material = new THREE.MeshBasicMaterial({
+                color: 0xffff00
+            });
+            mesh = new THREE.Mesh(geometry, material);
+
+            scene.add(mesh);
+            renderer.render(scene, camera);
+
+
+            console.log(renderer.domElement);
+
+            // console.log(renderer.domElement.toDataURL())
+            // window.location.href = imgData;
+            // let link = document.createElement('a');
+            // link.setAttribute('download', 'MintyPaper.png');
+            // link.setAttribute('href', imgData);
+            // link.click();
+
+
+            // let file = new Blob([imgData], {
+            //     type: 'image/png'
+            // });
+
+
+            // console.log(imgData);
+
+            //이벤트 등록
+            window.addEventListener('keyup', e => {
+                //오른쪽
+                if (e.keyCode == 39) {
+                    console.log('keyup right');
+                    // updateBufferGeometry();
+                    updateGeometry();
+                }
+                //아래
+                else if (e.keyCode == 40) {
+
+                }
+            });
+        };
+
+        function updateBufferGeometry() {
+            length += 50;
+
+            let positions = mesh.geometry.attributes.position.array;
+            console.log(positions);
+            positions[6] = length;
+            positions[3] = length;
+            // console.log(positions);
+            mesh.geometry.attributes.position.needsUpdate = true;
+            renderer.render(scene, camera);
+        }
+
+        function updateGeometry() {
+            length += 50;
+
+            let vertices = mesh.geometry.vertices;
+
+            console.log(vertices);
+
+            // vertices.push(new THREE.Vector3(-LENGTH, LENGTH / 2, 0));
+            //이렇게 새로 추가하게 추가하게 되면 적용이 안된다.
+            // vertices.splice(0, vertices.length);
+            // vertices.push(
+            //     new THREE.Vector3(0, 0, 0),
+            //     new THREE.Vector3(length, 0, 0),
+            //     new THREE.Vector3(length, LENGTH, 0),
+            //     new THREE.Vector3(0, LENGTH, 0)
+            // );
+
+            //사용 가능
+            vertices[2].x = length;
+            vertices[1].x = length;
+
+            //값에대한 변경은 가능
+            //추가와 새로운 배열을 추가하는 것은 불가능
+
+
+            console.log(mesh.geometry.vertices);
+            // mesh.geometry.dynamic = true;
+            mesh.geometry.verticesNeedUpdate = true;
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+
+/* for auto hide panel*/
+/* for left auto hide panel */
+.dfahpanelleft {background-Color:ButtonFace }
+/* for top auto hide panel */
+.dfahpaneltop {background-Color:ButtonFace}
+/* for right auto hide panel */
+.dfahpanelright {background-Color:ButtonFace}
+/* for bottom auto hide panel */
+.dfahpanelbottom {background-Color:ButtonFace}
+
+/* for tab panel global setting*/
+.dftabpanel {background-Color:ButtonFace;color:Black;font-family:Georgia;font-style:italic;font-size:12px/30px;font-weight:bold}
+
+/* floate frame global setting */
+.dffloatframe {background-Color:ButtonFace;border-Radius:8px}
+
+/* for DSXDFPanel */
+/* for title bar */
+.mydfaTitle {background-Color:ButtonFace;color:Black;font-family:Georgia;font-style:italic;font-size:16px;font-weight:bold;height:20px;text-align:left;border:1px solid black}
+/* for Auto Hide */
+.mydfaAutoHide{font-family:Georgia;font-style:normal;font-size:16px;font-weight:bold;padding-right:6px;}
+.mydfaAutoHide:hover { background-Color:grey;text-decoration:underline}
+/* for Pin  */
+.mydfaPin{background-Repeat:no-repeat}
+/* for Close */
+.mydfaClose{background-Repeat:no-repeat}
+/* for Tab Inactive */
+.mydfaTabInactive{background-Color:ButtonFace;border-bottom-left-radius:  16px 16px solid blue;border-bottom-right-radius:8px 8px;height:16;color:Gray;font-family:Georgia;font-style:normal;font-size:14px;}
+/* for Tab Active */
+.mydfaTabActive{background-Color:white;border-bottom-left-radius:  16px 16px solid green;border-bottom-right-radius:8px 8px;height:20;color:Black;font-family:Georgia;font-style:normal;font-size:14px;}
+

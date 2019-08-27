@@ -1,0 +1,71 @@
+<!--
+    vue에서 그려질 때 metro4를 적용하는 방법
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- https://metroui.org.ua/ribbon-menu.html# -->
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <!-- metro4를 지금 초기화하지 않는다. -->
+    <meta name="metro4:init" content="false">
+
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <title>Document</title>
+
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="container pt-4">
+            <label>Calendar Picker</label>
+            <input type="text" data-role="calendarpicker" id="calendar" value="1972-12-21">
+
+            <label>Date Picker</label>
+            <input data-role="datepicker" type="text" id="date">
+
+            <div class="mt-4">
+                <button class="button primary drop-shadow" @click="btnDate()">Date/Calendar</button>
+            </div>
+        </div>
+    </div>
+
+    <!--
+        vue 사용 전에 사용될 jquery와 metro script를 선언한다.
+    -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+
+
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                datepick: '',
+                calendarpick: '',
+                input: ''
+            },
+            //mounted : 
+            mounted: function() {
+                //mounted일때 초기화 되어야 한다.
+                Metro.init();
+                console.log("kuku");
+            },
+            methods: {
+                btnDate: function() {
+                    var date = document.getElementById("date");
+                    var calendar = document.getElementById("calendar");
+                    console.log(date.value);
+                    console.log(calendar.value)
+                }
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>

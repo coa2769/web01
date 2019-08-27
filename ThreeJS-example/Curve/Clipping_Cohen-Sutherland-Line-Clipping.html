@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Line Clipping Algorithm</title>
+    <script src="../js/three.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const INSIDE = 0; //    0000
+        const LEFT = 1; //      0001
+        const RIGHT = 2; //     0010
+        const BOTTOM = 4; //    0100
+        const TOP = 8; //       1000
+
+        let scene, camera, renderer, line;
+
+        function init() {
+            //여기에 Three.js코드를 추가한다.
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+            camera.position.set(0, 0, 500);
+
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //html 추가
+            document.body.appendChild(renderer.domElement);
+
+            const LENGTH = 100;
+
+            // $$ 기본 적으로 pattern의 선분들은 도형의 범위를 넘어서 그린다.
+            // $$ 영역에 대한 판별은 계산할 선분을 추려낼때 사용한다.
+
+            let geometry = new THREE.Geometry();
+            geometry.vertices.push(
+                new THREE.Vector3(0, -LENGTH * 0.5, 0),
+                new THREE.Vector3(0, LENGTH * 0.5, 0)
+            );
+
+            //Object3D와 똑같이 적용된다.
+            //geometry.rotateZ(Math.PI * 0.25 * 3);
+
+            let material = new THREE.LineBasicMaterial({
+                color: 0xffff00
+            });
+            line = new THREE.Line(geometry, material);
+
+            //축을 회전하므로 좌표에는 아무런 영향이 없다.
+            //이걸 사용할 수 없다.
+            //line.rotation.z = Math.PI * 0.25 * 3;
+
+            scene.add(line);
+
+            //※ 두점 사이의 기울기와 각도
+            //각도a = (y1 - y2) / (x1 - x2) = tan a
+            //let angle = Math.tan(Math.PI / 4 * 3);
+
+            //선의 이동
+
+            //※ 두 직선의 교차 방법
+            // 직선의 방정식 : Y = mX + b(m: 기울기 = y증가량 / x증가량, b : 상수)
+            // 두 직선의 교차점은 두 직선의 방정식을 연립시켜서 구한다.
+            // 직선A : Y = maX + ba (ma : 직선A 기울기, ba : 직선A 상수)
+            // 직선B : Y = mbX + bb (mb : 직선B 기울기, bb : 직선B 상수) 
+            //
+            // maX + ba = mb + bb
+            // X = -(ba - bb)/(ma - mb)
+            // X값을 직선A의 방정식에 대입
+            // Y = ma *(-(ba - bb)/(ma - mb)) + ba
+
+
+            renderer.render(scene, camera);
+
+        }
+
+
+        init();
+    </script>
+</body>
+
+</html>

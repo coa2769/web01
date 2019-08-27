@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- https://metroui.org.ua/ribbon-menu.html# -->
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav data-role="ribbonmenu">
+        <!-- 상단 tab들의 리스트 -->
+        <ul class="tabs-holder">
+            <li class="static"><a href="#">Static</a></li>
+            <li><a href="#section-one">One</a></li>
+            <li><a href="#section-two">Two</a></li>
+            <li class="disabled"><a href="#">Disabled</a></li>
+            <li><a href="#section-three">Three</a></li>
+        </ul>
+
+        <!-- tab에 의해 선택된 section -->
+        <div class="content-holder">
+            <div class="section" id="section-one">
+                <!-- section에 배치되어 있는 icon들 -->
+                <div class="group">
+                    <button class="ribbon-button">
+                        <!-- 이 버튼의 icon이미지 -->
+                        <span class="icon">
+                            <img src="images/share.svg">
+                        </span>
+                        <span class="caption">Button</span>
+                    </button>
+                    <!-- 그룹 타이틀 -->
+                    <span class="title">Button Elements</span>
+                </div>
+
+            </div>
+
+            <div class="section" id="section-two">
+                <p class="p-4">Section two</p>
+            </div>
+            <div class="section" id="section-three">
+                <p class="p-4">Section three</p>
+            </div>
+        </div>
+    </nav>
+
+    <h1 class="text-center">Metro 4</h1>
+    <h3 class="text-center">The Components Library</h3>
+    <div data-role="cube"></div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+</body>
+
+</html>
