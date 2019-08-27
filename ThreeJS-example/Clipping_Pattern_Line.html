@@ -73,7 +73,7 @@
 
         function parsingPatFile(text) {
             let arr = patText.split('\n');
-            console.log(arr);
+            // console.log(arr);
 
             let patData = [];
             let pat = {
@@ -145,7 +145,7 @@
         }
 
         //각도에 따라 선분 그리는 함수
-        function clacPointOfLine(distance, len, angle) {
+        function clacPointOfLine(disX, disY, len, angle) {
             let pos = [];
 
             if (angle < 0) {
@@ -162,22 +162,22 @@
             //angle > 90 (x가 증가하면 y는 감소)
             if (angle > (Math.PI * 0.5) && angle < Math.PI) {
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle) + distance,
-                    y: len * 0.5 * Math.sin(angle) + distance
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle) + disY
                 });
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
-                    y: len * 0.5 * Math.sin(angle2) + distance
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2) + disY
                 });
             }
             //angle == 90 (x만 증가)
             else if (angle == (Math.PI * 0.5)) {
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle) + distance,
+                    x: len * 0.5 * Math.cos(angle) + disX,
                     y: len * 0.5 * Math.sin(angle)
                 });
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
+                    x: len * 0.5 * Math.cos(angle2) + disX,
                     y: len * 0.5 * Math.sin(angle2)
                 });
             }
@@ -185,22 +185,22 @@
             else if (angle == 0) {
                 pos.push({
                     x: len * 0.5 * Math.cos(angle),
-                    y: len * 0.5 * Math.sin(angle) + distance
+                    y: len * 0.5 * Math.sin(angle) + disY
                 });
                 pos.push({
                     x: len * 0.5 * Math.cos(angle2),
-                    y: len * 0.5 * Math.sin(angle2) + distance
+                    y: len * 0.5 * Math.sin(angle2) + disY
                 });
             }
             //angle < 90  (x가 증가하면 y는 증가)
             else if (angle < (Math.PI * 0.5)) {
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle) + distance,
-                    y: len * 0.5 * Math.sin(angle) - distance
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle) - disY
                 });
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
-                    y: len * 0.5 * Math.sin(angle2) - distance
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2) - disY
                 });
             }
 
@@ -218,116 +218,117 @@
 
             let scene = new THREE.Scene();
             let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
-            camera.position.set(0, 0, 1);
+            camera.position.set(0, 0, 50);
             camera.lookAt(0, 0, 0);
 
-            let control = new THREE.OrbitControls(camera, document.body);
-            control.target.x = camera.position.x;
-            control.target.y = camera.position.y;
-            control.target.z = 0;
-            control.zoomSpeed = 3;
+            // let control = new THREE.OrbitControls(camera, document.body);
+            // control.target.x = camera.position.x;
+            // control.target.y = camera.position.y;
+            // control.target.z = 0;
+            // control.zoomSpeed = 3;
 
-            control.addEventListener('change', function() {
-                renderer.render(scene, camera);
-            });
+            // control.addEventListener('change', function() {
+            //     renderer.render(scene, camera);
+            // });
 
-            let len = 10;
+            let len = 50;
 
-            let geometry = new THREE.BufferGeometry();
-            let vertices = new Float32Array(6);
+            //========================
 
-            vertices[0] = 50;
-            vertices[1] = 50;
-            vertices[2] = 0;
+            // let geometry = new THREE.BufferGeometry();
+            // let vertices = new Float32Array(6);
 
-            vertices[3] = -50;
-            vertices[4] = -50;
-            vertices[5] = 0;
+            // vertices[0] = 50;
+            // vertices[1] = 50;
+            // vertices[2] = 0;
 
-            geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            // vertices[3] = -50;
+            // vertices[4] = -50;
+            // vertices[5] = 0;
 
+            // geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-            let material = new THREE.MeshBasicMaterial({
-                color: 0xffff00
-            });
-            let line = new THREE.Line(geometry, material);
-            scene.add(line);
+            // let material = new THREE.LineDashedMaterial({
+            //     color: 0xffff00,
+            //     dashSize: 1,
+            //     gapSize: 10
+            // });
+
+            // let line = new THREE.Line(geometry, material);
+            // line.computeLineDistances();
+            // scene.add(line);
+            //=================================
 
             //circle32
-            // let i;
-            // for (i = 0; i < patArr[0].data.length; i++) {
-            //     let pat = patArr[0].data[i];
-            //     //나중에는 distance도 추가하여 그리기
-            //     console.log(pat.angle);
-            //     let pos = clacPointOfLine(0, len, pat.angle);
-            //     console.log(pos);
-            //     let geometry = new THREE.BufferGeometry();
-            //     let vertices = new Float32Array(6);
+            let obj = new THREE.Object3D();
+            obj.position.x = 0;
+            obj.position.y = 0;
+            obj.position.z = 0;
 
-            //     vertices[0] = pos[0].x;
-            //     vertices[1] = pos[0].y;
-            //     vertices[2] = 0;
+            let count = 17;
 
-            //     vertices[3] = pos[1].x;
-            //     vertices[4] = pos[1].y;
-            //     vertices[5] = 0;
+            let i, j;
+            for (i = 0; i < patArr[0].data.length; i++) {
+                let pat = patArr[0].data[i];
 
-            //     geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            //     geometry.addAttribute('lineDistance', new THREE.BufferAttribute(new Float32Array([len]), 1));
+                for (j = 0; j < count; j++) {
+                    //나중에는 distance도 추가하여 그리기
+                    let pos = clacPointOfLine(0, 0, len, pat.angle);
+                    let geometry = new THREE.BufferGeometry();
+                    let vertices = new Float32Array(6);
 
-            //     let dashSize = 0;
-            //     let gapSize = 0;
-            //     let dotSize = 0;
+                    vertices[0] = pos[0].x;
+                    vertices[1] = pos[0].y;
+                    vertices[2] = 0;
 
-            //     if (pat.dash.length == 0) {
-            //         dashSize = 1;
-            //     }
+                    vertices[3] = pos[1].x;
+                    vertices[4] = pos[1].y;
+                    vertices[5] = 0;
 
-            //     let j;
-            //     for (j = 0; j < pat.dash.length; j++) {
-            //         if (pat.dash[j] == 0 || pat.dash[j] == 20) {
-            //             dotSize = 0.1;
-            //         }
-            //         //
-            //         else if (pat.dash[j] > 0) {
-            //             gapSize = Math.abs(pat.dash[j]);
-            //         }
-            //         //
-            //         else if (pat.dash[j] < 0) {
-            //             dashSize = pat.dash[j];
-            //         }
-            //     }
+                    geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+                    // geometry.addAttribute('lineDistance', new THREE.BufferAttribute(new Float32Array([len]), 1));
 
-            //     let lineMat = new THREE.ShaderMaterial({
-            //         uniforms: {
-            //             diffuse: {
-            //                 value: new THREE.Color(0xffff00)
-            //             },
-            //             dashSize: {
-            //                 value: dashSize
-            //             },
-            //             gapSize: {
-            //                 value: gapSize
-            //             },
-            //             dotSize: {
-            //                 value: dotSize
-            //             }
-            //             // opacity: {
-            //             //     value: 1
-            //             // }
-            //         },
-            //         vertexShader: lineVertShader,
-            //         fragmentShader: lineFragShader
-            //     });
+                    let dashSize = 0;
+                    let gapSize = 0;
+                    let dotSize = 0;
 
-            //     let material = new THREE.MeshBasicMaterial({
-            //         color: 0xffff00
-            //     });
-            //     let line = new THREE.Line(geometry, lineMat);
-            //     scene.add(line);
+                    if (pat.dash.length == 0) {
+                        dashSize = 1;
+                    }
 
-            // }
+                    let e;
+                    for (e = 0; e < pat.dash.length; e++) {
+                        if (pat.dash[e] == 0 || pat.dash[e] == 20) {
+                            dotSize = 0.1;
+                        }
+                        //
+                        else if (pat.dash[e] < 0) {
+                            gapSize = Math.abs(pat.dash[e]);
+                        }
+                        //
+                        else if (pat.dash[e] > 0) {
+                            dashSize = pat.dash[e];
+                        }
+                    }
 
+                    let material = new THREE.LineDashedMaterial({
+                        color: 0xffff00,
+                        dashSize: dashSize,
+                        gapSize: gapSize
+                    });
+
+                    // let material = new THREE.LineBasicMaterial({
+                    //     color: 0xffff00
+                    // });
+
+                    let line = new THREE.Line(geometry, material);
+                    line.computeLineDistances();
+
+                    obj.add(line);
+                }
+
+            }
+            scene.add(obj);
             renderer.render(scene, camera);
         }
 
