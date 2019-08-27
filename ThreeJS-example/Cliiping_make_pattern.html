@@ -13,137 +13,6 @@
         let patText;
         let patArr;
 
-        //shader data
-        let lineVertShader = `
-  attribute float lineDistance;
-  varying float vLineDistance;
-  
-  void main() {
-    vLineDistance = lineDistance;
-    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-    gl_Position = projectionMatrix * mvPosition;
-  }
-  `;
-
-        let lineFragShader = `
-  uniform vec3 diffuse;
-  uniform float opacity;
-
-  uniform float dashSize;
-  uniform float gapSize;
-  uniform float dotSize;
-  varying float vLineDistance;
-  
-  void main() {
-		float totalSize = dashSize + gapSize;
-		float modulo = mod( vLineDistance, totalSize );
-    float dotDistance = dashSize + (gapSize * .5) - (dotSize * .5);
-    
-    if ( modulo > dashSize && mod(modulo, dotDistance) > dotSize ) {
-      discard;
-    }
-
-    gl_FragColor = vec4( diffuse, opacity );
-  }
-  `;
-
-        function readTextFile(file) {
-            let rawFile = new XMLHttpRequest();
-            rawFile.open('GET', file, false);
-            rawFile.onreadystatechange = function() {
-                if (rawFile.readyState === 4) {
-                    if (rawFile.status === 200 || rawFile.status == 0) {
-                        patText = rawFile.responseText;
-                        console.log(rawFile.responseText);
-
-                        //파싱
-                        patArr = parsingPatFile(patText);
-                        //랜더링
-                        render();
-                    }
-                }
-            };
-
-            rawFile.send(null);
-        }
-
-        // readTextFile('./info/CIRCLE32.PAT');
-        // readTextFile('./info/dwgviewriso.pat');
-        readTextFile('./info/HPWAV4E0.pat');
-
-        function parsingPatFile(text) {
-            let arr = patText.split('\n');
-            // console.log(arr);
-
-            let patData = [];
-            let pat = {
-                name: '',
-                data: []
-            };
-
-            let i;
-            for (i = 0; i < arr.length; i++) {
-                let word1 = '*';
-                let word2 = ';;';
-
-                //;;는 주석
-                if (arr[i].includes(word2) == false) {
-                    //*는 이 패턴의 이름과 내용. 다음 *게 나올 때까지 숫자 데이터
-                    // console.log(arr[i][0]);
-                    if (arr[i][0] == '*') {
-
-                        if (pat.name != '') {
-                            patData.push(pat);
-                            pat = {
-                                name: '',
-                                data: []
-                            };
-                        }
-
-                        let name = arr[i].split(',');
-                        pat.name = name[0].slice(1, name[0].length);
-
-                    }
-                    //나머지는 숫자 데이터(.이나 숫자이면)
-                    else if ((arr[i][0] !== undefined) && (arr[i][0] == '.' || arr[i][0].match(/[0-9]/g) != null)) {
-                        //.으로 시작하는 숫자 데이터는 소숫점 (문자 => 숫자로 변환하는 함수 찾기)
-                        let data = arr[i].split(',');
-                        // console.log(data);
-
-                        let line = {
-                            angle: 0, //단위 : 각도법
-                            oriX: 0, //선의 시작
-                            oriY: 0, //선의 시작
-                            deltaX: 0, //다음 줄의 선 이동
-                            daltaY: 0, // 다음 줄의 선 이동
-                            dash: [] //5개 이후의 값들은 dash
-                        };
-
-                        line.angle = Number(data[0]) * (Math.PI / 180);
-                        // line.angle = Number(data[0]);
-                        line.orix = Number(data[1]);
-                        line.oriY = Number(data[2]);
-                        line.deltaX = Number(data[3]);
-                        line.deltaY = Number(data[4]);
-
-                        let j;
-                        for (j = 5; j < data.length; j++) {
-                            line.dash.push(Number(data[j]));
-                        }
-
-                        pat.data.push(line);
-                    }
-                }
-            }
-
-            //마지막에 파싱한 pat도 추가
-            patData.push(pat);
-            console.log(patData);
-
-            return patData;
-
-        }
-
         //각도에 따라 선분 그리는 함수
         function clacPointOfLine(disX, disY, len, angle) {
             let pos = [];
@@ -157,7 +26,6 @@
             }
 
             let angle2 = angle + Math.PI;
-
 
             //angle > 90 (x가 증가하면 y는 감소)
             if (angle > (Math.PI * 0.5) && angle < Math.PI) {
@@ -196,11 +64,11 @@
             else if (angle < (Math.PI * 0.5)) {
                 pos.push({
                     x: len * 0.5 * Math.cos(angle) + disX,
-                    y: len * 0.5 * Math.sin(angle) - disY
+                    y: len * 0.5 * Math.sin(angle) + disY
                 });
                 pos.push({
                     x: len * 0.5 * Math.cos(angle2) + disX,
-                    y: len * 0.5 * Math.sin(angle2) - disY
+                    y: len * 0.5 * Math.sin(angle2) + disY
                 });
             }
 
@@ -231,9 +99,9 @@
             //     renderer.render(scene, camera);
             // });
 
-            let len = 5;
+            let len = 50;
 
-            let count = 1;
+            let count = 17;
 
             let i, j;
             //patArr[0].data.length
@@ -295,15 +163,15 @@
                     geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
                     // geometry.addAttribute('lineDistance', new THREE.BufferAttribute(new Float32Array([len]), 1));
 
-                    // let material = new THREE.LineDashedMaterial({
-                    //     color: 0xffff00,
-                    //     dashSize: dashSize,
-                    //     gapSize: gapSize
-                    // });
-
-                    let material = new THREE.LineBasicMaterial({
-                        color: 0xffff00
+                    let material = new THREE.LineDashedMaterial({
+                        color: 0xffff00,
+                        dashSize: dashSize,
+                        gapSize: gapSize
                     });
+
+                    // let material = new THREE.LineBasicMaterial({
+                    //     color: 0xffff00
+                    // });
 
                     let line = new THREE.Line(geometry, material);
                     line.computeLineDistances();
