@@ -154,126 +154,127 @@
             let max, min;
 
             console.debug('Start Clipping');
-            for (i = 0; i < arrLine.length; i += 2) {
+            for (i = 0; i < arrLine.length - 1; i++) {
                 pos1 = arrLine[i];
                 pos2 = arrLine[i + 1];
 
-                //선분의 기울기와 상수 구하기
-                let ma = THREE.Math.slopeOfLine(pos1, pos2);
-                let ba = THREE.Math.constantOfLine(pos1, ma);
-                // console.log(`선 방정식 => 기울기 : ${ma} 상수 : ${ba}`);
+                if (pos1.x != pos2.x || pos1.y != pos2.y) {
+                    //선분의 기울기와 상수 구하기
+                    let ma = THREE.Math.slopeOfLine(pos1, pos2);
+                    let ba = THREE.Math.constantOfLine(pos1, ma);
+                    // console.log(`선 방정식 => 기울기 : ${ma} 상수 : ${ba}`);
 
-                for (j = 0; j < vertex.length; j++) {
-                    // console.debug(`${j} 과 ${j+1} 번째`);
+                    for (j = 0; j < vertex.length; j++) {
+                        // console.debug(`${j} 과 ${j+1} 번째`);
 
-                    //다각형 좌표 구하기
-                    let start = vertex[j];
-                    let end = (j + 1) >= (vertex.length) ? vertex[0] : vertex[j + 1];
+                        //다각형 좌표 구하기
+                        let start = vertex[j];
+                        let end = (j + 1) >= (vertex.length) ? vertex[0] : vertex[j + 1];
 
-                    if (start.x != end.x || start.y != end.y) {
+                        if (start.x != end.x || start.y != end.y) {
 
-                        //다각형의 기울기와 상수
-                        let mb = THREE.Math.slopeOfLine(start, end);
-                        let bb = THREE.Math.constantOfLine(start, mb);
-                        // console.log(`다각형의 선 방정식 => 기울기 : ${mb} 상수 : ${bb}`);
+                            //다각형의 기울기와 상수
+                            let mb = THREE.Math.slopeOfLine(start, end);
+                            let bb = THREE.Math.constantOfLine(start, mb);
+                            // console.log(`다각형의 선 방정식 => 기울기 : ${mb} 상수 : ${bb}`);
 
-                        let x, y;
+                            let x, y;
 
-                        //기울기 y증가량/x증가량 에서 x증가량이 0 이므로
-                        if (Math.abs(ma) !== Infinity && Math.abs(mb) !== Infinity) {
-                            x = -(ba - bb) / (ma - mb);
-                            y = ma * x + ba;
-                        } else {
-                            let incA = Math.abs(ma);
-                            let incB = Math.abs(mb);
-                            if (incA == incB) {
-                                x = NaN;
-                                y = NaN;
-                            } else if (incA === Infinity) {
-                                x = pos1.x;
-                                y = mb * x + bb;
-                            } else if (incB === Infinity) {
-                                x = start.x;
+                            //기울기 y증가량/x증가량 에서 x증가량이 0 이므로
+                            if (Math.abs(ma) !== Infinity && Math.abs(mb) !== Infinity) {
+                                x = -(ba - bb) / (ma - mb);
                                 y = ma * x + ba;
-                            }
-                        }
-
-                        // console.log(` ## 접점 => x : ${x} y : ${y}`);
-
-                        if (!isNaN(x) && !isNaN(y)) {
-                            //1. 접점이 내 선분내에 있는지 확인하여 없다면 넘어간다.
-
-                            max = {
-                                x: pos1.x > pos2.x ? pos1.x : pos2.x,
-                                y: pos1.y > pos2.y ? pos1.y : pos2.y
-                            };
-
-                            min = {
-                                x: pos1.x < pos2.x ? pos1.x : pos2.x,
-                                y: pos1.y < pos2.y ? pos1.y : pos2.y
-                            };
-
-                            //pos 내에 있는 점이다.
-                            if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
-                                max = {
-                                    x: start.x > end.x ? start.x : end.x,
-                                    y: start.y > end.y ? start.y : end.y
-                                };
-                                min = {
-                                    x: start.x < end.x ? start.x : end.x,
-                                    y: start.y < end.y ? start.y : end.y
-                                };
-
-                                if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
-                                    arrPos.push({
-                                        x: x,
-                                        y: y
-                                    });
+                            } else {
+                                let incA = Math.abs(ma);
+                                let incB = Math.abs(mb);
+                                if (incA == incB) {
+                                    x = NaN;
+                                    y = NaN;
+                                } else if (incA === Infinity) {
+                                    x = pos1.x;
+                                    y = mb * x + bb;
+                                } else if (incB === Infinity) {
+                                    x = start.x;
+                                    y = ma * x + ba;
                                 }
                             }
-                            //pos 외에 있는 점이다.
-                            else {
-                                console.debug('[ DEBUG ] 선분 외에 접점이 있다.');
+
+                            // console.log(` ## 접점 => x : ${x} y : ${y}`);
+
+                            if (!isNaN(x) && !isNaN(y)) {
+                                //1. 접점이 내 선분내에 있는지 확인하여 없다면 넘어간다.
+
+                                max = {
+                                    x: pos1.x > pos2.x ? pos1.x : pos2.x,
+                                    y: pos1.y > pos2.y ? pos1.y : pos2.y
+                                };
+
+                                min = {
+                                    x: pos1.x < pos2.x ? pos1.x : pos2.x,
+                                    y: pos1.y < pos2.y ? pos1.y : pos2.y
+                                };
+
+                                //pos 내에 있는 점이다.
+                                if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
+                                    max = {
+                                        x: start.x > end.x ? start.x : end.x,
+                                        y: start.y > end.y ? start.y : end.y
+                                    };
+                                    min = {
+                                        x: start.x < end.x ? start.x : end.x,
+                                        y: start.y < end.y ? start.y : end.y
+                                    };
+
+                                    if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
+                                        arrPos.push({
+                                            x: x,
+                                            y: y
+                                        });
+                                    }
+                                }
+                                //pos 외에 있는 점이다.
+                                else {
+                                    console.debug('[ DEBUG ] 선분 외에 접점이 있다.');
 
 
-                                //※ 원, 곡선과 같은 패턴 선분들 중 다각형 내에 있는 것들 판별
+                                    //※ 원, 곡선과 같은 패턴 선분들 중 다각형 내에 있는 것들 판별
 
-                                //## 접선을 판별할 마지막 다각형의 선분일 때
+                                    //## 접선을 판별할 마지막 다각형의 선분일 때
 
-                                //1. 이 선분의 접점이 1개인가?
-                                // 접점은 어느 선분과 이어져야 하지??
-
-
-                                //2. 이 선분의 접점이 2개인가?
-                                //접점 계산 완료!
+                                    //1. 이 선분의 접점이 1개인가?
+                                    // 접점은 어느 선분과 이어져야 하지??
 
 
-                                //3. 이 선분의 접점이 0개인가?
-                                //여태까지의 다른 선분들의 접선 갯수를 보고 내부인지 외부인지 판변
-                                //접선의 객수가 0이 아니고 짝수가 아닐 때 이 선분을 그대로 대입한다.
+                                    //2. 이 선분의 접점이 2개인가?
+                                    //접점 계산 완료!
+
+
+                                    //3. 이 선분의 접점이 0개인가?
+                                    //여태까지의 다른 선분들의 접선 갯수를 보고 내부인지 외부인지 판변
+                                    //접선의 객수가 0이 아니고 짝수가 아닐 때 이 선분을 그대로 대입한다.
 
 
 
-                                //(1) 홀수번째 접점 이후는 도형 내부이다.
-                                // if (crossPos.length % 2 == 1) {
-                                //     console.debug('[ DEBUG ] 도형 내부에 접점이 있다.');
-                                //     crossPos.push(pos2);
-                                // }
-                                //(2) 짝수번째 접점 이후는 도형 외부이다. not 추가
+                                    //(1) 홀수번째 접점 이후는 도형 내부이다.
+                                    // if (crossPos.length % 2 == 1) {
+                                    //     console.debug('[ DEBUG ] 도형 내부에 접점이 있다.');
+                                    //     crossPos.push(pos2);
+                                    // }
+                                    //(2) 짝수번째 접점 이후는 도형 외부이다. not 추가
+                                }
                             }
                         }
+
                     }
 
+                    //한 선분에 대한 접점을 구한 시점이다.
+
+
+                    //arrPos 수정
+                    if (arrPos.length > 2) {
+                        THREE.Math.sortContact(arrPos, ma);
+                    }
                 }
-
-                //한 선분에 대한 접점을 구한 시점이다.
-
-
-                //arrPos 수정
-                if (arrPos.length > 2) {
-                    THREE.Math.sortContact(arrPos, ma);
-                }
-
 
             }
 
@@ -320,12 +321,13 @@
 
             let scale = 20;
 
-            let maxLen = 200;
+            let length = 200;
+            let maxLength = length * 2;
             let radius = 0.5 * 0.5 * scale;
             let distance = 1 * scale; //0.5은 두 원의 반지름 + 0.5는 원의 간격 = 1
 
-            let rowCount = maxLen / distance - 1;
-            let colCount = maxLen / distance - 1; //맨 마지막도 없어도 되므로 
+            let rowCount = maxLength / distance - 1;
+            // let colCount = maxLen / distance - 1; //맨 마지막도 없어도 되므로 
 
             let parent = new THREE.Object3D();
             let material = new THREE.LineBasicMaterial({
@@ -334,83 +336,85 @@
 
             let geom = new THREE.Geometry();
             geom.vertices.push(
-                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
-                new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
-                new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
-                new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
-                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
+                new THREE.Vector3((-length * 0.5), (-length * 0.5), 0),
+                new THREE.Vector3((length * 0.5), (-length * 0.5), 0),
+                new THREE.Vector3((length * 0.5), (length * 0.5), 0),
+                new THREE.Vector3((-length * 0.5), (length * 0.5), 0),
+                new THREE.Vector3((-length * 0.5), (-length * 0.5), 0)
             );
 
-            let line = new THREE.Line(geom, material);
-            scene.add(line);
+            let squr = new THREE.Line(geom, material);
+            scene.add(squr);
 
             //===========================================================================
-            // console.log(rowCount);
-            // console.log(colCount);
-            let i, j, e;
+
+            let geometry, vertices, line;
+
+            let i, j, e, f;
             //행 (아래에서 위로)
             for (i = 0; i < rowCount; i++) {
 
-                let pos = THREE.Math.clacPointOfLine((-maxLen * 0.5) + (distance * (i + 1)), maxLen, Math.PI / 4);
-                //선분을 간격만큼 나누어 점들 구성.
-                let centerLine = new THREE.LineCurve(new THREE.Vector2(pos[0].x, pos[0].y), new THREE.Vector2(pos[1].x, pos[1].y));
-                let points = centerLine.getPoints(colCount - 1);
+                //원이 그려질 선분
+                let pos = THREE.Math.clacPointOfLine((-maxLength * 0.5) + (distance * (i + 1)), maxLength, Math.PI / 4 * 3);
+                let contact = THREE.Math.clipping(geom.vertices, pos);
 
-                let patVertices = [];
+                for (j = 0; j < contact.length - 1; j += 2) {
+                    //================파선 그리기 ====================
+                    geometry = new THREE.BufferGeometry();
+                    let vertices = new Float32Array(6);
 
-                for (j = 0; j < points.length - 1; j++) {
-                    let curve = new THREE.ArcCurve(
-                        points[j].x, points[j].y,
-                        radius,
-                        0, Math.PI * 2,
-                        false
-                    );
+                    vertices[0] = contact[j].x;
+                    vertices[1] = contact[j].y;
+                    vertices[2] = 0;
 
-                    let pos = curve.getPoints(50);
-                    patVertices.push.apply(patVertices, pos);
+                    vertices[3] = contact[j + 1].x;
+                    vertices[4] = contact[j + 1].y;
+                    vertices[5] = 0;
 
-                    //###########################################################
-                    let geometry = new THREE.BufferGeometry();
-                    let vertex = new Float32Array(pos.length * 3);
+                    geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-                    for (e = 0; e < pos.length; e++) {
-                        vertex[0 + (e * 3)] = pos[e].x;
-                        vertex[1 + (e * 3)] = pos[e].y;
-                        vertex[2 + (e * 3)] = 0;
-                    }
-
-                    geometry.addAttribute('position', new THREE.BufferAttribute(vertex, 3));
-
-                    let line = new THREE.Line(geometry, material);
+                    line = new THREE.Line(geometry, material);
                     parent.add(line);
-                    //#################################################################
-                }
 
-                let contact = THREE.Math.clipping(geom.vertices, patVertices);
+                    //=============== 원 그리기 ======================
+                    let centerLine = new THREE.LineCurve(
+                        new THREE.Vector2(contact[j].x, contact[j].y),
+                        new THREE.Vector2(contact[j + 1].x, contact[j + 1].y)
+                    );
+                    //거리 계산
+                    let len = Math.sqrt(Math.pow(contact[j].x - contact[j + 1].x, 2) + Math.pow(contact[j].y - contact[j + 1].y, 2));
+                    //distance로 나누기
+                    let colCount = len / distance;
 
-                if (contact.length > 1) {
-                    for (j = 0; j < contact.length; j += 2) {
-                        let geometry = new THREE.BufferGeometry();
-                        let vertices = new Float32Array(6);
+                    let points = centerLine.getPoints(colCount - 1);
 
-                        vertices[0] = contact[j].x;
-                        vertices[1] = contact[j].y;
-                        vertices[2] = 0;
-                        if (j + 1 < contact.length) {
+                    for (e = 0; e < points.length; e++) {
+                        let curve = new THREE.ArcCurve(
+                            points[e].x, points[e].y,
+                            radius,
+                            0, Math.PI * 2,
+                            false
+                        );
 
-                            vertices[3] = contact[j + 1].x;
-                            vertices[4] = contact[j + 1].y;
-                            vertices[5] = 0;
-                        } else {
-                            vertices[3] = contact[0].x;
-                            vertices[4] = contact[0].y;
-                            vertices[5] = 0;
+                        let pos = curve.getPoints(50);
+                        //접점이 있다면 그리지 않는다.
+                        let cricleContent = THREE.Math.clipping(geom.vertices, pos);
+
+                        if (cricleContent.length == 0) {
+                            geometry = new THREE.BufferGeometry();
+                            let vertex = new Float32Array(pos.length * 3);
+
+                            for (f = 0; f < pos.length; f++) {
+                                vertex[0 + (f * 3)] = pos[f].x;
+                                vertex[1 + (f * 3)] = pos[f].y;
+                                vertex[2 + (f * 3)] = 0;
+                            }
+
+                            geometry.addAttribute('position', new THREE.BufferAttribute(vertex, 3));
+
+                            line = new THREE.Line(geometry, material);
+                            parent.add(line);
                         }
-
-                        geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-                        let line = new THREE.Line(geometry, material);
-                        parent.add(line);
 
                     }
                 }
