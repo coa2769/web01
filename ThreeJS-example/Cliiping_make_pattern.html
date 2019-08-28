@@ -10,74 +10,6 @@
     <script src="js/three.js"></script>
     <script src="js/OrbitControls.js"></script>
     <script>
-        let patText;
-        let patArr;
-
-        //각도에 따라 선분 그리는 함수
-        function clacPointOfLine(disX, disY, len, angle) {
-            let pos = [];
-
-            if (angle < 0) {
-                angle = Math.PI * 2 + angle;
-            }
-
-            while (angle >= Math.PI) {
-                angle -= Math.PI;
-            }
-
-            let angle2 = angle + Math.PI;
-
-            //angle > 90 (x가 증가하면 y는 감소)
-            if (angle > (Math.PI * 0.5) && angle < Math.PI) {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle) + disX,
-                    y: len * 0.5 * Math.sin(angle) + disY
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + disX,
-                    y: len * 0.5 * Math.sin(angle2) + disY
-                });
-            }
-            //angle == 90 (x만 증가)
-            else if (angle == (Math.PI * 0.5)) {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle) + disX,
-                    y: len * 0.5 * Math.sin(angle)
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + disX,
-                    y: len * 0.5 * Math.sin(angle2)
-                });
-            }
-            //angle == 0 (y만 증가)
-            else if (angle == 0) {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle),
-                    y: len * 0.5 * Math.sin(angle) + disY
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2),
-                    y: len * 0.5 * Math.sin(angle2) + disY
-                });
-            }
-            //angle < 90  (x가 증가하면 y는 증가)
-            else if (angle < (Math.PI * 0.5)) {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle) + disX,
-                    y: len * 0.5 * Math.sin(angle) + disY
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + disX,
-                    y: len * 0.5 * Math.sin(angle2) + disY
-                });
-            }
-
-            return pos;
-
-        }
-
-
-
         function render() {
             //1.
             let renderer = new THREE.WebGLRenderer();
@@ -101,94 +33,22 @@
 
             let len = 50;
 
-            let count = 17;
+            let curve = new THREE.LineCurve(new THREE.Vector2(-len, len), new THREE.Vector2(len, 0));
+            let points = curve.getPoints(10);
+            console.log(points);
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+            let material = new THREE.LineBasicMaterial({
+                color: 0xffff00
+            });
 
-            let i, j;
-            //patArr[0].data.length
-            for (i = 0; i < patArr[0].data.length; i++) {
-                let pat = patArr[0].data[i];
+            let line = new THREE.Line(geometry, material);
 
-                let obj = new THREE.Object3D();
-                obj.position.x = 0;
-                obj.position.y = 0;
-                obj.position.z = 0;
-
-                let deltaX = pat.deltaX * 1;
-                let deltaY = pat.deltaY * 1;
-                let oriX = pat.oriX * 1;
-                let oriY = pat.oriY * 1;
-
-                let dashSize = 0;
-                let gapSize = 0;
-                let dotSize = 0;
-
-                if (pat.dash.length == 0) {
-                    dashSize = 1;
-                }
-
-                let e;
-                for (e = 0; e < pat.dash.length; e++) {
-                    if (pat.dash[e] == 0 || pat.dash[e] == 20) {
-                        dotSize = 0.1;
-                    }
-                    //
-                    else if (pat.dash[e] < 0) {
-                        gapSize = Math.abs(pat.dash[e]);
-                    }
-                    //
-                    else if (pat.dash[e] > 0) {
-                        dashSize = pat.dash[e];
-                    }
-                }
-
-                for (j = 0; j < count; j++) {
-                    //나중에는 distance도 추가하여 그리기
-                    //-len * 0.5) + pat.deltaX * j, (len * 0.5) + pat.deltaX * j
-                    let pos = clacPointOfLine(
-                        oriX + (-len * 0.5) + (deltaX * j),
-                        oriY + (len * 0.5) - (deltaY * j),
-                        len, pat.angle);
-
-                    let geometry = new THREE.BufferGeometry();
-                    let vertices = new Float32Array(6);
-
-                    vertices[0] = pos[0].x;
-                    vertices[1] = pos[0].y;
-                    vertices[2] = 0;
-
-                    vertices[3] = pos[1].x;
-                    vertices[4] = pos[1].y;
-                    vertices[5] = 0;
-
-                    geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-                    // geometry.addAttribute('lineDistance', new THREE.BufferAttribute(new Float32Array([len]), 1));
-
-                    let material = new THREE.LineDashedMaterial({
-                        color: 0xffff00,
-                        dashSize: dashSize,
-                        gapSize: gapSize
-                    });
-
-                    // let material = new THREE.LineBasicMaterial({
-                    //     color: 0xffff00
-                    // });
-
-                    let line = new THREE.Line(geometry, material);
-                    line.computeLineDistances();
-
-                    obj.add(line);
-                }
-
-                //obj.translateX(minX);
-                //obj.translateY(minY);
-
-                scene.add(obj);
-            }
-
-
+            scene.add(line);
 
             renderer.render(scene, camera);
         }
+
+        render();
     </script>
 </body>
 

@@ -231,7 +231,7 @@
             //     renderer.render(scene, camera);
             // });
 
-            let len = 5;
+            let len = 1;
 
             let count = 1;
 
@@ -261,7 +261,9 @@
                 let e;
                 for (e = 0; e < pat.dash.length; e++) {
                     if (pat.dash[e] == 0 || pat.dash[e] == 20) {
+
                         dotSize = 0.1;
+
                     }
                     //
                     else if (pat.dash[e] < 0) {
@@ -275,7 +277,7 @@
 
                 for (j = 0; j < count; j++) {
                     //나중에는 distance도 추가하여 그리기
-                    //-len * 0.5) + pat.deltaX * j, (len * 0.5) + pat.deltaX * j
+                    //(-len * 0.5) + pat.deltaX * j, (len * 0.5) + pat.deltaX * j
                     let pos = clacPointOfLine(
                         oriX + (-len * 0.5) + (deltaX * j),
                         oriY + (len * 0.5) - (deltaY * j),
