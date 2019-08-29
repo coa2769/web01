@@ -18,130 +18,12 @@
 
     </div>
     <script>
-        THREE.Math.polar = function(point, distance, angle) {
-            var result = {};
-            result.x = point.x + distance * Math.cos(angle);
-            result.y = point.y + distance * Math.sin(angle);
-            return result;
-        };
-
-        //=============================
-
         //지금 point에서 angle 방향으로 distance만큼 떨어져 있는 point 반환
-        THREE.Math.clacPointOfLine = function(distance, len, angle) {
-            let pos = [];
-
-            //angle을 360도 내의 각도
-            while (angle > (Math.PI * 2) || (angle < 0)) {
-
-                if (angle < 0) {
-                    angle = angle + (Math.PI * 2);
-                } else if (angle > (Math.PI * 2)) {
-                    angle = angle - (Math.PI * 2);
-                }
-            }
-
-            let angle1, angle2;
-            //pos[0] ==> 왼쪽
-            //pos[1] ==> 오른쪽
-
-            //angle ==> 왼쪽
-            if (angle >= Math.PI * 0.5 && angle < (Math.PI * 0.5 * 3)) {
-                angle1 = angle;
-                //왼쪽 위
-                if (angle1 < Math.PI) {
-                    angle2 = angle1 + Math.PI;
-                }
-                //왼쪽 아래
-                else {
-                    angle2 = angle1 - Math.PI;
-                }
-            }
-            //angle ==> 오른쪽
-            else {
-                angle2 = angle;
-                //오른쪽 위
-                if (angle2 >= 0 && angle2 < Math.PI) {
-                    angle1 = angle2 + Math.PI;
-                }
-                //오른쪽 아래
-                else {
-                    angle1 = angle2 - Math.PI;
-                }
-            }
-
-            //angle == 90 (x만 증가)
-            if (angle1 == (Math.PI * 0.5)) {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle1) + distance,
-                    y: len * 0.5 * Math.sin(angle1)
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
-                    y: len * 0.5 * Math.sin(angle2)
-                });
-            }
-            //angle == 180 (y만 증가)
-            else if (angle1 == Math.PI) {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle1),
-                    y: len * 0.5 * Math.sin(angle1) + distance
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2),
-                    y: len * 0.5 * Math.sin(angle2) + distance
-                });
-            }
-            //
-            else {
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle1) + distance,
-                    y: len * 0.5 * Math.sin(angle1) + distance
-                });
-                pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
-                    y: len * 0.5 * Math.sin(angle2) + distance
-                });
-            }
-
-            //angle > 90    ex) 180 / 4 * 3 = 135 (x가 증가하면 y는 감소)
-            // if (angle1 > (Math.PI * 0.5) && angle1 < Math.PI) {
-            //     pos.push({
-            //         x: len * 0.5 * Math.cos(angle1) + distance,
-            //         y: len * 0.5 * Math.sin(angle1) + distance
-            //     });
-            //     pos.push({
-            //         x: len * 0.5 * Math.cos(angle2) + distance,
-            //         y: len * 0.5 * Math.sin(angle2) + distance
-            //     });
-            // }
-
-            // //angle < 90    ex) 180 / 5 = 36 (x가 증가하면 y는 증가)
-            // else if (angle1 < (Math.PI * 0.5)) {
-            //     pos.push({
-            //         x: len * 0.5 * Math.cos(angle1) + distance,
-            //         y: len * 0.5 * Math.sin(angle1) - distance
-            //     });
-            //     pos.push({
-            //         x: len * 0.5 * Math.cos(angle2) + distance,
-            //         y: len * 0.5 * Math.sin(angle2) - distance
-            //     });
-            // }
-
-            return pos;
-        };
         // THREE.Math.clacPointOfLine = function(disX, disY, len, angle) {
         //     let pos = [];
 
         //     //angle을 360도 내의 각도
-        //     while (angle > (Math.PI * 2) || (angle < 0)) {
-
-        //         if (angle < 0) {
-        //             angle = angle + (Math.PI * 2);
-        //         } else if (angle > (Math.PI * 2)) {
-        //             angle = angle - (Math.PI * 2);
-        //         }
-        //     }
+        //     angle = THREE.Math.adjustAngle(angle);
 
         //     let angle1, angle2;
         //     //pos[0] ==> 왼쪽
@@ -151,7 +33,7 @@
         //     if (angle >= Math.PI * 0.5 && angle < (Math.PI * 0.5 * 3)) {
         //         angle1 = angle;
         //         //왼쪽 위
-        //         if (angle1 <= Math.PI) {
+        //         if (angle1 < Math.PI) {
         //             angle2 = angle1 + Math.PI;
         //         }
         //         //왼쪽 아래
@@ -172,20 +54,8 @@
         //         }
         //     }
 
-
-        //     //angle > 90    ex) 180 / 4 * 3 = 135 (x가 증가하면 y는 감소)
-        //     if (angle > (Math.PI * 0.5) && angle < Math.PI) {
-        //         pos.push({
-        //             x: len * 0.5 * Math.cos(angle1) + disX,
-        //             y: len * 0.5 * Math.sin(angle1) + disY
-        //         });
-        //         pos.push({
-        //             x: len * 0.5 * Math.cos(angle2) + disX,
-        //             y: len * 0.5 * Math.sin(angle2) + disY
-        //         });
-        //     }
         //     //angle == 90 (x만 증가)
-        //     else if (angle == (Math.PI * 0.5)) {
+        //     if (angle1 == (Math.PI * 0.5)) {
         //         pos.push({
         //             x: len * 0.5 * Math.cos(angle1) + disX,
         //             y: len * 0.5 * Math.sin(angle1)
@@ -195,8 +65,8 @@
         //             y: len * 0.5 * Math.sin(angle2)
         //         });
         //     }
-        //     //angle == 0 (y만 증가)
-        //     else if (angle == 0) {
+        //     //angle == 180 (y만 증가)
+        //     else if (angle1 == Math.PI) {
         //         pos.push({
         //             x: len * 0.5 * Math.cos(angle1),
         //             y: len * 0.5 * Math.sin(angle1) + disY
@@ -206,20 +76,305 @@
         //             y: len * 0.5 * Math.sin(angle2) + disY
         //         });
         //     }
-        //     //angle < 90    ex) 180 / 5 = 36 (x가 증가하면 y는 증가)
-        //     else if (angle < (Math.PI * 0.5)) {
-        //         pos.push({
-        //             x: len * 0.5 * Math.cos(angle1) + disX,
-        //             y: len * 0.5 * Math.sin(angle1) - disY
-        //         });
-        //         pos.push({
-        //             x: len * 0.5 * Math.cos(angle2) + disX,
-        //             y: len * 0.5 * Math.sin(angle2) - disY
-        //         });
+        //     //
+        //     else {
+        //         if (angle1 < Math.PI) {
+        //             pos.push({
+        //                 x: len * 0.5 * Math.cos(angle1) + disX,
+        //                 y: len * 0.5 * Math.sin(angle1) - disY
+        //             });
+        //             pos.push({
+        //                 x: len * 0.5 * Math.cos(angle2) + disX,
+        //                 y: len * 0.5 * Math.sin(angle2) - disY
+        //             });
+        //         } else if (angle1 >= Math.PI) {
+        //             pos.push({
+        //                 x: len * 0.5 * Math.cos(angle1) + disX,
+        //                 y: len * 0.5 * Math.sin(angle1) + disY
+        //             });
+        //             pos.push({
+        //                 x: len * 0.5 * Math.cos(angle2) + disX,
+        //                 y: len * 0.5 * Math.sin(angle2) + disY
+        //             });
+        //         }
+
         //     }
 
         //     return pos;
         // };
+
+        THREE.Math.clacPointOfLine = function(disX, disY, len, angle) {
+            let pos = [];
+
+            //angle을 - => +
+            if (angle < 0) {
+                angle = Math.PI * 2 + angle;
+            }
+            //angle을 360도 내의 각도
+            while (angle >= Math.PI) {
+                angle -= Math.PI;
+            }
+
+            let angle2 = angle + Math.PI;
+
+
+            //angle > 90    ex) 180 / 4 * 3 = 135 (x가 증가하면 y는 감소)
+            if (angle > (Math.PI * 0.5) && angle < Math.PI) {
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle) - disY
+                });
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2) - disY
+                });
+            }
+            //angle == 90 (x만 증가)
+            else if (angle == (Math.PI * 0.5)) {
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle)
+                });
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2)
+                });
+            }
+            //angle == 0 (y만 증가)
+            else if (angle == 0) {
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle),
+                    y: len * 0.5 * Math.sin(angle) + disY
+                });
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle2),
+                    y: len * 0.5 * Math.sin(angle2) + disY
+                });
+            }
+            //angle < 90    ex) 180 / 5 = 36 (x가 증가하면 y는 증가)
+            else if (angle < (Math.PI * 0.5)) {
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle) + disY
+                });
+                pos.push({
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2) + disY
+                });
+            }
+
+            return pos;
+        };
+
+        THREE.Math.polar = function(point, distance, angle) {
+            var result = {};
+            result.x = point.x + distance * Math.cos(angle);
+            result.y = point.y + distance * Math.sin(angle);
+            return result;
+        };
+        //선의 기울기
+        THREE.Math.slopeOfLine = function(pos1, pos2) {
+            return (pos2.y - pos1.y) / (pos2.x - pos1.x);
+        };
+
+        //선 방정식의 상수
+        THREE.Math.constantOfLine = function(pos, slope) {
+            return pos.y - (slope * pos.x);
+        };
+
+        //$$ 기울기를 비교하여 접점의 순서 정하기
+        THREE.Math.sortContact = function(contact, inc) {
+            // ※ 
+            //1) 기울기 > 0 오른쪽 위로 향한다. (x가 증가하면 y는 증가)
+            //2) 기울기 < 0 오른쪽 아래로 향한다. (x가 증가하면 y는 감소)
+
+            //2. 입력받은 기울기를 기준으로 정렬( 오름차순 )
+            //y절편
+            if (inc == 0) {
+                //y로 정렬
+                contact.sort(function(a, b) {
+                    return a.y - b.y;
+                })
+            }
+            //x절편
+            else {
+                //x로 정렬
+                contact.sort(function(a, b) {
+                    return a.x - b.x;
+                })
+            }
+
+        };
+
+
+        THREE.Math.clipping = function(vertex, arrLine) {
+            //vertex : 다각형 선들
+            //arrPos : 선
+            let obj = [];
+
+            let i, j, e;
+            let pos1, pos2;
+            let max, min;
+
+            console.debug('Start Clipping');
+            for (i = 0; i < arrLine.length - 1; i++) {
+                let contact = [];
+
+                pos1 = arrLine[i];
+                pos2 = arrLine[i + 1];
+
+                if (pos1.x != pos2.x || pos1.y != pos2.y) {
+                    //선분의 기울기와 상수 구하기
+                    let ma = THREE.Math.slopeOfLine(pos1, pos2);
+                    let ba = THREE.Math.constantOfLine(pos1, ma);
+                    // console.log(`선 방정식 => 기울기 : ${ma} 상수 : ${ba}`);
+
+                    for (j = 0; j < vertex.length; j++) {
+                        // console.debug(`${j} 과 ${j+1} 번째`);
+
+                        //다각형 좌표 구하기
+                        let start = vertex[j];
+                        let end = (j + 1) >= (vertex.length) ? vertex[0] : vertex[j + 1];
+
+                        if (start.x != end.x || start.y != end.y) {
+
+                            //다각형의 기울기와 상수
+                            let mb = THREE.Math.slopeOfLine(start, end);
+                            let bb = THREE.Math.constantOfLine(start, mb);
+                            // console.log(`다각형의 선 방정식 => 기울기 : ${mb} 상수 : ${bb}`);
+
+                            let x, y;
+
+                            //기울기 y증가량/x증가량 에서 x증가량이 0 이므로
+                            if (Math.abs(ma) !== Infinity && Math.abs(mb) !== Infinity) {
+                                x = -(ba - bb) / (ma - mb);
+                                y = ma * x + ba;
+                            } else {
+                                let incA = Math.abs(ma);
+                                let incB = Math.abs(mb);
+                                if (incA == incB) {
+                                    x = NaN;
+                                    y = NaN;
+                                } else if (incA === Infinity) {
+                                    x = pos1.x;
+                                    y = mb * x + bb;
+                                } else if (incB === Infinity) {
+                                    x = start.x;
+                                    y = ma * x + ba;
+                                }
+                            }
+
+
+                            if (!isNaN(x) && !isNaN(y)) {
+                                //1. 접점이 내 선분내에 있는지 확인하여 없다면 넘어간다.
+
+                                max = {
+                                    x: pos1.x > pos2.x ? pos1.x : pos2.x,
+                                    y: pos1.y > pos2.y ? pos1.y : pos2.y
+                                };
+
+                                min = {
+                                    x: pos1.x < pos2.x ? pos1.x : pos2.x,
+                                    y: pos1.y < pos2.y ? pos1.y : pos2.y
+                                };
+
+                                //pos 내에 있는 점이다.
+                                if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
+
+                                    max = {
+                                        x: start.x > end.x ? start.x : end.x,
+                                        y: start.y > end.y ? start.y : end.y
+                                    };
+                                    min = {
+                                        x: start.x < end.x ? start.x : end.x,
+                                        y: start.y < end.y ? start.y : end.y
+                                    };
+                                    // $$ 계산에 의한 소주점의 오차 75 == > 75.000000001
+                                    if (x <= max.x && x >= min.x && y <= max.y && y >= min.y) {
+                                        // 원본에 추가 $$ 같은 점이 있는지 확인
+                                        let isPush = true;
+                                        for (e = 0; e < contact.length; e++) {
+                                            if (contact[e].x == x && contact[e].y == y) {
+                                                isPush = false;
+                                                break;
+                                            }
+                                        }
+
+
+                                        if (isPush == true) {
+                                            contact.push({
+                                                x: x,
+                                                y: y
+                                            });
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    // $$ 원본에 추가 arrPos 수정
+                    if (contact.length > 0) {
+                        THREE.Math.sortContact(contact, ma);
+                        // $$ 판별한 선분의 index
+
+                        obj.push({
+                            index: i,
+                            pos: contact
+                        });
+                    }
+
+                }
+
+            }
+
+
+            // console.log(obj);
+            console.debug('End Clipping');
+
+
+            return obj;
+
+        }
+
+        //도형의 월드 좌표 => 로컬 좌표
+        THREE.worldPosToLocalPos = function(vertex, min, width, height) {
+                let center = {
+                    x: min.x + (width * 0.5),
+                    y: min.y + (height * 0.5)
+                };
+
+                let arr = [];
+                let i;
+                for (i = 0; i < vertex.length; i++) {
+                    arr.push({
+                        x: vertex[i].x - center.x,
+                        y: vertex[i].y - center.y
+                    });
+                    // $$ 아래 X
+                    // arr.push({ x: center.x - vertex[i].x, y: vertex[i].y - center.y });
+                }
+
+                return arr;
+            }
+            //=============================
+            //각도 재조정
+        THREE.Math.adjustAngle = function(angle) {
+            let reAngle = angle;
+
+            while (reAngle > (Math.PI * 2) || (reAngle < 0)) {
+                if (reAngle < 0) {
+                    reAngle = reAngle + (Math.PI * 2);
+                } else if (reAngle > (Math.PI * 2)) {
+                    reAngle = reAngle - (Math.PI * 2);
+                }
+            }
+
+            return reAngle;
+        }
 
         //로딩이 끝나면 Three.js를 숭행한다.
         function init() {
@@ -244,15 +399,15 @@
             let hDistance = 8 * scale;
             let wDistance = 25 * scale; //일정하게 하기 위해 25로 
             //다음 선의 간격
-            let distance = 60 * scale;
+            let distance = 30 * scale;
             //시작 점
             let x = 0 * scale;
             let y = 30 * scale;
 
             //<pattern에 대한>
-            let maxLen = 300;
-            let rowCount = maxLen / distance;
-            let colCount = maxLen / (wDistance * 2) + 1;
+            let length = 150;
+            let maxLength = length * 2;
+            let rowCount = maxLength / distance;
 
             let parent = new THREE.Object3D();
             let material = new THREE.LineBasicMaterial({
@@ -260,92 +415,145 @@
             });
 
             //===========================================================================
+            let geom = new THREE.Geometry();
+            geom.vertices.push(
+                new THREE.Vector3((-length * 0.5), (-length * 0.5), 0),
+                new THREE.Vector3((length * 0.5), (-length * 0.5), 0),
+                new THREE.Vector3((length * 0.5), (length * 0.5), 0),
+                new THREE.Vector3((-length * 0.5), (length * 0.5), 0),
+                new THREE.Vector3((-length * 0.5), (-length * 0.5), 0)
+            );
+
+            let squr = new THREE.Line(geom, material);
+            scene.add(squr);
+            //===========================================================================
+
             let i, j, e;
             let upAngle = Math.atan(hDistance / wDistance);
             let downAngle = Math.atan(-hDistance / wDistance);
-            let len = Math.sqrt(Math.pow(wDistance, 2) + Math.pow(hDistance, 2));
-            let angle = 0;
+            let disLength = Math.sqrt(Math.pow(wDistance, 2) + Math.pow(hDistance, 2));
+            // let angle = Math.PI + Math.PI / 4 * 3;
+            // let angle = Math.PI + Math.PI / 4;
+            // let angle = Math.PI / 4 * 3;
+            let angle = Math.PI / 4;
 
-            // THREE.Math.polar = function(point, distance, angle);
+            angle = THREE.Math.adjustAngle(angle);
+
+            //angle >= 0 && angle < Math.PI * 0.5
+            //angle <
+            if (angle >= Math.PI * 0.5 && angle < Math.PI) {
+                angle += Math.PI;
+            }
+            //
+            else if (angle >= Math.PI && angle < (Math.PI + Math.PI * 0.5)) {
+                angle -= Math.PI;
+            }
+
+            let geometry, vertices, line;
             //행
             for (i = 0; i < rowCount; i++) {
-                //(-maxLen * 0.5) + (distance * i)
-                let pos = THREE.Math.clacPointOfLine((-maxLen * 0.5) + (distance * i), maxLen, angle);
-                //중심이 되는 선을 간격 만큼 나눈다.
-                // let oriLine = new THREE.LineCurve(new THREE.Vector2(pos[0].x, pos[0].y), new THREE.Vector2(pos[1].x, pos[1].y));
-                // let points = oriLine.getPoints(colCount);
+                console.debug('make line');
+                // (-maxLen * 0.5) + (distance * i)
+                let pos = THREE.Math.clacPointOfLine((-maxLength * 0.5) + (distance * i), (maxLength * 0.5) - (distance * i), maxLength, angle);
+                // console.log(pos);
+                //================ 선 그리기 ====================
+                // geometry = new THREE.BufferGeometry();
+                // vertices = new Float32Array(6);
 
-                let curve = new THREE.SplineCurve([new THREE.Vector2(pos[0].x, pos[0].y)]);
-                //
-                let downPos = new THREE.Vector2(pos[0].x, pos[0].y);
-                let upPos;
-                for (j = 0; j < colCount; j++) {
-                    upPos = THREE.Math.polar(downPos, len, upAngle + angle);
-                    downPos = THREE.Math.polar(upPos, len, downAngle + angle);
+                // vertices[0] = pos[0].x;
+                // vertices[1] = pos[0].y;
+                // vertices[2] = 0;
 
-                    curve.points.push(new THREE.Vector2(upPos.x, upPos.y));
-                    curve.points.push(new THREE.Vector2(downPos.x, downPos.y));
+                // vertices[3] = pos[1].x;
+                // vertices[4] = pos[1].y;
+                // vertices[5] = 0;
+
+                // geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+                // line = new THREE.Line(geometry, material);
+                // parent.add(line);
+                //======================== ====================
+
+                let contact = THREE.Math.clipping(geom.vertices, pos);
+
+                if (contact.length != 0) {
+                    for (j = 0; j < contact[0].pos.length - 1; j += 2) {
+
+                        //================파선 그리기 ====================
+                        // geometry = new THREE.BufferGeometry();
+                        // vertices = new Float32Array(6);
+
+                        // vertices[0] = contact[0].pos[j].x;
+                        // vertices[1] = contact[0].pos[j].y;
+                        // vertices[2] = 0;
+
+                        // vertices[3] = contact[0].pos[j + 1].x;
+                        // vertices[4] = contact[0].pos[j + 1].y;
+                        // vertices[5] = 0;
+
+                        // geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+                        // line = new THREE.Line(geometry, material);
+                        // parent.add(line);
+                        //================ 곡선 그리기 ====================
+
+                        let len = Math.sqrt(Math.pow(contact[0].pos[j].x - contact[0].pos[j + 1].x, 2) + Math.pow(contact[0].pos[j].y - contact[0].pos[j + 1].y, 2));
+
+                        let curve, curvePos;
+                        curve = new THREE.SplineCurve([new THREE.Vector2(contact[0].pos[j].x, contact[0].pos[j].y)]);
+                        curvePos = new THREE.Vector2(contact[0].pos[j].x, contact[0].pos[j].y);
+
+                        //let colCount = maxLength / (wDistance * 2) + 1;
+                        let colCount = len / wDistance;
+
+                        for (e = 0; e < colCount; e++) {
+                            //홀수
+                            if (e % 2 == 1) {
+                                curvePos = THREE.Math.polar(curvePos, disLength, upAngle + angle);
+                                curve.points.push(new THREE.Vector2(curvePos.x, curvePos.y));
+                            }
+                            //짝수
+                            else if (e % 2 == 0) {
+                                curvePos = THREE.Math.polar(curvePos, disLength, downAngle + angle);
+                                curve.points.push(new THREE.Vector2(curvePos.x, curvePos.y));
+                            }
+                        }
+
+                        let points = curve.getPoints(50);
+
+                        let curveContact = THREE.Math.clipping(geom.vertices, points);
+
+                        //접점이 있다면 그 점을 마지막으로
+                        if (curveContact.length !== 0) {
+                            // console.log('커브의 접점 : ');
+                            // console.log(curveContact);
+
+                            let index = curveContact[curveContact.length - 1].index;
+                            console.log(index);
+                            if (index != 0) {
+                                let deleteCount = 50 - index;
+                                points.splice(index + 1, deleteCount);
+                                // console.log('points : ');
+                                // console.log(points);
+
+                                let arrPos = curveContact[curveContact.length - 1].pos;
+                                // console.log('arrPos : ');
+                                // console.log(arrPos);
+                                points[index].x = arrPos[arrPos.length - 1].x;
+                                points[index].y = arrPos[arrPos.length - 1].y;
+                            }
+                        }
+
+                        geometry = new THREE.BufferGeometry().setFromPoints(points);
+                        let spline = new THREE.Line(geometry, material);
+                        parent.add(spline);
+                    }
+
                 }
-
-                let curvePos = curve.getPoints(50);
-                let geometry = new THREE.BufferGeometry().setFromPoints(curvePos);
-                let spline = new THREE.Line(geometry, material);
-                parent.add(spline);
 
             }
 
             scene.add(parent);
-
-            let geometry = new THREE.Geometry();
-            geometry.vertices.push(
-                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
-                new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
-                new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
-                new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
-                new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
-            );
-
-            let line = new THREE.Line(geometry, material);
-            scene.add(line);
-
-            // //행
-            // for (i = 0; i < rowCount; i++) {
-
-            //     let pos = THREE.Math.clacPointOfLine((-maxLen * 0.5) + (distance * i), maxLen, Math.PI * 0.5);
-            //     //중심이 되는 선을 간격 만큼 나눈다.
-            //     let oriLine = new THREE.LineCurve(new THREE.Vector2(pos[0].x, pos[0].y), new THREE.Vector2(pos[1].x, pos[1].y));
-            //     let points = oriLine.getPoints(colCount * 2);
-
-            //     let curve = new THREE.SplineCurve([new THREE.Vector2(points[0].x, points[0].y)]);
-
-            //     for (j = 1; j < points.length; j += 2) {
-
-            //         curve.points.push(new THREE.Vector2(points[j].x, points[j].y + hDistance));
-            //         curve.points.push(new THREE.Vector2(points[j + 1].x, points[j + 1].y));
-            //     }
-
-            //     let curvePos = curve.getPoints(50);
-            //     let geometry = new THREE.BufferGeometry().setFromPoints(curvePos);
-            //     let spline = new THREE.Line(geometry, material);
-            //     parent.add(spline);
-
-            // }
-
-            // scene.add(parent);
-
-            // let geometry = new THREE.Geometry();
-            // geometry.vertices.push(
-            //     new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0),
-            //     new THREE.Vector3((maxLen * 0.5), (-maxLen * 0.5), 0),
-            //     new THREE.Vector3((maxLen * 0.5), (maxLen * 0.5), 0),
-            //     new THREE.Vector3((-maxLen * 0.5), (maxLen * 0.5), 0),
-            //     new THREE.Vector3((-maxLen * 0.5), (-maxLen * 0.5), 0)
-            // );
-
-            // let line = new THREE.Line(geometry, material);
-            // scene.add(line);
-            //===========================================================================
-
 
             renderer.render(scene, camera);
         };

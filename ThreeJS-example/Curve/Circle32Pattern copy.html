@@ -19,7 +19,7 @@
     </div>
     <script>
         //지금 point에서 angle 방향으로 distance만큼 떨어져 있는 point 반환
-        THREE.Math.clacPointOfLine = function(distance, len, angle) {
+        THREE.Math.clacPointOfLine = function(disX, disY, len, angle) {
             let pos = [];
 
             //angle을 - => +
@@ -37,22 +37,22 @@
             //angle > 90    ex) 180 / 4 * 3 = 135 (x가 증가하면 y는 감소)
             if (angle > (Math.PI * 0.5) && angle < Math.PI) {
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle) + distance,
-                    y: len * 0.5 * Math.sin(angle) + distance
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle) - disY
                 });
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
-                    y: len * 0.5 * Math.sin(angle2) + distance
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2) - disY
                 });
             }
             //angle == 90 (x만 증가)
             else if (angle == (Math.PI * 0.5)) {
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle) + distance,
+                    x: len * 0.5 * Math.cos(angle) + disX,
                     y: len * 0.5 * Math.sin(angle)
                 });
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
+                    x: len * 0.5 * Math.cos(angle2) + disX,
                     y: len * 0.5 * Math.sin(angle2)
                 });
             }
@@ -60,22 +60,22 @@
             else if (angle == 0) {
                 pos.push({
                     x: len * 0.5 * Math.cos(angle),
-                    y: len * 0.5 * Math.sin(angle) + distance
+                    y: len * 0.5 * Math.sin(angle) + disY
                 });
                 pos.push({
                     x: len * 0.5 * Math.cos(angle2),
-                    y: len * 0.5 * Math.sin(angle2) + distance
+                    y: len * 0.5 * Math.sin(angle2) + disY
                 });
             }
             //angle < 90    ex) 180 / 5 = 36 (x가 증가하면 y는 증가)
             else if (angle < (Math.PI * 0.5)) {
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle) + distance,
-                    y: len * 0.5 * Math.sin(angle) - distance
+                    x: len * 0.5 * Math.cos(angle) + disX,
+                    y: len * 0.5 * Math.sin(angle) + disY
                 });
                 pos.push({
-                    x: len * 0.5 * Math.cos(angle2) + distance,
-                    y: len * 0.5 * Math.sin(angle2) - distance
+                    x: len * 0.5 * Math.cos(angle2) + disX,
+                    y: len * 0.5 * Math.sin(angle2) + disY
                 });
             }
 
@@ -333,6 +333,7 @@
             let material = new THREE.LineBasicMaterial({
                 color: 0xffff00
             });
+            //===========================================================================
 
             let geom = new THREE.Geometry();
             geom.vertices.push(
@@ -355,7 +356,7 @@
             for (i = 0; i < rowCount; i++) {
 
                 //원이 그려질 선분
-                let pos = THREE.Math.clacPointOfLine((-maxLength * 0.5) + (distance * (i + 1)), maxLength, Math.PI / 4 * 3);
+                let pos = THREE.Math.clacPointOfLine((-maxLength * 0.5) + (distance * (i + 1)), (maxLength * 0.5) - (distance * (i + 1)), maxLength, Math.PI / 4);
                 let contact = THREE.Math.clipping(geom.vertices, pos);
 
                 for (j = 0; j < contact.length - 1; j += 2) {
