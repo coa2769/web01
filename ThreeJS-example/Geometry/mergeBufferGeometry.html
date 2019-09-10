@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <script src="../js/three.js"></script>
+</head>
+
+<body>
+    <script>
+        function getRandomInt(min, max) {
+            return (Math.random() * max) + min;
+        }
+
+
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+        camera.position.set(0, 0, 300);
+        let renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+        // let modelGeometry = new THREE.Geometry();
+
+        // let material = new THREE.LineBasicMaterial({
+        //     color: 0xffff00
+        // });
+
+        // let halfWidth = window.innerWidth * 0.5;
+        // let halfHeigth = window.innerHeight * 0.5;
+
+        // console.log(`halfWidth : ${halfWidth} halfHeight : ${halfHeigth}`);
+
+        // let i;
+        // for (i = 0; i < 50; i++) {
+        //     let size = getRandomInt(50, 70);
+        //     let x = getRandomInt(-halfWidth + 70, halfWidth);
+        //     let y = getRandomInt(-halfHeigth + 70, halfHeigth);
+
+        //     console.log(`size : ${size} x:${x}, y : ${y}`);
+
+        //     let shape = new THREE.Shape();
+        //     shape.moveTo(x, y);
+        //     shape.lineTo(x + size, y);
+        //     shape.lineTo(x + size, y - size);
+        //     shape.lineTo(x, y - size);
+        //     shape.lineTo(x, y);
+
+        //     let geometry = new THREE.ShapeGeometry(shape);
+
+        //     modelGeometry.merge(geometry);
+        // }
+
+        // let bufGeometry = new THREE.BufferGeometry().fromGeometry(modelGeometry);
+
+        // // let mesh = new THREE.LineSegments(bufGeometry, material);
+        // let mesh = new THREE.LineSegments(bufGeometry, material);
+        // scene.add(mesh);
+
+        let modelGeometry = new THREE.Geometry();
+
+        let material = new THREE.LineBasicMaterial({
+            color: 0xffff00
+        });
+
+        let halfWidth = window.innerWidth * 0.5;
+        let halfHeigth = window.innerHeight * 0.5;
+
+        console.log(`halfWidth : ${halfWidth} halfHeight : ${halfHeigth}`);
+
+        let vertices = new Float32Array(8 * 3 * 10);
+
+        let i;
+        for (i = 0; i < 10; i++) {
+            let size = getRandomInt(50, 70);
+            let x = getRandomInt(-halfWidth + 70, halfWidth);
+            let y = getRandomInt(-halfHeigth + 70, halfHeigth);
+
+            console.log(`size : ${size} x:${x}, y : ${y}`);
+
+            vertices[(i * 24)] = x;
+            vertices[1 + (i * 24)] = y;
+            vertices[2 + (i * 24)] = 0;
+
+            vertices[3 + (i * 24)] = x + size;
+            vertices[4 + (i * 24)] = y;
+            vertices[5 + (i * 24)] = 0;
+
+            vertices[6 + (i * 24)] = x + size;
+            vertices[7 + (i * 24)] = y;
+            vertices[8 + (i * 24)] = 0;
+
+            vertices[9 + (i * 24)] = x + size;
+            vertices[10 + (i * 24)] = y - size;
+            vertices[11 + (i * 24)] = 0;
+
+            vertices[12 + (i * 24)] = x + size;
+            vertices[13 + (i * 24)] = y - size;
+            vertices[14 + (i * 24)] = 0;
+
+            vertices[15 + (i * 24)] = x;
+            vertices[16 + (i * 24)] = y - size;
+            vertices[17 + (i * 24)] = 0;
+
+            vertices[18 + (i * 24)] = x;
+            vertices[19 + (i * 24)] = y - size;
+            vertices[20 + (i * 24)] = 0;
+
+            vertices[21 + (i * 24)] = x;
+            vertices[22 + (i * 24)] = y;
+            vertices[23 + (i * 24)] = 0;
+
+        }
+
+        let bufGeometry = new THREE.BufferGeometry();
+        bufGeometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+        let mesh = new THREE.LineSegments(bufGeometry, material);
+        scene.add(mesh);
+
+        renderer.render(scene, camera);
+    </script>
+</body>
+
+</html>
