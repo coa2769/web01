@@ -1,0 +1,609 @@
+<!-- 
+    텍스트 만드는 방법
+    1. DOM + CSS  html에 tag를 추가해서
+    2. canvas 태그에 그리고 texture로 출력
+    3. 3D응용 프로그램에서 만들어지 text관련 모델을 three.js가 화면에 출력
+    4. three.js의 text객체를 만든다.
+    5. bitmap 글꼴 사용
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>My first three.js app</title>
+    <style>
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            display: block;
+        }
+        
+        body {
+            margin: 0;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="info">Description</div>
+    <script src="js/three.js"></script>
+    <script>
+        THREE.UniformsLib.line = {
+            linewidth: {
+                value: 1
+            },
+            resolution: {
+                value: new THREE.Vector2(1, 1)
+            },
+            dashScale: {
+                value: 1
+            },
+            dashSize: {
+                value: 1
+            },
+            gapSize: {
+                value: 1
+            }
+        };
+
+        THREE.ShaderLib['line'] = {
+            uniforms: THREE.UniformsUtils.merge([
+                THREE.UniformsLib.common,
+                THREE.UniformsLib.fog,
+                THREE.UniformsLib.line
+            ]),
+            vertexShader: `
+		#include <common>
+		#include <color_pars_vertex>
+		#include <fog_pars_vertex>
+		#include <logdepthbuf_pars_vertex>
+		#include <clipping_planes_pars_vertex>
+
+		uniform float linewidth;
+		uniform vec2 resolution;
+
+		attribute vec3 instanceStart;
+		attribute vec3 instanceEnd;
+
+		attribute vec3 instanceColorStart;
+		attribute vec3 instanceColorEnd;
+
+		varying vec2 vUv;
+
+		#ifdef USE_DASH
+
+			uniform float dashScale;
+			attribute float instanceDistanceStart;
+			attribute float instanceDistanceEnd;
+			varying float vLineDistance;
+
+		#endif
+
+		void trimSegment( const in vec4 start, inout vec4 end ) {
+
+			// trim end segment so it terminates between the camera plane and the near plane
+
+			// conservative estimate of the near plane
+			float a = projectionMatrix[ 2 ][ 2 ]; // 3nd entry in 3th column
+			float b = projectionMatrix[ 3 ][ 2 ]; // 3nd entry in 4th column
+			float nearEstimate = - 0.5 * b / a;
+
+			float alpha = ( nearEstimate - start.z ) / ( end.z - start.z );
+
+			end.xyz = mix( start.xyz, end.xyz, alpha );
+
+		}
+
+		void main() {
+
+			#ifdef USE_COLOR
+
+				vColor.xyz = ( position.y < 0.5 ) ? instanceColorStart : instanceColorEnd;
+
+			#endif
+
+			#ifdef USE_DASH
+
+				vLineDistance = ( position.y < 0.5 ) ? dashScale * instanceDistanceStart : dashScale * instanceDistanceEnd;
+
+			#endif
+
+			float aspect = resolution.x / resolution.y;
+
+			vUv = uv;
+
+			// camera space
+			vec4 start = modelViewMatrix * vec4( instanceStart, 1.0 );
+			vec4 end = modelViewMatrix * vec4( instanceEnd, 1.0 );
+
+			// special case for perspective projection, and segments that terminate either in, or behind, the camera plane
+			// clearly the gpu firmware has a way of addressing this issue when projecting into ndc space
+			// but we need to perform ndc-space calculations in the shader, so we must address this issue directly
+			// perhaps there is a more elegant solution -- WestLangley
+
+			bool perspective = ( projectionMatrix[ 2 ][ 3 ] == - 1.0 ); // 4th entry in the 3rd column
+
+			if ( perspective ) {
+
+				if ( start.z < 0.0 && end.z >= 0.0 ) {
+
+					trimSegment( start, end );
+
+				} else if ( end.z < 0.0 && start.z >= 0.0 ) {
+
+					trimSegment( end, start );
+
+				}
+
+			}
+
+			// clip space
+			vec4 clipStart = projectionMatrix * start;
+			vec4 clipEnd = projectionMatrix * end;
+
+			// ndc space
+			vec2 ndcStart = clipStart.xy / clipStart.w;
+			vec2 ndcEnd = clipEnd.xy / clipEnd.w;
+
+			// direction
+			vec2 dir = ndcEnd - ndcStart;
+
+			// account for clip-space aspect ratio
+			dir.x *= aspect;
+			dir = normalize( dir );
+
+			// perpendicular to dir
+			vec2 offset = vec2( dir.y, - dir.x );
+
+			// undo aspect ratio adjustment
+			dir.x /= aspect;
+			offset.x /= aspect;
+
+			// sign flip
+			if ( position.x < 0.0 ) offset *= - 1.0;
+
+			// endcaps
+			if ( position.y < 0.0 ) {
+
+				offset += - dir;
+
+			} else if ( position.y > 1.0 ) {
+
+				offset += dir;
+
+			}
+
+			// adjust for linewidth
+			offset *= linewidth;
+
+			// adjust for clip-space to screen-space conversion // maybe resolution should be based on viewport ...
+			offset /= resolution.y;
+
+			// select end
+			vec4 clip = ( position.y < 0.5 ) ? clipStart : clipEnd;
+
+			// back to clip space
+			offset *= clip.w;
+
+			clip.xy += offset;
+
+			gl_Position = clip;
+
+			vec4 mvPosition = ( position.y < 0.5 ) ? start : end; // this is an approximation
+
+			#include <logdepthbuf_vertex>
+			#include <clipping_planes_vertex>
+			#include <fog_vertex>
+
+		}
+		`,
+
+            fragmentShader: `
+		uniform vec3 diffuse;
+		uniform float opacity;
+
+		#ifdef USE_DASH
+
+			uniform float dashSize;
+			uniform float gapSize;
+
+		#endif
+
+		varying float vLineDistance;
+
+		#include <common>
+		#include <color_pars_fragment>
+		#include <fog_pars_fragment>
+		#include <logdepthbuf_pars_fragment>
+		#include <clipping_planes_pars_fragment>
+
+		varying vec2 vUv;
+
+		void main() {
+
+			#include <clipping_planes_fragment>
+
+			#ifdef USE_DASH
+
+				if ( vUv.y < - 1.0 || vUv.y > 1.0 ) discard; // discard endcaps
+
+				if ( mod( vLineDistance, dashSize + gapSize ) > dashSize ) discard; // todo - FIX
+
+			#endif
+
+			if ( abs( vUv.y ) > 1.0 ) {
+
+				float a = vUv.x;
+				float b = ( vUv.y > 0.0 ) ? vUv.y - 1.0 : vUv.y + 1.0;
+				float len2 = a * a + b * b;
+
+				if ( len2 > 1.0 ) discard;
+
+			}
+
+			vec4 diffuseColor = vec4( diffuse, opacity );
+
+			#include <logdepthbuf_fragment>
+			#include <color_fragment>
+
+			gl_FragColor = vec4( diffuseColor.rgb, diffuseColor.a );
+
+			#include <premultiplied_alpha_fragment>
+			#include <tonemapping_fragment>
+			#include <encodings_fragment>
+			#include <fog_fragment>
+
+		}
+		`
+        };
+
+        let LineMaterial = function(parameters) {
+            //함수 내의 this객체를 LineMaterial로 바인딩. 
+            THREE.ShaderMaterial.call(this, {
+                type: 'LineMaterial',
+                uniforms: THREE.UniformsUtils.clone(THREE.ShaderLib['line'].uniforms),
+                vertexShader: THREE.ShaderLib['line'].vertexShader,
+                fragmentShader: THREE.ShaderLib['line'].fragmentShader
+            });
+
+            this.dashed = false;
+
+            //속성을 추가
+            Object.defineProperties(this, {
+                color: {
+                    enumerable: true,
+                    get: function() {
+                        return this.uniforms.diffuse.value;
+                    },
+                    set: function(value) {
+                        this.uniforms.diffuse.value = value;
+                    }
+                },
+                linewidth: {
+                    enumerable: true,
+                    get: function() {
+                        return this.uniforms.linewidth.value;
+                    },
+                    set: function(value) {
+                        this.uniforms.linewidth.value = value;
+                    }
+                },
+                dashScale: {
+                    enumerable: true,
+                    get: function() {
+                        return this.uniforms.dashScale.value;
+                    },
+                    set: function(value) {
+                        this.uniforms.dashScale.value = value;
+                    }
+                },
+                dashSize: {
+                    enumerable: true,
+                    get: function() {
+                        return this.uniforms.dashSize.value;
+                    },
+                    set: function(value) {
+                        this.uniforms.dashSize.value = value;
+                    }
+                },
+                gapSize: {
+                    enumerable: true,
+                    get: function() {
+                        return this.uniforms.gapSize.value;
+                    },
+                    set: function(value) {
+                        this.uniforms.gapSize.value = value;
+                    }
+                },
+
+                resolution: {
+                    enumerable: true,
+                    get: function() {
+                        return this.uniforms.resolution.value;
+                    },
+                    set: function(value) {
+                        this.uniforms.resolution.value.copy(value);
+                    }
+                }
+            });
+
+            this.setValues(parameters);
+
+        };
+        LineMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
+        LineMaterial.prototype.constructor = LineMaterial;
+
+        LineMaterial.prototype.isLineMaterial = true;
+
+        LineMaterial.prototype.copy = function(source) {
+
+            ShaderMaterial.prototype.copy.call(this, source);
+
+            this.color.copy(source.color);
+
+            this.linewidth = source.linewidth;
+
+            this.resolution = source.resolution;
+
+            // todo
+
+            return this;
+
+        };
+
+
+        //=========================================================================================================================
+
+        var Line2 = function(geometry, material) {
+            LineSegments2.call(this);
+            this.type = 'Line2';
+            this.geometry = geometry !== undefined ? geometry : new LineGeometry();
+            this.material = material !== undefined ? material : new LineMaterial({
+                color: Math.random() * 0xffffff
+            });
+
+        };
+
+        Line2.prototype = Object.assign(Object.create(LineSegments2.prototype), {
+            constructor: Line2,
+            isLine2: true,
+            copy: function( /* source */ ) {
+                // todo
+
+                return this;
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //=========================================================================================================================
+        //엔진
+        let renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        //장면
+        let scene = new THREE.Scene();
+        //카메라
+        let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+        camera.position.set(0, 0, 200);
+        camera.lookAt(0, 0, 0);
+
+        //물질 정의? (재질 생성)
+        //LineBasicMaterial 또는 LineDasheMaterial
+        let material;
+        material = new THREE.LineBasicMaterial({
+            color: 0xffff00,
+            linewidth: 10
+                // vertexColors: 0x0000ff
+        });
+
+        let material = new THREE.ShaderMaterial({
+            unfi
+        })
+
+        //가장 간단한 파선 만드는 방법
+        // material = new THREE.LineDashedMaterial({
+        //     color: 0xffff00,
+        //     gapSize: 4,
+        //     dashSize: 4
+        // });
+
+        //굵기를 변경
+        // material = new LineMaterial({
+        //     color: 0xffff00,
+        //     linewidth: 5,
+        //     vertexColors: 0xffff00,
+        //     dashed: false
+        // });
+
+
+
+
+        let geometry = new THREE.BufferGeometry();
+        let vertices = new Float32Array(6);
+
+        vertices[0] = -50;
+        vertices[1] = 0;
+        vertices[2] = 0;
+        vertices[3] = 50;
+        vertices[4] = 0;
+        vertices[5] = 0;
+
+        geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        let line = new THREE.Line(geometry, material);
+        line.scale.set(1, 1, 1);
+        line.computeLineDistances();
+
+        scene.add(line);
+        renderer.render(scene, camera);
+    </script>
+</body>
+
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>My first three.js app</title>
+    <style>
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            display: block;
+        }
+        
+        body {
+            margin: 0;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+</head>
+
+
+<body>
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        var lineVertShader = `
+  attribute float lineDistance;
+  varying float vLineDistance;
+  
+  void main() {
+    vLineDistance = lineDistance;
+    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+    gl_Position = projectionMatrix * mvPosition;
+  }
+  `;
+
+        var lineFragShader = `
+  uniform vec3 diffuse;
+  uniform float opacity;
+
+  uniform float dashSize;
+  uniform float gapSize;
+  uniform float dotSize;
+  varying float vLineDistance;
+  
+  void main() {
+		float totalSize = dashSize + gapSize;
+		float modulo = mod( vLineDistance, totalSize );
+    float dotDistance = dashSize + (gapSize * .5) - (dotSize * .5);
+    
+    if ( modulo > dashSize && mod(modulo, dotDistance) > dotSize ) {
+      discard;
+    }
+
+    gl_FragColor = vec4( diffuse, opacity );
+  }
+  `;
+    </script>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 1000);
+        camera.position.set(0, 0, 10);
+        var renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        var points = [];
+        for (let i = 0; i < 10; i++) {
+            points.push(new THREE.Vector3(
+                THREE.Math.randInt(-5, 5),
+                THREE.Math.randInt(-5, 5),
+                THREE.Math.randInt(-5, 5)
+            ))
+        }
+
+        var lineDistances = [];
+        var d = 0;
+        for (let i = 0; i < points.length; i++) {
+            if (i > 0) {
+                d += points[i].distanceTo(points[i - 1]);
+            }
+            lineDistances[i] = d;
+        }
+
+        var lineGeom = new THREE.BufferGeometry().setFromPoints(points);
+        lineGeom.addAttribute('lineDistance', new THREE.BufferAttribute(new Float32Array(lineDistances), 1));
+        var lineMat = new THREE.ShaderMaterial({
+            uniforms: {
+                diffuse: {
+                    value: new THREE.Color("yellow")
+                },
+                dashSize: {
+                    value: 1
+                },
+                gapSize: {
+                    value: 1
+                },
+                dotSize: {
+                    value: 0.1
+                },
+                opacity: {
+                    value: 0.5
+                }
+            },
+            vertexShader: lineVertShader,
+            fragmentShader: lineFragShader,
+            transparent: true
+        });
+
+        var line = new THREE.Line(lineGeom, lineMat);
+        scene.add(line);
+
+        var clock = new THREE.Clock();
+        var time = 0;
+
+        render();
+
+        function render() {
+            requestAnimationFrame(render);
+            time += clock.getDelta();
+            lineMat.uniforms.opacity.value = Math.sin(time) * 0.4 + 0.6;
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+
+</html> -->
