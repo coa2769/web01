@@ -1,0 +1,140 @@
+/*
+    ※
+    1. 설명과 적용 이미지를 같이 블로그에 기재해야한다.
+    2. 
+*/
+
+
+/* header */
+
+header {
+    /* ?? */
+    position: absolute;
+    /* 위치 */
+    top: 0;
+    left: 0;
+    /* ?? */
+    z-index: 100;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* 헤더A : 사이트 이름 */
+
+.headA {
+    /* ?? */
+    display: inline-block;
+    /* ?? */
+    line-height: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #5D9AB2;
+    background-color: var(--main-color);
+    /* 폰트 컬러 */
+    color: #fff;
+    color: var(--text-bright-color);
+    /* 사용할 폰트의 집함 
+    브라우저마다 지원하는 폰트가 다르므로
+    html을 출력하는 브라우저에서 지원하는 폰트가 하나 적용되다.
+    왼쪽 -> 오른쪽 순서대로 확인 */
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    /* 폰트에 적용된 style을 적용.... 자세한건 찾아 보자  ??  */
+    text-decoration: none;
+}
+
+
+/* 헤더B : 내비게이션 메뉴 */
+
+.headB ul {
+    margin: 0;
+    padding: 0;
+    /* ul과 같은 리스트 스타일을 지정해준다. */
+    list-style: none;
+}
+
+.headB a {
+    display: block;
+    padding: 15px;
+    /* inherit 값은 무엇을 뜻하는 가? */
+    color: inherit;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.headB a:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/*@media는 정확하게 무슨 뜻 */
+
+@media(min-width:768px) {
+    header .container {
+        /* 속성과 flex값 에 대한 설면 찾기 ?? */
+        display: flex;
+        /* 글자 정렬 ?? */
+        align-items: center;
+        /* ?? */
+        justify-content: space-between;
+        max-width: 1000px;
+        max-width: var(--large-width);
+        /* box 디자인 정리 */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .headB ul {
+        display: flex;
+    }
+}
+
+
+/* 헤더C : 토글 버튼 */
+
+
+/* 작은 화면 전용 설정 */
+
+@media (max-width:767px) {
+    header .container-small {
+        display: flex;
+        align-items: center;
+        /* align-items 속성. 아이템 컨텐츠 정렬 */
+        justify-content: space-between;
+    }
+    .headC {
+        margin-right: 10px;
+        padding: 0;
+        border: none;
+        /* ?? */
+        outline: none;
+        /* 배경 속성 삭제 */
+        background: none;
+        font-size: 28px;
+        /* 투명도 */
+        opacity: 0.5;
+        /* 마우스 커서 속성 */
+        cursor: pointer;
+    }
+    /* :hover : 마우스 커서가 이 컨텐츠 위에 있을 때 */
+    .headC:hover {
+        opacity: 0.3;
+    }
+    .headB {
+        /* ?? none 하면 어떻게 되는가? */
+        display: none;
+    }
+}
+
+
+/* 큰 화면 전용 설정 */
+
+@media (min-width:768px) {
+    .headC {
+        display: none;
+    }
+    .headB {
+        /* important 값 ?? */
+        display: block !important;
+    }
+}

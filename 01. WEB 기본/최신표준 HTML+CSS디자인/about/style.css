@@ -1,0 +1,140 @@
+/* 기본색 */
+
+:root {
+    --main-color: #5D9AB2;
+    --accent-color: #BF6A7A;
+    --dark-color: #2B5566;
+    --text-bright-color: #fff;
+    /* 추가01 */
+    --icon-color: #fff;
+    --icon-bk-color: #ddd;
+    --large-width: 1000px;
+    /* 추가02 */
+    --gray-color: #ddd;
+    --middle-wdith: 800px;
+}
+
+
+/* about.html에 적용되는 스타일 */
+
+@media (max-width:599px) {
+     :root {
+        font-size: 14px;
+    }
+}
+
+@media(min-width:600px) and (max-width:799px) {
+     :root {
+        font-size: 16px;
+    }
+}
+
+@media(min-width: 800px) {
+     :root {
+        font-size: 18px;
+    }
+}
+
+body {
+    font-size: 16px;
+}
+
+.nohero header {
+    position: static;
+    border-bottom: solid 1px #ddd;
+    border-bottom: solid 1px var(--gray-color);
+}
+
+
+/* 콘텐츠 페이지 : 기사 */
+
+.post .container {
+    max-width: 800px;
+    max-width: var(--middle-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px 10px;
+}
+
+.post h1 {
+    padding-left: 0.5rem;
+    border-left: solid 0.75rem #BF6A7A;
+    border-left: solid 0.75rem var(--accent-color);
+    font-size: 2rem;
+}
+
+.post p {
+    font-size: 1rem;
+    line-height: 2;
+}
+
+.post img {
+    max-width: 100%;
+}
+
+
+/* 소개 페이지: 이미지와 연혁 */
+
+.history {
+    background-color: #5D9AB2;
+    background-color: var(--main-color);
+    color: #fff;
+    color: var(--text-bright-color);
+}
+
+.history .text {
+    padding: 20px;
+}
+
+.history h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.history .photo {
+    min-height: 300px;
+    /* 배경에 쓰일 이미지 속성.... url함수의 뜻은?? */
+    background-image: url(../img/plant.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
+.history table {
+    border-collapse: collapse;
+    border-top: solid 1px #ddd;
+    border-top: solid 1px var(--gray-color);
+    font-size: 0.875rem;
+}
+
+.history th,
+.history td {
+    padding-top: 1.8rem;
+    padding-bottom: 1.8rem;
+    border-bottom: solid 1px #ddd;
+    border-bottom: solid 1px var(--gray-color);
+}
+
+.history th {
+    padding-right: 1rem;
+    text-align: left;
+    /* ?? */
+    word-break: keep-all;
+}
+
+@media (min-width:768px) {
+    .history .container {
+        display: flex;
+        max-width: 1000px;
+        max-width: var(--large-width);
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .history .photo {
+        flex: 3;
+    }
+    .histroy .text {
+        flex: 2;
+        padding: 50px;
+    }
+}

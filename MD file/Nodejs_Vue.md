@@ -494,3 +494,106 @@ props로 자신에게 정보를 전달할 때 정보가 HTML태그이면 불편�
 ### 9.5 재귀 컴포넌트
 템플릿에서 자기 자신을 호출하는 컴포넌트를 말한다.
 사용시에 꼭 name옵션을 지정해야만한다.
+
+## 외전 1. vuetify
+간단한 UI 템플릿이다.
+vue cli 패키지를 기반으로 사용한다.
+SSR(서브사이드 렌더링), SPA(싱글페이지 어플리케이션), PWA(프로그레시브 웹 어플리케이션)와 단독 HTML 페이지를 지원한다.
+
+[URL] https://vuetifyjs.com/ko/getting-started/quick-start
+
+<p>익스플로러를 지원하지 않는다.</p>
+
+```js
+//vue-cli 필요
+npm install @vue/cli -g
+
+//버전 확인
+vue --version
+
+//vue 프로젝트 생성
+//+ vue의 라우터나 vuex 등을 추가 하고 싶다면 다른 설정
+vue create my-app
+
+//이동
+cd my-app
+
+//vuetify 추가 - 일단 Default 
+vue add vuetify
+//start 명령어(이에 대해서 찾아보자.)
+npm run serve
+```
+
+vue ui로 프로젝트를 생성할 수 있다.
+```
+vue ui
+```
+
+## 외전 1.1. 설치하여 설정하는 방법
+Vuetify를 설치할 수 있는 세가지 방법.<br>
+
+첫번째) default installation<br>
+자동 A-la-carte를 사용하는 것.
+컴파일 크기를 크게 감소할 수 있고 vue-cli-3에 적용된다.
+vue add vuetify를 하면 vuetify.js가 생성됩니다. 
+이 방법을 가장 권장한다.
+
+vue-cli-3패키지를 사용할 수 없는 경우 vue.config.js또는 웹 팩 구성을 통해 수동으로 vuetify-loader를 설치할 수 있다.
+
+[자세한 내용 URL] https://vuetifyjs.com/ko/customization/a-la-carte
+
+두번째) vue-cli  a-la-carte installation<br>
+vuetify-loader없이 개별 구성요소를 수동으로 가져오는 방법.
+수동으로 A-la-carte를 설치하는 방법.
+자세한 내용은 vuetify 홈페이지 Quick start 참조.
+
+세번째) Webpack installation<br>
+웹 팩으로 기존 규칙을 수정하여 필요한 종속성을 설치하는 방법.
+자세한 내용은 vuetify 홈페이지 Quick start 참조.
+
+## 외전 1.2. 사용방법
+import로 vuetify.js를 가져다 쓴다. vue를 생성한 인스턴스에 vuetify를 등록. 이 방법은 Vue-Router및 Vuex를 사용하는 방법과 유사하다.
+
+```js
+//main.js
+import Vue from 'vue'
+import App from './App.vue'
+import vuetify from './plugins/vuetify';
+
+Vue.config.productionTip = false
+
+new Vue({
+  vuetify,
+  render: h => h(App)
+}).$mount('#app')
+
+```
+
+vuetify에서 기본으로 사용되는 font를 적용하는 두가지 방법이 있다.
+첫번째 ) Google Roboto의 URL을 <link>로 링크하는 방법.
+두번째 ) MDI Iconfont를 npm으로 설치하여 적용하는 방법.
+```js
+//모듈로 설치
+npm install @mdi/font -D
+
+//////////////////////////////////////////////////////
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib';
+
+Vue.use(Vuetify);
+
+export default new Vuetify({
+  icons: {
+    iconfont: 'mdi',
+  },
+});
+```
+
+## 외전 1.3. CDN 방법
+CDN으로 간단하게 적용하는 방법이 있다.
+자세한 내용은 아래의 URL으로
+[URL] https://vuetifyjs.com/ko/getting-started/quick-start#cdn-usage
+
+Edge에서 사용하는 방법은 따로 있다.
+[URL] https://vuetifyjs.com/ko/getting-started/quick-start#edge-support
+

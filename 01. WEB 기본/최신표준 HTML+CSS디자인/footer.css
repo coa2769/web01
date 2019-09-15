@@ -1,0 +1,132 @@
+/* 푸터 */
+
+footer {
+    color: #fff;
+    color: var(--text-bright-color);
+    background-color: #2B5566;
+    background-color: var(--dark-color);
+}
+
+footer .container {
+    padding: 40px 20px;
+}
+
+
+/* 푸터A : 사이트 정보 */
+
+.footA h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.2em;
+    /* em 단위에 대해 */
+}
+
+.footA a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* 푸터B : 푸터 메뉴 */
+
+.footB div {
+    margin-bottom: 20px
+}
+
+.footB h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    /* currentColor 값의 의미 */
+    border-bottom: solid 1px currentColor;
+    font-size: 14px;
+}
+
+.footB ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footB a {
+    display: block;
+    padding: 5px;
+    color: inherit;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.footB a:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+@media(min-width:780px) {
+    footer .container {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1000px;
+        max-width: var(--large-width);
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .footA {
+        /* flex속성이란? */
+        flex: 0 0 40%;
+    }
+    .footB {
+        display: flex;
+        flex: 0 0 60%;
+    }
+    .footB div {
+        flex: 1;
+    }
+    /* 자세한 설명 필요 ?? */
+    .footB div:not(:first-child) {
+        margin-left: 40px;
+    }
+    .footC {
+        flex: 0 0 100%;
+    }
+}
+
+
+/* 푸터C : 저작권 */
+
+.footC {
+    font-size: 12px;
+    text-align: center;
+    font-family: 'Montserrat' sans-serif;
+}
+
+
+/* 푸터D : SNS 메뉴 */
+
+.footD {
+    margin-top: 20px;
+}
+
+.footD ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footD a {
+    display: block;
+    margin-right: 8px;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+    border: solid 1px currentColor;
+    width: 2em;
+    line-height: 2em;
+    /* 원의 각을 둥글게 */
+    border-radius: 50%;
+    text-align: center;
+}
+
+.footD a:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}

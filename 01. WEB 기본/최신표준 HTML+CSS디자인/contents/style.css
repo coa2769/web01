@@ -1,0 +1,104 @@
+@charset "UTF-8";
+
+/* 기본색 */
+
+:root {
+    --main-color: #5D9AB2;
+    --accent-color: #BF6A7A;
+    --dark-color: #2B5566;
+    --text-bright-color: #fff;
+    /* 추가01 */
+    --icon-color: #fff;
+    --icon-bk-color: #ddd;
+    --large-width: 1000px;
+    /* 추가02 */
+    --gray-color: #ddd;
+    --middle-wdith: 800px;
+}
+
+
+/* contents.html에 적용되는 스타일 */
+
+@media (max-width:599px) {
+     :root {
+        font-size: 14px;
+    }
+}
+
+@media(min-width:600px) and (max-width:799px) {
+     :root {
+        font-size: 16px;
+    }
+}
+
+@media(min-width: 800px) {
+     :root {
+        font-size: 18px;
+    }
+}
+
+body {
+    font-size: 16px;
+}
+
+.nohero header {
+    position: static;
+    border-bottom: solid 1px #ddd;
+    border-bottom: solid 1px var(--gray-color);
+}
+
+
+/* 콘텐츠 페이지 : 기사 */
+
+.post .container {
+    max-width: 800px;
+    max-width: var(--middle-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px 10px;
+}
+
+.post h1 {
+    padding-left: 0.5rem;
+    border-left: solid 0.75rem #BF6A7A;
+    border-left: solid 0.75rem var(--accent-color);
+    font-size: 2rem;
+}
+
+.post p {
+    font-size: 1rem;
+    line-height: 2;
+}
+
+.post img {
+    max-width: 100%;
+}
+
+
+/* 콘텐츠 페이지 : 빵 부스러기 리스트 */
+
+.bread ol {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bread a {
+    display: block;
+    padding: 5px;
+    color: inherit;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.bread a::after {
+    margin-left: 10px;
+    content: '\f054';
+    font-family: 'FontAwesome';
+    opacity: 0.3;
+}
+
+.bread a:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}

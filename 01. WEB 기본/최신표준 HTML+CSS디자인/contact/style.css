@@ -1,0 +1,141 @@
+/* 기본색 */
+
+:root {
+    --main-color: #5D9AB2;
+    --accent-color: #BF6A7A;
+    --dark-color: #2B5566;
+    --text-bright-color: #fff;
+    /* 추가01 */
+    --icon-color: #fff;
+    --icon-bk-color: #ddd;
+    --large-width: 1000px;
+    /* 추가02 */
+    --gray-color: #ddd;
+    --middle-wdith: 800px;
+}
+
+
+/* about.html에 적용되는 스타일 */
+
+@media (max-width:599px) {
+     :root {
+        font-size: 14px;
+    }
+}
+
+@media(min-width:600px) and (max-width:799px) {
+     :root {
+        font-size: 16px;
+    }
+}
+
+@media(min-width: 800px) {
+     :root {
+        font-size: 18px;
+    }
+}
+
+body {
+    font-size: 16px;
+}
+
+.nohero header {
+    position: static;
+    border-bottom: solid 1px #ddd;
+    border-bottom: solid 1px var(--gray-color);
+}
+
+
+/* 콘텐츠 페이지 : 기사 */
+
+.post .container {
+    max-width: 800px;
+    max-width: var(--middle-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px 10px;
+}
+
+.post h1 {
+    padding-left: 0.5rem;
+    border-left: solid 0.75rem #BF6A7A;
+    border-left: solid 0.75rem var(--accent-color);
+    font-size: 2rem;
+}
+
+.post p {
+    font-size: 1rem;
+    line-height: 2;
+}
+
+.post img {
+    max-width: 100%;
+}
+
+
+/* 소개 페이지: 이미지와 연혁 */
+
+.contact {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: solid 1px #ddd;
+    border: solid 1px var(--gray-color);
+    text-align: center;
+}
+
+.contact span {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 2.2em;
+    width: 2em;
+    line-height: 2em;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #5D9AB2;
+    background-color: var(--main-color);
+    color: #fff;
+    color: var(--icon-color);
+}
+
+.contact h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.contact a {
+    font-size: 1.4rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+@media(min-width:768px) {
+    .contact-wrap {
+        display: flex;
+    }
+    .contact {
+        flex: 1;
+    }
+}
+
+
+/* 문의 페이지 : 지도 */
+
+.location iframe {
+    width: 100%;
+    height: 400px;
+    /* ?? */
+    vertical-align: bottom;
+}
+
+.location h2 {
+    margin: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #5D9AB2;
+    background-color: var(--main-color);
+    color: #fff;
+    color: var(--text-bright-color);
+    font-size: 1.5rem;
+    text-align: center;
+}

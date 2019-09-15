@@ -14,18 +14,67 @@
     <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
 </head>
 
+<!-- 
+    [ 문제 01 ]
+    웹브라우저가 tag들의 구문 분석 후 Vue 컴포넌트를 렌더링 하기 때문에
+    option-component이 자식으로 구문 분석되지 못했다.
+    <select></select> 상태로 렌더링
+ -->
+<!-- 
 <script type="text/javascript">
-    Vue.component('option-component', {
-        template: '<option>hello</option>'
-    });
-
     //option을 감싸는 컴포넌트
-    Vue.component('option-component02', {
+    Vue.component('option-component', {
         template: '<option>hello</option>'
     });
 </script>
 
-<!-- select를 감싼 컴포넌트의 template -->
+<body>
+    <div id="app">
+        <select>
+            <option-component></option-component>
+            <option-component></option-component>
+        </select>
+    </div>
+</body> 
+-->
+
+<!------------------------------------------------------------------------------------------------>
+
+<!--
+[ 해결 ]
+1) is 속성 사용
+-->
+<!-- 
+<script type="text/javascript">
+    Vue.component('option-component', {
+        template: '<option>hello</option>'
+    });
+</script>
+
+<body>
+    <div id="app">
+        <select>
+            <option is="option-component"></option>
+            <option is="option-component"></option>
+        </select>
+    </div>
+</body> 
+-->
+
+<!------------------------------------------------------------------------------------------------>
+
+<!-- 
+[ 해결 ]
+2) option을 컴포넌트로 감싼다. => script로 templte => select를 컴포넌트로 감싼다.
+(단 x-template이 아닌 template tag는 is 속성을 사용한다.)
+-->
+<!-- 
+<script type="text/javascript">
+    Vue.component('option-component', {
+        template: '<option>hello</option>'
+    });
+</script>
+
 <script type="text/x-template" id="selectTemplate">
     <select>
             <option-component></option-component>
@@ -38,62 +87,57 @@
     Vue.component('select-component', {
         template: '#selectTemplate'
     });
-
-    Vue.component('helloTemplate', {
-        template: '#helloTemplate'
-    })
 </script>
 
 <body>
     <div id="app">
-        <!-- 
-            웹브라우저가 tag들의 구문 분석 후 Vue 컴포넌트를 렌더링 하기 때문에
-            option-component이 자식으로 구문 분석되지 못했다.
-            <select></select> 상태로 렌더링
-
-            해결)
-            1) is속성 사용
-            2) option을 컴포넌트로 감싼다. => script로 templte => select를 컴포넌트로 감싼다.
-            (단 template tag는 is 속성을 사용한다.)
-         -->
-        <select>
-            <option-component></option-component>
-            <option-component></option-component>
-        </select>
-
-        <select>
-                <option is="option-component"></option>
-                <option is="option-component"></option>
-        </select>
-
         <select-component></select-component>
+    </div>
+</body> 
+-->
 
-        <!--
-            template tag안의 루트 요소는 하나여야만 한다.(최신 크롬에서는 잘 렌더링 된다?)
+<!------------------------------------------------------------------------------------------------>
 
-            해결)
-            div로 감싸주어 루트 요소가 되게 한다.
-        -->
+<!--
+[ 문제 ]
+template tag안의 루트 요소는 하나여야만 한다.(최신 크롬에서는 잘 렌더링 된다?)
+-->
+<!-- 
+<body>
+    <div id="app">
         <template id="helloTemplate">
             <div>hello</div>
-            <div>world</div>         
+            <div>World</div>
         </template>
+    </div>
+</body> 
+-->
 
+<!--
+[ 해결 ]
+div로 감싸주어 루트 요소가 되게 한다.
+-->
+
+<!-- 
+<body>
+    <div id="app">
         <template id="helloTemplate">
             <div>    
                 <div>hello</div>
                 <div>world</div>
-            </div>         
+            </div>   
         </template>
-
     </div>
+</body> 
+-->
 
-</body>
+
+<!-- [공통] -->
 <script type="text/javascript">
     Vue.config.devtools = true;
     var vm = new Vue({
         el: '#app'
-    })
+    });
 </script>
 
 </html>
