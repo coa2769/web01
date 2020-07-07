@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^5.0.3",
+    "electron": "^7.2.4",
     "get-title": "^1.0.1",
     "photonkit": "^0.1.2",
     "superagent": "^5.0.8"
